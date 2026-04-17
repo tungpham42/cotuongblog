@@ -95,7 +95,7 @@
         </form>
     </div>
 </div>
-<script src="https://cdn.tiny.cloud/1/qi3gfxgeni41d9ww3dv5bakyu3vuea0ap54n0vy9drzweuiy/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -103,6 +103,7 @@
 
         tinymce.init({
             selector: '#content-editor',
+            license_key: 'gpl',
             height: 500,
             plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -174,7 +175,9 @@
                 editor.on('change', function () {
                     editor.save();
                 });
-            }
+            },
+            promotion: false,
+            branding: false,
         });
     });
 </script>
