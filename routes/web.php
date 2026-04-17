@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Post;
 use App\Models\Category;
@@ -24,6 +25,8 @@ Route::get('/', function () {
 
 // Guest Routes (Login / Register)
 Route::middleware('guest')->group(function () {
+    Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
 
@@ -52,5 +55,6 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 
 // Normal Authenticated Users (Chỉ cần đăng nhập)
 Route::middleware(['auth'])->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

@@ -25,7 +25,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect('/')->with('success', 'Đăng nhập thành công!');
         }
 
         return back()->withErrors([
@@ -54,7 +54,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'Đăng ký tài khoản thành công!');
+        return redirect('/')->with('success', 'Đăng ký tài khoản thành công!');
     }
 
     public function logout(Request $request)

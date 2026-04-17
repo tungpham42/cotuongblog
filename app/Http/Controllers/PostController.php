@@ -108,4 +108,10 @@ class PostController extends Controller
 
         return redirect()->route('posts.index')->with('success', 'Bài viết đã được xóa!');
     }
+
+    public function show(Post $post)
+    {
+        $post->load(['author', 'category', 'tags', 'comments.user']);
+        return view('posts.show', compact('post'));
+    }
 }
