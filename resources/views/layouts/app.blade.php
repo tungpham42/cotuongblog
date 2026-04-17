@@ -7,6 +7,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Cờ tướng')</title>
+    <meta name="description" content="Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.">
+    <meta name="keywords" content="cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng">
+    <meta name="author" content="Tùng Phạm">
+    <meta property="og:title" content="@yield('title', 'Cờ tướng')">
+    <meta property="og:description" content="Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.">
+    <meta property="og:image" content="{{ url('/') }}/img/1200x630.jpg">
+    <meta property="og:image:width" content="1200" >
+    <meta property="og:image:height" content="630" >
+    <meta property="og:image:alt" content="Cờ tướng 2 người" >
+    <link rel="apple-touch-icon" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-game.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-game.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-retina-game.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-retina-game.png">
+    <link rel="icon" sizes="32x32" href="{{ url('/') }}/img/favicon-32x32-game.png" >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
