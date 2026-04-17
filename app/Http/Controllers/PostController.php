@@ -114,4 +114,29 @@ class PostController extends Controller
         $post->load(['author', 'category', 'tags', 'comments.user']);
         return view('posts.show', compact('post'));
     }
+
+    public function uploadImage(Request $request)
+    {
+        // Validate file upload
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // Max 5MB
+        ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            // Tạo tên file ngẫu nhiên để tránh trùng lặp
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Lưu file vào thư mục storage/app/public/uploads/posts
+            $path = $file->storeAs('uploads/posts', $filename, 'public');
+
+            // TinyMCE yêu cầu response trả về một JSON có key là 'location' chứa URL của ảnh
+            return response()->json([
+                'location' => asset('storage/' . $path)
+            ]);
+        }
+
+        return response()->json(['error' => 'Không thể tải ảnh lên.'], 400);
+    }
 }

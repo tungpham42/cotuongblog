@@ -95,7 +95,7 @@
         </form>
     </div>
 </div>
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/qi3gfxgeni41d9ww3dv5bakyu3vuea0ap54n0vy9drzweuiy/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -112,14 +112,64 @@
             toolbar: 'undo redo | blocks | ' +
             'bold italic backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 16px; }',
+            'image media | removeformat | help', // Thêm nút 'image' vào toolbar
 
             // Tự động điều chỉnh giao diện Sáng/Tối
             skin: isDarkMode ? 'oxide-dark' : 'oxide',
             content_css: isDarkMode ? 'dark' : 'default',
 
-            // Đảm bảo dữ liệu được đồng bộ vào thẻ textarea trước khi submit form
+            // ==========================================
+            // CẤU HÌNH UPLOAD ẢNH
+            // ==========================================
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: 'image',
+
+            images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+                xhr.open('POST', '{{ route('tinymce.upload') }}');
+
+                // Lấy CSRF token của Laravel
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+                               || '{{ csrf_token() }}';
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+                xhr.upload.onprogress = (e) => {
+                    progress(e.loaded / e.total * 100);
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status === 403) {
+                        reject({ message: 'Lỗi xác thực: ' + xhr.status, remove: true });
+                        return;
+                    }
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        reject('Lỗi HTTP: ' + xhr.status);
+                        return;
+                    }
+
+                    const json = JSON.parse(xhr.responseText);
+                    if (!json || typeof json.location != 'string') {
+                        reject('JSON không hợp lệ: ' + xhr.responseText);
+                        return;
+                    }
+
+                    // Trả về URL ảnh để TinyMCE hiển thị
+                    resolve(json.location);
+                };
+
+                xhr.onerror = () => {
+                    reject('Lỗi mạng khi tải ảnh lên.');
+                };
+
+                const formData = new FormData();
+                // Nối file ảnh vào formData với key là 'file' (khớp với validate ở Backend)
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                xhr.send(formData);
+            }),
+
             setup: function (editor) {
                 editor.on('change', function () {
                     editor.save();

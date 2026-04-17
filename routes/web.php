@@ -23,17 +23,6 @@ Route::get('/', function () {
     return view('welcome', compact('posts', 'categories', 'tags'));
 })->name('home');
 
-// Guest Routes (Login / Register)
-Route::middleware('guest')->group(function () {
-    Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login']);
-
-    Route::get('register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('register', [AuthController::class, 'register']);
-});
-
 // Admin Routes (Chỉ Admin mới được vào)
 Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('/dashboard', function () {
@@ -51,10 +40,22 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
     Route::resource('users', UserController::class);
+    Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('tinymce.upload');
 });
 
 // Normal Authenticated Users (Chỉ cần đăng nhập)
 Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+// Guest Routes (Login / Register)
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
+
+    Route::get('register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('register', [AuthController::class, 'register']);
 });

@@ -60,7 +60,7 @@
                             <span class="text-slate-600 dark:text-slate-300 font-medium">Xin chào, {{ auth()->user()->name }}</span>
                         @endif
 
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                        <form method="POST" action="{{ route('logout') }}" class="inline m-0">
                             @csrf
                             <button type="submit" class="text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-500 font-medium transition">Đăng xuất</button>
                         </form>
