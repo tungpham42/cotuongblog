@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
       x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
-      x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+      x-init="$watch('darkMode', val => { 
+          localStorage.setItem('darkMode', val); 
+          window.dispatchEvent(new CustomEvent('theme-changed', { detail: val })); 
+      })"
       :class="{ 'dark': darkMode }">
 <head>
     <meta charset="utf-8">
@@ -37,7 +40,7 @@
                     },
                     colors: {
                         brand: {
-                            DEFAULT: '#f97316', // Warm Orange
+                            DEFAULT: '#f97316',
                             hover: '#ea580c',
                             light: '#ffedd5',
                         }
@@ -52,7 +55,6 @@
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];

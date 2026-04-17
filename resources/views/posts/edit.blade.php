@@ -148,6 +148,19 @@
         document.getElementById('post-form').addEventListener('submit', function() {
             hiddenInput.value = editor.getMarkdown();
         });
+
+        // Dynamic theme switching handler
+        window.addEventListener('theme-changed', function(e) {
+            const isDark = e.detail;
+            const editorUI = document.querySelector('.toastui-editor-defaultUI');
+            if (editorUI) {
+                if (isDark) {
+                    editorUI.classList.add('toastui-editor-dark');
+                } else {
+                    editorUI.classList.remove('toastui-editor-dark');
+                }
+            }
+        });
     });
 </script>
 @endsection
