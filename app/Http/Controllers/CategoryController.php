@@ -67,7 +67,10 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         // Lấy các bài viết thuộc chuyên mục, phân trang 12 bài / trang
-        $posts = $category->posts()->latest()->paginate(12);
+        $posts = $category->posts()
+                          ->where('is_published', true)
+                          ->latest()
+                          ->paginate(12);
         return view('categories.show', compact('category', 'posts'));
     }
 }

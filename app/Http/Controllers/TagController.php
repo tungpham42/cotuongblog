@@ -62,7 +62,10 @@ class TagController extends Controller
     public function show(Tag $tag)
     {
         // Lấy các bài viết có gắn thẻ này, phân trang 12 bài / trang
-        $posts = $tag->posts()->latest()->paginate(12);
+        $posts = $tag->posts()
+                     ->where('is_published', true)
+                     ->latest()
+                     ->paginate(12);
         return view('tags.show', compact('tag', 'posts'));
     }
 }

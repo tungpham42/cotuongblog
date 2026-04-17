@@ -34,7 +34,7 @@
                     </h3>
 
                     <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-4 flex-grow leading-relaxed">
-                        {{ Str::limit($post->content ?? $post->excerpt, 120) }}
+                        {{ Str::limit(strip_tags($post->content ?? $post->excerpt), 120) }}
                     </p>
                 </div>
             </a>

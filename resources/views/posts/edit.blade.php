@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form id="post-form" action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -56,7 +56,8 @@
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Nội dung</label>
-                <textarea id="content-editor" name="content" rows="12" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none resize-y">{{ old('content', $post->content) }}</textarea>
+                <input type="hidden" name="content" id="content-hidden">
+                <div id="editor-wrapper" class="bg-white rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 text-left"></div>
             </div>
 
             <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700" x-data="{ imageUrl: '{{ $post->featured_image ? asset('storage/' . $post->featured_image) : '' }}' }">
@@ -95,89 +96,57 @@
         </form>
     </div>
 </div>
-<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const isDarkMode = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const hiddenInput = document.getElementById('content-hidden');
+        const initialContent = {!! json_encode(old('content', $post->content)) !!};
 
-        tinymce.init({
-            selector: '#content-editor',
-            license_key: 'gpl',
-            height: 500,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | ' +
-            'bold italic backcolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'image media | removeformat | help', // Thêm nút 'image' vào toolbar
+        const editor = new toastui.Editor({
+            el: document.querySelector('#editor-wrapper'),
+            height: '500px',
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical',
+            theme: isDarkMode ? 'dark' : 'default',
+            initialValue: initialContent,
+            hooks: {
+                addImageBlobHook: (blob, callback) => {
+                    const formData = new FormData();
+                    formData.append('file', blob);
 
-            // Tự động điều chỉnh giao diện Sáng/Tối
-            skin: isDarkMode ? 'oxide-dark' : 'oxide',
-            content_css: isDarkMode ? 'dark' : 'default',
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
 
-            // ==========================================
-            // CẤU HÌNH UPLOAD ẢNH
-            // ==========================================
-            image_title: true,
-            automatic_uploads: true,
-            file_picker_types: 'image',
+                    fetch('{{ route('image.upload') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.location) {
+                            callback(data.location, blob.name || 'image');
+                        } else {
+                            alert('Tải ảnh thất bại.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Lỗi mạng khi tải ảnh lên.');
+                    });
+                }
+            }
+        });
 
-            images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.withCredentials = false;
-                xhr.open('POST', '{{ route('tinymce.upload') }}');
-
-                // Lấy CSRF token của Laravel
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-                               || '{{ csrf_token() }}';
-                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-
-                xhr.upload.onprogress = (e) => {
-                    progress(e.loaded / e.total * 100);
-                };
-
-                xhr.onload = () => {
-                    if (xhr.status === 403) {
-                        reject({ message: 'Lỗi xác thực: ' + xhr.status, remove: true });
-                        return;
-                    }
-                    if (xhr.status < 200 || xhr.status >= 300) {
-                        reject('Lỗi HTTP: ' + xhr.status);
-                        return;
-                    }
-
-                    const json = JSON.parse(xhr.responseText);
-                    if (!json || typeof json.location != 'string') {
-                        reject('JSON không hợp lệ: ' + xhr.responseText);
-                        return;
-                    }
-
-                    // Trả về URL ảnh để TinyMCE hiển thị
-                    resolve(json.location);
-                };
-
-                xhr.onerror = () => {
-                    reject('Lỗi mạng khi tải ảnh lên.');
-                };
-
-                const formData = new FormData();
-                // Nối file ảnh vào formData với key là 'file' (khớp với validate ở Backend)
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-                xhr.send(formData);
-            }),
-
-            setup: function (editor) {
-                editor.on('change', function () {
-                    editor.save();
-                });
-            },
-            promotion: false,
-            branding: false,
+        // Sync editor content to hidden textarea right before form submission
+        document.getElementById('post-form').addEventListener('submit', function() {
+            hiddenInput.value = editor.getMarkdown();
         });
     });
 </script>

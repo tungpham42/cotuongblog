@@ -131,7 +131,7 @@ class PostController extends Controller
             // Lưu file vào thư mục storage/app/public/uploads/posts
             $path = $file->storeAs('uploads/posts', $filename, 'public');
 
-            // TinyMCE yêu cầu response trả về một JSON có key là 'location' chứa URL của ảnh
+            // JavaScript fetch fetch hook ở Frontend sẽ expect một JSON key là 'location'
             return response()->json([
                 'location' => asset('storage/' . $path)
             ]);

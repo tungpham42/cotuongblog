@@ -16,7 +16,7 @@ use App\Models\User;
 // Public Front Page
 Route::get('/', function () {
     // Lấy danh sách để hiển thị ngoài trang chủ
-    $posts = Post::latest()->take(6)->get(); // Lấy 6 bài mới nhất
+    $posts = Post::where('is_published', true)->latest()->take(6)->get();
     $categories = Category::all();
     $tags = Tag::all();
 
@@ -40,7 +40,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
     Route::resource('users', UserController::class);
-    Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('tinymce.upload');
+    Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('image.upload'); // Renamed route
 });
 
 // Normal Authenticated Users (Chỉ cần đăng nhập)
@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Route hiển thị bài viết public
-Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])->where('is_published', true)->name('posts.show');
 
 // Thêm 2 route này cho Category và Tag (Sử dụng slug)
 Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
