@@ -103,7 +103,7 @@
                             {{-- Nút Xóa dành cho Admin --}}
                             @if(auth()->check() && auth()->user()->is_admin) {{-- Điều chỉnh 'is_admin' theo logic thực tế của bạn --}}
                                 <div class="ml-auto">
-                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
+                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="delete-comment-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:text-red-600 dark:hover:text-red-400 text-sm font-medium transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10">
@@ -124,6 +124,8 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
 
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
@@ -155,4 +157,39 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('.delete-comment-form');
+
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                // Prevent the form from submitting immediately
+                e.preventDefault(); 
+                
+                // Check current theme state for the Swal popup
+                const isDark = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Bạn sẽ không thể khôi phục bình luận này!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444', // Tailwind red-500
+                    cancelButtonColor: '#64748b',  // Tailwind slate-500
+                    confirmButtonText: 'Vâng, xóa nó!',
+                    cancelButtonText: 'Hủy',
+                    background: isDark ? '#1e293b' : '#ffffff', // Tailwind slate-800 / white
+                    color: isDark ? '#f8fafc' : '#0f172a',     // Tailwind slate-50 / slate-900
+                    reverseButtons: true // Puts confirm button on the right
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If confirmed, submit the form programmatically
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
