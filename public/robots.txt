@@ -1,2 +1,21 @@
 User-agent: *
-Disallow:
+# Allow crawling of public content
+Allow: /
+Allow: /posts/*
+Allow: /categories/*
+Allow: /tags/*
+
+# Disallow administrative and private routes
+Disallow: /dashboard
+Disallow: /posts/create
+Disallow: /posts/*/edit
+Disallow: /categories/create
+Disallow: /categories/*/edit
+Disallow: /tags/create
+Disallow: /tags/*/edit
+Disallow: /users
+Disallow: /login
+Disallow: /register
+
+# Sitemap location
+Sitemap: https://blog.cotuong.top/sitemap.xml

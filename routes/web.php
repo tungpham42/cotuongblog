@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Post;
 use App\Models\Category;
@@ -64,3 +65,5 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('register', [AuthController::class, 'register']);
 });
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
