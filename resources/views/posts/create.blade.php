@@ -59,8 +59,7 @@
 
             <div>
                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Nội dung</label>
-                <textarea name="content" rows="12" placeholder="Viết nội dung của bạn ở đây..."
-                          class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none resize-y placeholder-slate-400 dark:placeholder-slate-500">{{ old('content') }}</textarea>
+                <textarea id="content-editor" name="content" rows="12" placeholder="Viết nội dung của bạn ở đây..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none resize-y placeholder-slate-400 dark:placeholder-slate-500">{{ old('content') }}</textarea>
             </div>
 
             <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700" x-data="{ imageUrl: '' }">
@@ -96,4 +95,37 @@
         </form>
     </div>
 </div>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const isDarkMode = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        tinymce.init({
+            selector: '#content-editor',
+            height: 500,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 16px; }',
+
+            // Tự động điều chỉnh giao diện Sáng/Tối
+            skin: isDarkMode ? 'oxide-dark' : 'oxide',
+            content_css: isDarkMode ? 'dark' : 'default',
+
+            // Đảm bảo dữ liệu được đồng bộ vào thẻ textarea trước khi submit form
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        });
+    });
+</script>
 @endsection
