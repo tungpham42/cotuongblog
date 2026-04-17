@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <div class="space-y-8">
+        <div class="space-y-8 sticky top-8 self-start lg:block">
 
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
