@@ -103,7 +103,7 @@
                 <ul class="space-y-2">
                     @forelse ($categories as $category)
                         <li>
-                            <a href="#" class="group flex items-center justify-between p-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-brand/10 hover:text-brand transition-colors">
+                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center justify-between p-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-brand/10 hover:text-brand transition-colors">
                                 <span class="font-medium">{{ $category->name }}</span>
                                 <span class="text-xs bg-slate-100 dark:bg-slate-700 group-hover:bg-brand/20 group-hover:text-brand px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-300 transition-colors">📌</span>
                             </a>
@@ -120,7 +120,7 @@
                 </h3>
                 <div class="flex flex-wrap gap-2">
                     @forelse ($tags as $tag)
-                        <a href="#" class="px-3.5 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand hover:text-white dark:hover:bg-brand transition-all duration-200">
+                        <a href="{{ route('tags.show', $tag->slug) }}" class="px-3.5 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand hover:text-white dark:hover:bg-brand transition-all duration-200">
                             #{{ $tag->name }}
                         </a>
                     @empty

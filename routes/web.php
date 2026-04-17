@@ -49,7 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+// Route hiển thị bài viết public
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+// Thêm 2 route này cho Category và Tag (Sử dụng slug)
+Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
 // Guest Routes (Login / Register)
 Route::middleware('guest')->group(function () {

@@ -58,4 +58,11 @@ class TagController extends Controller
 
         return redirect()->route('tags.index')->with('success', 'Thẻ đã được xóa!');
     }
+
+    public function show(Tag $tag)
+    {
+        // Lấy các bài viết có gắn thẻ này, phân trang 12 bài / trang
+        $posts = $tag->posts()->latest()->paginate(12);
+        return view('tags.show', compact('tag', 'posts'));
+    }
 }
