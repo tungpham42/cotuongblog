@@ -42,6 +42,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::resource('tags', TagController::class);
     Route::resource('users', UserController::class);
     Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('image.upload'); // Renamed route
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 // Normal Authenticated Users (Chỉ cần đăng nhập)

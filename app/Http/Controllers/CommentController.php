@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment; // Thêm import này
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -19,5 +20,12 @@ class CommentController extends Controller
         ]);
 
         return back()->with('success', 'Bình luận đã được đăng thành công!');
+    }
+
+    // Thêm method destroy
+    public function destroy(Comment $comment)
+    {
+        $comment->delete();
+        return back()->with('success', 'Bình luận đã được xóa!');
     }
 }

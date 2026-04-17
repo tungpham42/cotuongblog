@@ -52,7 +52,7 @@
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg>
                 </a>
                 
-                <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($post->title) }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700/50 text-slate-500 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors" title="Chia sẻ qua X">
+                <a href="https://x.com/intent/post?url={{ urlencode(url()->current()) }}&text={{ urlencode($post->title) }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700/50 text-slate-500 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors" title="Chia sẻ qua X">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 5.96H5.078z"></path></svg>
                 </a>
                 
@@ -90,13 +90,28 @@
                 @forelse($post->comments as $comment)
                     <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 transition-colors">
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="w-10 h-10 rounded-full bg-brand-light dark:bg-brand/20 flex items-center justify-center text-brand font-bold border border-brand/10">
-                                {{ substr($comment->user->name, 0, 1) }}
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-brand-light dark:bg-brand/20 flex items-center justify-center text-brand font-bold border border-brand/10">
+                                    {{ substr($comment->user->name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 dark:text-white">{{ $comment->user->name }}</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $comment->created_at->diffForHumans() }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 dark:text-white">{{ $comment->user->name }}</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $comment->created_at->diffForHumans() }}</p>
-                            </div>
+
+                            {{-- Nút Xóa dành cho Admin --}}
+                            @if(auth()->check() && auth()->user()->is_admin) {{-- Điều chỉnh 'is_admin' theo logic thực tế của bạn --}}
+                                <div class="ml-auto">
+                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-600 dark:hover:text-red-400 text-sm font-medium transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10">
+                                            Xóa
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                         <p class="text-slate-700 dark:text-slate-300 leading-relaxed">{{ $comment->content }}</p>
                     </div>
