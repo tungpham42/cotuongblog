@@ -92,6 +92,11 @@
                     </div>
                 @endforelse
             </div>
+            @if ($posts->hasPages())
+                <div class="mt-8">
+                    {{ $posts->links() }}
+                </div>
+            @endif
         </div>
 
         <div class="space-y-8 sticky top-28 self-start lg:block">

@@ -17,7 +17,7 @@ use App\Models\User;
 // Public Front Page
 Route::get('/', function () {
     // Lấy danh sách để hiển thị ngoài trang chủ
-    $posts = Post::where('is_published', true)->latest()->take(6)->get();
+    $posts = Post::where('is_published', true)->latest()->paginate(6);
     $categories = Category::all();
     $tags = Tag::all();
 
