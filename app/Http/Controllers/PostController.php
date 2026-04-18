@@ -20,8 +20,8 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
-        $tags = Tag::all();
+        $categories = Category::withCount('posts')->get();
+        $tags = Tag::withCount('posts')->get();
         return view('posts.create', compact('categories', 'tags'));
     }
 
@@ -66,8 +66,8 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        $categories = Category::all();
-        $tags = Tag::all();
+        $categories = Category::withCount('posts')->get();
+        $tags = Tag::withCount('posts')->get();
         return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 

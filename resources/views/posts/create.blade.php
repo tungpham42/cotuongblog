@@ -49,7 +49,7 @@
                         <option value="" class="text-slate-500">Chọn chuyên mục...</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
+                                {{ $category->name }}({{ $category->posts_count }})
                             </option>
                         @endforeach
                     </select>
@@ -59,7 +59,7 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Thẻ (Tags)</label>
                     <select name="tags[]" multiple class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none h-32 custom-scrollbar">
                         @foreach($tags as $tag)
-                            <option value="{{ $tag->id }}" class="py-1">{{ $tag->name }}</option>
+                            <option value="{{ $tag->id }}" class="py-1">{{ $tag->name }} ({{ $tag->posts_count }})</option>
                         @endforeach
                     </select>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1">
