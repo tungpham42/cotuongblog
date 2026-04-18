@@ -36,6 +36,15 @@
             @endif
         </div>
 
+        <div id="toc-container" class="hidden mb-8 p-6 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors">
+            <div class="flex items-center gap-2 mb-4">
+                <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Nội dung chính</h3>
+            </div>
+            <ul id="toc-list" class="space-y-2.5 text-slate-600 dark:text-slate-300">
+                </ul>
+        </div>
+
         <div id="viewer-wrapper" class="mb-10 text-left"></div>
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
@@ -147,10 +156,61 @@
             theme: isDarkMode ? 'dark' : 'default'
         });
 
-        // Dynamic theme switching handler for viewer
+        // ----------------------------------------------------
+        // TẠO TABLE OF CONTENTS (MỤC LỤC)
+        // ----------------------------------------------------
+        const viewerRoot = document.querySelector('#viewer-wrapper');
+        const tocContainer = document.getElementById('toc-container');
+        const tocList = document.getElementById('toc-list');
+        
+        // Lấy tất cả các thẻ heading từ h1 đến h6 trong nội dung bài viết
+        const headings = viewerRoot.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+        if (headings.length > 0) {
+            // Hiển thị khung ToC nếu có ít nhất 1 heading
+            tocContainer.classList.remove('hidden');
+
+            headings.forEach((heading, index) => {
+                // Tạo ID cho heading nếu chưa có (để có thể làm anchor link)
+                const headingId = heading.id || `heading-${index}`;
+                heading.id = headingId;
+                
+                // Thêm scroll-margin-top để khi click nhảy đến không bị thanh Nav che khuất (thanh nav cao h-20 ~ 5rem)
+                heading.style.scrollMarginTop = '6rem';
+
+                // Xác định cấp độ của thẻ (H1 -> 1, H2 -> 2,...)
+                const level = parseInt(heading.tagName.substring(1));
+                
+                // Cấu trúc thẻ <li> và thụt lề tương ứng với cấp độ Heading
+                const li = document.createElement('li');
+                // Tính toán lề trái (mỗi cấp thụt vào 1.5rem, bắt đầu từ cấp nhỏ nhất có trong bài)
+                const marginLeft = level > 1 ? `${(level - 1) * 1.2}rem` : '0';
+                li.style.marginLeft = marginLeft;
+
+                // Cấu trúc thẻ <a>
+                const a = document.createElement('a');
+                a.href = `#${headingId}`;
+                a.textContent = heading.textContent;
+                a.className = 'hover:text-brand font-medium transition-colors block';
+                
+                // Thêm hiệu ứng cuộn mượt khi click
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    heading.scrollIntoView({ behavior: 'smooth' });
+                    // Tùy chọn: Thay đổi URL hash để dễ chia sẻ đúng phần đang đọc
+                    history.pushState(null, null, `#${headingId}`);
+                });
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        // ----------------------------------------------------
+        // XỬ LÝ ĐỔI GIAO DIỆN SÁNG/TỐI (Giữ nguyên của bạn)
+        // ----------------------------------------------------
         window.addEventListener('theme-changed', function(e) {
             const isDark = e.detail;
-            const viewerRoot = document.querySelector('#viewer-wrapper');
             if (viewerRoot) {
                 if (isDark) {
                     viewerRoot.classList.add('toastui-editor-dark');
