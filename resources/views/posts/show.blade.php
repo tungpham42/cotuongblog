@@ -227,14 +227,18 @@
         document.querySelectorAll('#toc-container a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
+                
+                // Lấy ID bằng cách loại bỏ dấu '#' ở đầu
+                const idWithoutHash = this.getAttribute('href').substring(1);
+                
+                // Sử dụng getElementById thay vì querySelector để không bị lỗi với ID bắt đầu bằng số
+                const targetElement = document.getElementById(idWithoutHash); 
                 
                 if (targetElement) {
                     targetElement.scrollIntoView({
                         behavior: 'smooth'
                     });
-                    history.pushState(null, null, targetId);
+                    history.pushState(null, null, '#' + idWithoutHash);
                 }
             });
         });
