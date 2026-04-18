@@ -13,6 +13,20 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+
+Route::get('/test-redis', function () {
+    // Check if the cache exists
+    if (Cache::has('browser_test')) {
+        return "Loaded from Redis Cache: " . Cache::get('browser_test');
+    }
+
+    // If not, set it for 1 minute (60 seconds)
+    $message = "This is fresh data created at " . now();
+    Cache::put('browser_test', $message, 60);
+
+    return "Saved to Redis. Refresh the page! Data: " . $message;
+});
 
 // Public Front Page
 Route::get('/', function () {
