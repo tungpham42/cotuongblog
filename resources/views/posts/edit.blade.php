@@ -26,7 +26,17 @@
             <div>
                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tiêu đề</label>
                 <input type="text" name="title" value="{{ old('title', $post->title) }}"
-                       class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border {{ $errors->has('title') || $errors->has('slug') ? 'border-red-500' : 'border-slate-200 dark:border-slate-700' }} rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">
+                
+                @error('title')
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+
+                @if (!$errors->has('title'))
+                    @error('slug')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                @endif
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

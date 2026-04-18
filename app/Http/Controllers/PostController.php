@@ -27,15 +27,24 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        // Generate the slug and merge it into the request before validation
+        $request->merge([
+            'slug' => Str::slug($request->title)
+        ]);
+
         $validated = $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:255|unique:posts,title',
+            'slug' => 'required|unique:posts,slug',
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
             'featured_image' => 'nullable|image|max:5120', // Max 5MB
             'tags' => 'array|exists:tags,id',
+        ], [
+            // Custom error messages
+            'title.unique' => 'Tiêu đề bài viết này đã tồn tại. Vui lòng chọn một tiêu đề khác.',
+            'slug.unique' => 'Đường dẫn (slug) được tạo từ tiêu đề này đã bị trùng lặp.'
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
         $validated['user_id'] = auth()->id(); // Gán user hiện tại đang đăng nhập
         $validated['is_published'] = $request->has('is_published');
 
@@ -64,15 +73,25 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
+        // Generate the slug and merge it into the request before validation
+        $request->merge([
+            'slug' => Str::slug($request->title)
+        ]);
+
         $validated = $request->validate([
-            'title' => 'required|max:255',
+            // Ignore the current post's ID in the unique check
+            'title' => 'required|max:255|unique:posts,title,' . $post->id,
+            'slug' => 'required|unique:posts,slug,' . $post->id,
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
             'featured_image' => 'nullable|image|max:5120',
             'tags' => 'array|exists:tags,id',
+        ], [
+            // Custom error messages
+            'title.unique' => 'Tiêu đề bài viết này đã tồn tại. Vui lòng chọn một tiêu đề khác.',
+            'slug.unique' => 'Đường dẫn (slug) được tạo từ tiêu đề này đã bị trùng lặp.'
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
         $validated['is_published'] = $request->has('is_published');
 
         // Xử lý thay đổi ảnh đại diện
