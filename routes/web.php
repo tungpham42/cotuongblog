@@ -31,7 +31,7 @@ Route::get('/test-redis', function () {
 // Public Front Page
 Route::get('/', function () {
     // Lấy danh sách để hiển thị ngoài trang chủ
-    $posts = Post::where('is_published', true)->latest()->paginate(6);
+    $posts = Post::where('is_published', true)->latest()->paginate(12);
     $categories = Category::all();
     $tags = Tag::all();
 
