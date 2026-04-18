@@ -2,6 +2,10 @@
 
 @section('title', $post->title)
 
+@if($post->featured_image)
+    @section('og_image', asset('storage/' . $post->featured_image))
+@endif
+
 @section('content')
 <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
 
