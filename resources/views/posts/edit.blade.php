@@ -45,7 +45,7 @@
                     <select name="category_id" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none appearance-none">
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}&nbsp;&nbsp;&nbsp;&nbsp;({{ $category->posts_count }})
+                                {{ $category->name }}&nbsp;&nbsp;({{ $category->posts_count }})
                             </option>
                         @endforeach
                     </select>
@@ -57,7 +57,7 @@
                     <select name="tags[]" multiple class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none h-32">
                         @foreach($tags as $tag)
                             <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', $postTags)) ? 'selected' : '' }} class="py-1">
-                                {{ $tag->name }}&nbsp;&nbsp;&nbsp;&nbsp;({{ $tag->posts_count }})
+                                {{ $tag->name }}&nbsp;&nbsp;({{ $tag->posts_count }})
                             </option>
                         @endforeach
                     </select>
