@@ -49,7 +49,7 @@
                         <option value="" class="text-slate-500">Chọn chuyên mục...</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}({{ $category->posts_count }})
+                                {{ $category->name }} ({{ $category->posts_count }})
                             </option>
                         @endforeach
                     </select>
