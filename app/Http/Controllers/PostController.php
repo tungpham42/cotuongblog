@@ -31,7 +31,7 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'featured_image' => 'nullable|image|max:2048', // Max 2MB
+            'featured_image' => 'nullable|image|max:5120', // Max 5MB
             'tags' => 'array|exists:tags,id',
         ]);
 
@@ -68,7 +68,7 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'featured_image' => 'nullable|image|max:2048',
+            'featured_image' => 'nullable|image|max:5120',
             'tags' => 'array|exists:tags,id',
         ]);
 
