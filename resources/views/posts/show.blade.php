@@ -7,6 +7,42 @@
 @endif
 
 @section('content')
+
+@php
+    // 1. Parse nội dung bài viết (Giả sử nội dung đang lưu dưới dạng Markdown)
+    // Nếu bạn lưu thẳng HTML trong database, hãy bỏ qua dòng Str::markdown() và gán $htmlContent = $post->content;
+    $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
+
+    // 2. Trích xuất các thẻ Heading (H1-H6) để tạo TOC tĩnh
+    $toc = [];
+    $htmlContent = preg_replace_callback(
+        '/<h([1-6])(.*?)>(.*?)<\/h\1>/is',
+        function ($matches) use (&$toc) {
+            $level = $matches[1];
+            $text = strip_tags($matches[3]);
+            $id = \Illuminate\Support\Str::slug($text);
+            
+            // Đảm bảo ID không bị trùng lặp trong cùng 1 bài viết
+            $originalId = $id;
+            $counter = 1;
+            while (in_array($id, array_column($toc, 'id'))) {
+                $id = $originalId . '-' . $counter;
+                $counter++;
+            }
+
+            $toc[] = [
+                'level' => $level,
+                'id' => $id,
+                'text' => trim($text),
+            ];
+
+            // Trả về thẻ heading đã được bổ sung ID và khoảng cách cuộn (scroll-margin-top)
+            return "<h{$level} id=\"{$id}\" style=\"scroll-margin-top: 6rem;\"{$matches[2]}>{$matches[3]}</h{$level}>";
+        },
+        $htmlContent
+    );
+@endphp
+
 <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
 
     @if($post->featured_image)
@@ -36,16 +72,34 @@
             @endif
         </div>
 
-        <div id="toc-container" class="hidden mb-8 p-6 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors">
+        {{-- Bắt đầu render Mục Lục Tĩnh --}}
+        @if(!empty($toc))
+        <div id="toc-container" class="mb-8 p-6 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors">
             <div class="flex items-center gap-2 mb-4">
                 <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white">Nội dung chính</h3>
             </div>
-            <ul id="toc-list" class="space-y-2.5 text-slate-600 dark:text-slate-300">
-                </ul>
+            <ul class="space-y-2.5 text-slate-600 dark:text-slate-300">
+                @foreach($toc as $item)
+                    @php
+                        // Thụt lề dựa trên cấp độ thẻ (H1 -> 0, H2 -> 1.2rem, H3 -> 2.4rem...)
+                        $marginLeft = $item['level'] > 1 ? ($item['level'] - 1) * 1.2 . 'rem' : '0';
+                    @endphp
+                    <li style="margin-left: {{ $marginLeft }}">
+                        <a href="#{{ $item['id'] }}" class="hover:text-brand font-medium transition-colors block">
+                            {{ $item['text'] }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
+        @endif
+        {{-- Kết thúc render Mục Lục --}}
 
-        <div id="viewer-wrapper" class="mb-10 text-left"></div>
+        {{-- Nội dung bài viết (Sử dụng prose để styling cho HTML thô) --}}
+        <div class="mb-10 text-left prose prose-slate dark:prose-invert max-w-none">
+            {!! $htmlContent !!}
+        </div>
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
             <div class="flex flex-wrap gap-2">
@@ -113,8 +167,7 @@
                                 </div>
                             </div>
 
-                            {{-- Nút Xóa dành cho Admin --}}
-                            @if(auth()->check() && auth()->user()->is_admin) {{-- Điều chỉnh 'is_admin' theo logic thực tế của bạn --}}
+                            @if(auth()->check() && auth()->user()->is_admin)
                                 <div class="ml-auto">
                                     <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="delete-comment-form">
                                         @csrf
@@ -139,98 +192,15 @@
 </div>
 
 @push('scripts')
-
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const isDarkMode = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const initialContent = {!! json_encode($post->content) !!};
-
-        const viewer = new toastui.Editor({
-            el: document.querySelector('#viewer-wrapper'),
-            viewer: true,
-            initialValue: initialContent,
-            theme: isDarkMode ? 'dark' : 'default'
-        });
-
-        // ----------------------------------------------------
-        // TẠO TABLE OF CONTENTS (MỤC LỤC)
-        // ----------------------------------------------------
-        const viewerRoot = document.querySelector('#viewer-wrapper');
-        const tocContainer = document.getElementById('toc-container');
-        const tocList = document.getElementById('toc-list');
-        
-        // Lấy tất cả các thẻ heading từ h1 đến h6 trong nội dung bài viết
-        const headings = viewerRoot.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-        if (headings.length > 0) {
-            // Hiển thị khung ToC nếu có ít nhất 1 heading
-            tocContainer.classList.remove('hidden');
-
-            headings.forEach((heading, index) => {
-                // Tạo ID cho heading nếu chưa có (để có thể làm anchor link)
-                const headingId = heading.id || `heading-${index}`;
-                heading.id = headingId;
-                
-                // Thêm scroll-margin-top để khi click nhảy đến không bị thanh Nav che khuất (thanh nav cao h-20 ~ 5rem)
-                heading.style.scrollMarginTop = '6rem';
-
-                // Xác định cấp độ của thẻ (H1 -> 1, H2 -> 2,...)
-                const level = parseInt(heading.tagName.substring(1));
-                
-                // Cấu trúc thẻ <li> và thụt lề tương ứng với cấp độ Heading
-                const li = document.createElement('li');
-                // Tính toán lề trái (mỗi cấp thụt vào 1.5rem, bắt đầu từ cấp nhỏ nhất có trong bài)
-                const marginLeft = level > 1 ? `${(level - 1) * 1.2}rem` : '0';
-                li.style.marginLeft = marginLeft;
-
-                // Cấu trúc thẻ <a>
-                const a = document.createElement('a');
-                a.href = `#${headingId}`;
-                a.textContent = heading.textContent;
-                a.className = 'hover:text-brand font-medium transition-colors block';
-                
-                // Thêm hiệu ứng cuộn mượt khi click
-                a.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    heading.scrollIntoView({ behavior: 'smooth' });
-                    // Tùy chọn: Thay đổi URL hash để dễ chia sẻ đúng phần đang đọc
-                    history.pushState(null, null, `#${headingId}`);
-                });
-
-                li.appendChild(a);
-                tocList.appendChild(li);
-            });
-        }
-
-        // ----------------------------------------------------
-        // XỬ LÝ ĐỔI GIAO DIỆN SÁNG/TỐI (Giữ nguyên của bạn)
-        // ----------------------------------------------------
-        window.addEventListener('theme-changed', function(e) {
-            const isDark = e.detail;
-            if (viewerRoot) {
-                if (isDark) {
-                    viewerRoot.classList.add('toastui-editor-dark');
-                } else {
-                    viewerRoot.classList.remove('toastui-editor-dark');
-                }
-            }
-        });
-    });
-</script>
+{{-- Đã xóa thư viện và JS khởi tạo ToastUI --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const deleteForms = document.querySelectorAll('.delete-comment-form');
 
         deleteForms.forEach(form => {
             form.addEventListener('submit', function(e) {
-                // Prevent the form from submitting immediately
                 e.preventDefault(); 
                 
-                // Check current theme state for the Swal popup
                 const isDark = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
                 
                 Swal.fire({
@@ -238,19 +208,34 @@
                     text: "Bạn sẽ không thể khôi phục bình luận này!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#ef4444', // Tailwind red-500
-                    cancelButtonColor: '#64748b',  // Tailwind slate-500
+                    confirmButtonColor: '#ef4444', 
+                    cancelButtonColor: '#64748b',  
                     confirmButtonText: 'Vâng, xóa nó!',
                     cancelButtonText: 'Hủy',
-                    background: isDark ? '#1e293b' : '#ffffff', // Tailwind slate-800 / white
-                    color: isDark ? '#f8fafc' : '#0f172a',     // Tailwind slate-50 / slate-900
-                    reverseButtons: true // Puts confirm button on the right
+                    background: isDark ? '#1e293b' : '#ffffff', 
+                    color: isDark ? '#f8fafc' : '#0f172a',     
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // If confirmed, submit the form programmatically
                         form.submit();
                     }
                 });
+            });
+        });
+        
+        // Cải thiện cuộn mượt (Smooth scroll) cho các link của ToC
+        document.querySelectorAll('#toc-container a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    history.pushState(null, null, targetId);
+                }
             });
         });
     });
