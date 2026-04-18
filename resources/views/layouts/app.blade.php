@@ -15,7 +15,7 @@
     <meta name="author" content="Tùng Phạm">
     <meta property="og:title" content="@yield('title', 'Cờ tướng')">
     <meta property="og:description" content="Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.">
-    <meta property="og:image" content="@yield('og_image', asset('img/1200x630.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
     <meta property="og:image:width" content="1200" >
     <meta property="og:image:height" content="630" >
     <meta property="og:image:alt" content="Cờ tướng 2 người" >
