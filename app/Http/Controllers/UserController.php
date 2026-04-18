@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::withCount('posts')->latest()->paginate(10);
+        $users = User::withCount('posts')->latest()->paginate(12);
         return view('users.index', compact('users'));
     }
 

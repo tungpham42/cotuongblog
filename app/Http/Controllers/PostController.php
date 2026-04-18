@@ -14,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         // Eager load relationships để tránh N+1 Query
-        $posts = Post::with(['category', 'author', 'tags'])->latest()->paginate(10);
+        $posts = Post::with(['category', 'author', 'tags'])->latest()->paginate(12);
         return view('posts.index', compact('posts'));
     }
 

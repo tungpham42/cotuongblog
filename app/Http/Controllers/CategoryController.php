@@ -11,7 +11,7 @@ class CategoryController extends Controller
     public function index()
     {
         // Kèm theo số lượng bài viết của mỗi chuyên mục
-        $categories = Category::withCount('posts')->latest()->paginate(10);
+        $categories = Category::withCount('posts')->latest()->paginate(12);
         return view('categories.index', compact('categories'));
     }
 
