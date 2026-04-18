@@ -148,7 +148,41 @@
     </main>
 
     @stack('scripts')
+    <div x-data="{ showTop: false, showBottom: true }"
+        x-init="
+            const toggleButtons = () => {
+                showTop = window.scrollY > 250;
+                showBottom =
+                    (window.innerHeight + window.scrollY)
+                    < (document.documentElement.scrollHeight - 250);
+            };
 
+            toggleButtons();
+            window.addEventListener('scroll', toggleButtons);
+            window.addEventListener('resize', toggleButtons);
+        "
+        class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+
+        <!-- Back to top -->
+        <button x-show="showTop"
+                x-transition
+                @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+                class="h-12 w-12 rounded-full bg-brand text-white shadow-lg hover:bg-brand-hover flex items-center justify-center text-xl">
+            ↑
+        </button>
+
+        <!-- Scroll to bottom -->
+        <button x-show="showBottom"
+                x-transition
+                @click="window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                })"
+                class="h-12 w-12 rounded-full bg-slate-800 dark:bg-slate-700 text-white shadow-lg flex items-center justify-center text-xl">
+            ↓
+        </button>
+
+    </div>
     @if(session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
