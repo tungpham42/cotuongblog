@@ -14,13 +14,15 @@
     $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
 
     // 2. Trích xuất các thẻ Heading (H1-H6) để tạo TOC tĩnh
-    $toc = [];
+$toc = [];
     $htmlContent = preg_replace_callback(
         '/<h([1-6])(.*?)>(.*?)<\/h\1>/is',
         function ($matches) use (&$toc) {
             $level = $matches[1];
-            $text = strip_tags($matches[3]);
-            $id = \Illuminate\Support\Str::slug($text);
+            
+            // FIX: Loại bỏ thẻ HTML và giải mã entities để tránh lỗi double-escaping của Blade
+            $rawText = html_entity_decode(strip_tags($matches[3]), ENT_QUOTES, 'UTF-8');
+            $id = \Illuminate\Support\Str::slug($rawText);
             
             // Đảm bảo ID không bị trùng lặp trong cùng 1 bài viết
             $originalId = $id;
@@ -33,7 +35,7 @@
             $toc[] = [
                 'level' => $level,
                 'id' => $id,
-                'text' => trim($text),
+                'text' => trim($rawText), // Lưu text thuần đã được giải mã
             ];
 
             // Trả về thẻ heading đã được bổ sung ID và khoảng cách cuộn (scroll-margin-top)
