@@ -7,7 +7,7 @@
 @endif
 
 {{-- Pass the excerpt to the layout. Adding a fallback to a truncated version of the content is recommended just in case the excerpt is empty --}}
-@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($post->content), 160))
+@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit($post->excerpt ?? $post->content, 160))
 
 @section('content')
 
