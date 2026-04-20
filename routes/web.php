@@ -82,3 +82,5 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+Route::get('/api/v1/posts', [PostController::class, 'apiIndex'])->name('api.posts.index');

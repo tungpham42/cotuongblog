@@ -8,6 +8,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\CommonMarkConverter;
 
 class PostController extends Controller
 {
@@ -157,5 +158,43 @@ class PostController extends Controller
         }
 
         return response()->json(['error' => 'Không thể tải ảnh lên.'], 400);
+    }
+
+    /**
+     * Get all published posts as JSON (Title and Content only)
+     */
+    public function apiIndex(Request $request)
+    {
+        $converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+
+        // Only fetch published posts without unnecessary relationships
+        $posts = Post::where('is_published', true)
+                    ->latest()
+                    ->get();
+
+        // Map the collection to return only title and processed content
+        $formattedPosts = $posts->map(function ($post) use ($converter) {
+            // 1. Convert Markdown to HTML
+            $html = $converter->convert($post->content)->getContent();
+
+            // 2. Clean the content (remove tags and collapse whitespace)
+            $content = str_replace(['</p>', '<br>', '</div>'], ' ', $html);
+            $content = strip_tags($content);
+            $content = preg_replace('/\s+/', ' ', $content);
+            $content = trim($content);
+
+            // Return only the desired fields
+            return [
+                'title' => $post->title,
+                'slug' => $post->slug,
+                'content' => $content,
+            ];
+        });
+
+        // Return JSON with readable characters
+        return response()->json($formattedPosts, 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }

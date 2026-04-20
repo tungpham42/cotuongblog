@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
       x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
-      x-init="$watch('darkMode', val => { 
-          localStorage.setItem('darkMode', val); 
-          window.dispatchEvent(new CustomEvent('theme-changed', { detail: val })); 
+      x-init="$watch('darkMode', val => {
+          localStorage.setItem('darkMode', val);
+          window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
       })"
       :class="{ 'dark': darkMode }">
 <head>
@@ -62,6 +62,8 @@
 
         gtag('config', 'G-QEW6K9YPY7');
     </script>
+    <!-- AI Chat Widget -->
+    <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script>
     @guest
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
     @endguest
