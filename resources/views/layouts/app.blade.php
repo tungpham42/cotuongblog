@@ -55,18 +55,18 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-QEW6K9YPY7');
-    </script>
     <!-- AI Chat Widget -->
     <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script>
+
     @guest
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-QEW6K9YPY7');
+        </script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
     @endguest
 </head>
