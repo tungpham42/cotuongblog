@@ -132,7 +132,19 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->load(['author', 'category', 'tags', 'comments.user']);
-        return view('posts.show', compact('post'));
+
+        // Tăng lượt xem bài viết
+        $post->increment('views');
+
+        // Tải các bài viết liên quan (cùng chuyên mục) để hiển thị ở sidebar hoặc cuối bài
+        $relatedPosts = Post::where('category_id', $post->category_id)
+                            ->where('id', '!=', $post->id)
+                            ->where('is_published', true)
+                            ->latest()
+                            ->take(5)
+                            ->get();
+
+        return view('posts.show', compact('post', 'relatedPosts'));
     }
 
     public function uploadImage(Request $request)

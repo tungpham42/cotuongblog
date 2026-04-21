@@ -196,6 +196,57 @@ $toc = [];
     </div>
 </div>
 
+@if ($relatedPosts->count() > 0)
+    {{-- Thêm đoạn này vào bên dưới phần nội dung bài viết --}}
+    <section class="mt-16 pt-8 border-t border-slate-100 dark:border-slate-700">
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+            <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-brand/10 text-brand">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v4a2 2 0 002 2h4"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 9h10M7 13h10M7 17h10"></path>
+                </svg>
+            </span>
+            Bài viết liên quan
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @forelse ($relatedPosts as $rPost)
+                <a href="{{ route('posts.show', $rPost->slug) }}" class="group flex flex-col sm:flex-row bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-md hover:border-brand/50 transition-all duration-300">
+                    {{-- Thumbnail --}}
+                    <div class="sm:w-40 aspect-[16/9] sm:aspect-square flex-shrink-0 bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
+                        @if($rPost->featured_image)
+                            <img src="{{ asset('storage/' . $rPost->featured_image) }}" alt="{{ $rPost->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center opacity-30 text-3xl">🏆</div>
+                        @endif
+
+                        {{-- Views Badge cho Related Posts --}}
+                        <div class="absolute top-2 right-2 bg-slate-900/60 backdrop-blur-sm text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            {{ number_format($rPost->views ?? 0) }}
+                        </div>
+                    </div>
+
+                    {{-- Content --}}
+                    <div class="p-4 flex flex-col justify-center min-w-0">
+                        <h4 class="text-slate-900 dark:text-white font-bold group-hover:text-brand transition-colors line-clamp-2 leading-snug mb-2">
+                            {{ $rPost->title }}
+                        </h4>
+                        <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                            <span>🕒 {{ $rPost->created_at->diffForHumans() }}</span>
+                        </div>
+                    </div>
+                </a>
+            @empty
+                <div class="col-span-full py-8 text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Chưa có bài viết liên quan nào.</p>
+                </div>
+            @endforelse
+        </div>
+    </section>
+@endif
+
 @push('scripts')
 {{-- Đã xóa thư viện và JS khởi tạo ToastUI --}}
 <script>
