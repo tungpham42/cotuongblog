@@ -38,7 +38,7 @@ class PostController extends Controller
             'slug' => 'required|unique:posts,slug',
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'featured_image' => 'nullable|image|max:5120', // Max 5MB
+            'featured_image' => 'nullable|image|max:20480', // Max 20MB
             'tags' => 'array|exists:tags,id',
         ], [
             // Custom error messages
@@ -85,7 +85,7 @@ class PostController extends Controller
             'slug' => 'required|unique:posts,slug,' . $post->id,
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
-            'featured_image' => 'nullable|image|max:5120',
+            'featured_image' => 'nullable|image|max:20480',
             'tags' => 'array|exists:tags,id',
         ], [
             // Custom error messages

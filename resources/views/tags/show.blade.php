@@ -1,56 +1,75 @@
 @extends('layouts.app')
 
 @section('title', 'Thẻ: ' . $tag->name . ' - Cờ tướng')
+@if($tag->featured_image)
+    @section('og_image', asset('storage/' . $tag->featured_image))
+@endif
+@section('meta_description', $tag->description ? Str::limit($tag->description, 150) : 'Xem tất cả bài viết liên quan đến #' . $tag->name)
 
 @section('content')
 <div class="space-y-8">
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 text-center">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">
+    {{-- Header Section --}}
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 sm:p-12 text-center flex flex-col items-center">
+        @if($tag->featured_image)
+            <div class="w-24 h-24 mb-6 rounded-2xl overflow-hidden shadow-md border border-white dark:border-slate-600">
+                <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
+            </div>
+        @endif
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4">
             🏷️ Thẻ: <span class="text-brand">#{{ $tag->name }}</span>
         </h1>
-        <p class="text-slate-600 dark:text-slate-400 font-medium">
-            Tìm thấy {{ $posts->total() }} bài viết liên quan
-        </p>
+
+        @if($tag->description)
+            <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-6 text-lg leading-relaxed">
+                {{ $tag->description }}
+            </p>
+        @endif
+
+        <div class="px-5 py-1.5 rounded-full bg-brand/10 text-brand text-sm font-bold border border-brand/20 shadow-sm">
+            {{ $posts->total() }} bài viết liên quan
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{-- Grid Layout --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         @forelse ($posts as $post)
-            <a href="{{ route('posts.show', $post->slug) }}" class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-md hover:border-brand/50 transition-all duration-300">
-                <div class="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-700 relative overflow-hidden flex items-center justify-center">
+            <a href="{{ route('posts.show', $post->slug) }}" class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:border-brand/40 transition-all duration-300">
+                <div class="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden">
                     @if($post->featured_image)
                         <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     @else
-                        <span class="text-5xl opacity-50 group-hover:scale-110 transition-transform duration-500">🏆</span>
+                        <div class="w-full h-full flex items-center justify-center text-5xl opacity-40 group-hover:scale-110 transition-transform duration-500">🏆</div>
                     @endif
                 </div>
 
                 <div class="p-6 flex flex-col flex-grow">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-brand mb-3 uppercase tracking-wider">
-                        <span>📁 {{ $post->category->name ?? 'Chưa phân loại' }}</span>
-                        <span class="text-slate-300 dark:text-slate-600">•</span>
-                        <span class="text-slate-500 dark:text-slate-400 normal-case font-medium flex items-center gap-1">🕒 {{ $post->created_at->diffForHumans() }}</span>
+                    <div class="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400 mb-4">
+                        <span class="text-brand bg-brand-light dark:bg-brand/20 px-2 py-0.5 rounded uppercase">📁 {{ $post->category->name ?? 'Chưa phân loại' }}</span>
+                        <span>🕒 {{ $post->created_at->diffForHumans() }}</span>
                     </div>
 
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand transition-colors line-clamp-2 leading-snug">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand transition-colors line-clamp-2 leading-tight">
                         {{ $post->title }}
                     </h3>
 
                     <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-4 flex-grow leading-relaxed">
-                        {{ Str::limit($post->excerpt ?? $post->content, 120) }}
+                        {{ Str::limit($post->excerpt ?? strip_tags($post->content), 120) }}
                     </p>
                 </div>
             </a>
         @empty
-            <div class="col-span-full py-16 text-center bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
-                <span class="text-5xl block mb-4">📭</span>
-                <p class="text-slate-500 dark:text-slate-400 text-lg font-medium">Chưa có bài viết nào gắn thẻ này.</p>
-                <a href="{{ route('home') }}" class="inline-block mt-4 text-brand hover:underline font-medium">← Quay lại trang chủ</a>
+            <div class="col-span-full py-20 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+                <span class="text-6xl block mb-4">📭</span>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Chưa có nội dung</h3>
+                <p class="text-slate-500 dark:text-slate-400 mb-6">Không có bài viết nào được gắn thẻ này.</p>
+                <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-2 bg-brand text-white rounded-xl hover:bg-brand-hover shadow-lg shadow-brand/30 transition-all">← Quay về trang chủ</a>
             </div>
         @endforelse
     </div>
 
     @if ($posts->hasPages())
-        <div class="mt-8">
+        <div class="mt-10 flex justify-center">
             {{ $posts->links() }}
         </div>
     @endif

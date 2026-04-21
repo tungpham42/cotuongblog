@@ -22,10 +22,16 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:tags,name',
+            'name'           => 'required|string|max:255|unique:tags,name',
+            'description'    => 'nullable|string',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        if ($request->hasFile('featured_image')) {
+            $validated['featured_image'] = $request->file('featured_image')->store('tags', 'public');
+        }
 
         Tag::create($validated);
 
@@ -40,10 +46,16 @@ class TagController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
+            'name'           => 'required|string|max:255|unique:tags,name,' . $tag->id,
+            'description'    => 'nullable|string',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        if ($request->hasFile('featured_image')) {
+            $validated['featured_image'] = $request->file('featured_image')->store('tags', 'public');
+        }
 
         $tag->update($validated);
 

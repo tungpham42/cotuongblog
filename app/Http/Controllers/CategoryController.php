@@ -23,10 +23,16 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
+            'name'           => 'required|string|max:255|unique:categories,name',
+            'description'    => 'nullable|string',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        if ($request->hasFile('featured_image')) {
+            $validated['featured_image'] = $request->file('featured_image')->store('categories', 'public');
+        }
 
         Category::create($validated);
 
@@ -41,11 +47,17 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            // Bỏ qua unique check cho chính category đang sửa
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'name'           => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'description'    => 'nullable|string',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        if ($request->hasFile('featured_image')) {
+            // Optional: Delete old image here if using Storage::delete()
+            $validated['featured_image'] = $request->file('featured_image')->store('categories', 'public');
+        }
 
         $category->update($validated);
 

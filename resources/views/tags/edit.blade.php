@@ -7,6 +7,7 @@
     <div class="px-6 py-8 sm:p-10">
         <div class="mb-8">
             <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Chỉnh sửa thẻ</h2>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Cập nhật thông tin chi tiết cho thẻ <span class="text-brand">#{{ $tag->name }}</span>.</p>
         </div>
 
         @if ($errors->any())
@@ -18,7 +19,7 @@
             </div>
         @endif
 
-        <form action="{{ route('tags.update', $tag) }}" method="POST" class="space-y-6">
+        <form action="{{ route('tags.update', $tag) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -28,10 +29,30 @@
                        class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">
             </div>
 
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Mô tả thẻ</label>
+                <textarea name="description" rows="3"
+                          class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">{{ old('description', $tag->description) }}</textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Ảnh đại diện thẻ</label>
+
+                @if($tag->featured_image)
+                    <div class="mb-4">
+                        <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="Current Tag Image" class="w-24 h-24 object-cover rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <p class="text-xs text-slate-500 mt-2">Ảnh hiện tại</p>
+                    </div>
+                @endif
+
+                <input type="file" name="featured_image" accept="image/*"
+                       class="w-full text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand/10 file:text-brand hover:file:bg-brand/20 transition-all cursor-pointer">
+            </div>
+
             <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100 dark:border-slate-700">
                 <a href="{{ route('tags.index') }}" class="px-6 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-center">Hủy</a>
                 <button type="submit" class="px-6 py-2.5 bg-brand text-white rounded-xl hover:bg-brand-hover shadow-md shadow-brand/30 transition font-medium text-center">
-                    Cập nhật thay đổi
+                    Cập nhật thẻ
                 </button>
             </div>
         </form>
