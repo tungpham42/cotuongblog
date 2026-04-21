@@ -141,7 +141,7 @@ class PostController extends Controller
                             ->where('id', '!=', $post->id)
                             ->where('is_published', true)
                             ->latest()
-                            ->take(5)
+                            ->take(4)
                             ->get();
 
         return view('posts.show', compact('post', 'relatedPosts'));
