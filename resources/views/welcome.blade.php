@@ -81,7 +81,7 @@
                             </h3>
 
                             <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-4 flex-grow leading-relaxed">
-                                {{ Str::limit($post->excerpt ?? $post->content, 120) }}
+                                {{ Str::limit($post->excerpt ?? strip_tags($post->content), 120) }}
                             </p>
                         </div>
                     </a>
@@ -101,16 +101,31 @@
 
         <div class="space-y-8 sticky top-28 self-start lg:block">
 
+            {{-- Categories Sidebar with Featured Images --}}
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-5 flex items-center gap-2">
                     📂 Chuyên mục
                 </h3>
-                <ul class="space-y-2">
+                <ul class="space-y-3">
                     @forelse ($categories as $category)
                         <li>
-                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center justify-between p-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-brand/10 hover:text-brand transition-colors">
-                                <span class="font-medium">{{ $category->name }}</span>
-                                <span class="text-xs bg-slate-100 dark:bg-slate-700 group-hover:bg-brand/20 group-hover:text-brand px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-300 transition-colors">📌</span>
+                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center gap-3 p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-brand/10 hover:text-brand transition-all duration-200">
+                                {{-- Category Featured Image --}}
+                                <div class="flex-shrink-0 w-11 h-11 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+                                    @if($category->featured_image)
+                                        <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                    @else
+                                        <span class="text-xl group-hover:scale-110 transition-transform duration-300">📂</span>
+                                    @endif
+                                </div>
+
+                                {{-- Name & Arrow --}}
+                                <div class="flex-grow flex items-center justify-between min-w-0 pr-1">
+                                    <span class="font-semibold truncate text-sm sm:text-base">{{ $category->name }}</span>
+                                    <svg class="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
                             </a>
                         </li>
                     @empty
