@@ -8,7 +8,7 @@
     <p class="text-slate-600 dark:text-slate-400 mt-2">Chào mừng bạn quay trở lại. Dưới đây là thống kê các dữ liệu hiện có.</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 transition hover:shadow-md">
         <div class="flex items-center justify-between">
             <div>
@@ -58,6 +58,19 @@
         </div>
         <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
             <a href="{{ route('users.index') }}" class="text-brand hover:text-brand-hover text-sm font-medium transition">Quản lý người dùng &rarr;</a>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 transition hover:shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Bình luận</p>
+                <p class="text-3xl font-bold text-slate-800 dark:text-white mt-2">{{ $stats['comments'] }}</p>
+            </div>
+            <div class="text-4xl">💬</div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+            <a href="{{ route('comments.index') }}" class="text-brand hover:text-brand-hover text-sm font-medium transition">Quản lý bình luận &rarr;</a>
         </div>
     </div>
 </div>

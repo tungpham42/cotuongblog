@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function index()
+    {
+        // Load relationships user và post
+        $comments = Comment::with(['user', 'post'])->latest()->paginate(12);
+        return view('comments.index', compact('comments'));
+    }
+
     public function store(Request $request, Post $post)
     {
         $validated = $request->validate([

@@ -29,6 +29,7 @@
                         <th class="px-6 py-4 font-semibold">Tên người dùng</th>
                         <th class="px-6 py-4 font-semibold">Email</th>
                         <th class="px-6 py-4 font-semibold text-center">Số bài viết</th>
+                        <th class="px-6 py-4 font-semibold text-center">Số bình luận</th>
                         <th class="px-6 py-4 font-semibold">Ngày tạo</th>
                         <th class="px-6 py-4 font-semibold text-right">Thao tác</th>
                     </tr>
@@ -50,6 +51,11 @@
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
                                     {{ $user->posts_count }} bài
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                    {{ $user->comments_count }} bình luận
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm">
@@ -80,7 +86,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                            <td colspan="6" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
                                 Chưa có người dùng nào.
                             </td>
                         </tr>

@@ -90,6 +90,7 @@
                             <a href="{{ route('categories.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Chuyên mục</a>
                             <a href="{{ route('tags.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Thẻ</a>
                             <a href="{{ route('users.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Người dùng</a>
+                            <a href="{{ route('comments.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bình luận</a>
                         @else
                             <span class="text-slate-600 dark:text-slate-300 font-medium">Xin chào, {{ auth()->user()->name }}</span>
                         @endif
@@ -133,6 +134,7 @@
                         <a href="{{ route('categories.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Chuyên mục</a>
                         <a href="{{ route('tags.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Thẻ</a>
                         <a href="{{ route('users.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Người dùng</a>
+                        <a href="{{ route('comments.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Bình luận</a>
                     @else
                         <div class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-500 font-medium">Xin chào, {{ auth()->user()->name }}</div>
                     @endif

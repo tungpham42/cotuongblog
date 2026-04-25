@@ -13,6 +13,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Cache;
 
 Route::get('/test-redis', function () {
@@ -46,6 +47,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
             'categories' => Category::count(),
             'tags' => Tag::count(),
             'users' => User::count(),
+            'comments' => Comment::count(),
         ];
         return view('dashboard', compact('stats'));
     })->name('dashboard');
@@ -56,6 +58,8 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::resource('tags', TagController::class);
     Route::resource('users', UserController::class);
     Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('image.upload'); // Renamed route
+
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
