@@ -27,7 +27,7 @@
                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tiêu đề</label>
                 <input type="text" name="title" value="{{ old('title', $post->title) }}"
                     class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border {{ $errors->has('title') || $errors->has('slug') ? 'border-red-500' : 'border-slate-200 dark:border-slate-700' }} rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">
-                
+
                 @error('title')
                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                 @enderror
@@ -86,16 +86,26 @@
                 </div>
             </div>
 
-            <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                <input type="hidden" name="is_published" value="0">
-                <input type="checkbox" name="is_published" id="is_published" value="1"
-                       {{ old('is_published', $post->is_published) ? 'checked' : '' }}
-                       class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
-                <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
-                    Trạng thái xuất bản
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-normal">Bật để hiển thị bài viết công khai.</p>
-                </label>
-            </div>
+            @if(auth()->user()->is_admin)
+                <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <input type="hidden" name="is_published" value="0">
+                    <input type="checkbox" name="is_published" id="is_published" value="1"
+                        {{ old('is_published', $post->is_published) ? 'checked' : '' }}
+                        class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
+                    <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
+                        Trạng thái xuất bản
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-normal">Bật để hiển thị bài viết công khai.</p>
+                    </label>
+                </div>
+            @else
+                <div class="p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl flex items-start gap-3">
+                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <div>
+                        <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Lưu ý</h4>
+                        <p class="text-xs text-amber-700 dark:text-amber-300 mt-1">Khi bạn cập nhật, bài viết sẽ được đưa trở lại trạng thái "Chờ duyệt" cho đến khi quản trị viên phê duyệt lại.</p>
+                    </div>
+                </div>
+            @endif
 
             <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
                 <a href="{{ route('posts.index') }}" class="px-6 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition font-medium text-center">Hủy</a>

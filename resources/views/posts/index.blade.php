@@ -43,10 +43,21 @@
                     <div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-700 mt-6">
                         <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg {{ $post->is_published ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' }}">
                             <span class="w-1.5 h-1.5 rounded-full {{ $post->is_published ? 'bg-emerald-500' : 'bg-amber-500' }}"></span>
-                            {{ $post->is_published ? 'Đã xuất bản' : 'Bản nháp' }}
+                            {{ $post->is_published ? 'Đã xuất bản' : 'Chờ duyệt' }}
                         </span>
 
                         <div class="flex space-x-2">
+                            {{-- Nút duyệt bài dành cho Admin --}}
+                            @if(auth()->user()->is_admin && !$post->is_published)
+                                <form action="{{ route('posts.approve', $post) }}" method="POST" class="inline m-0">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="p-2 text-slate-400 hover:text-emerald-500 bg-slate-50 hover:bg-emerald-50 dark:bg-slate-700 dark:hover:bg-emerald-500/20 rounded-lg transition-colors" title="Duyệt bài này">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </button>
+                                </form>
+                            @endif
+
                             <a href="{{ route('posts.edit', $post) }}" class="p-2 text-slate-400 hover:text-brand dark:hover:text-brand bg-slate-50 hover:bg-brand-light dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg transition-colors" title="Sửa">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>

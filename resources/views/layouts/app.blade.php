@@ -84,9 +84,10 @@
 
                 <div class="hidden sm:flex sm:items-center sm:space-x-6">
                     @auth
+                        <a href="{{ route('posts.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bài viết</a>
+
                         @if(auth()->user()->is_admin)
                             <a href="{{ route('dashboard') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Tổng quan</a>
-                            <a href="{{ route('posts.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bài viết</a>
                             <a href="{{ route('categories.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Chuyên mục</a>
                             <a href="{{ route('tags.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Thẻ</a>
                             <a href="{{ route('users.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Người dùng</a>
@@ -128,9 +129,10 @@
         <div x-show="open" class="sm:hidden border-t border-slate-100 dark:border-slate-700" style="display: none;" x-transition>
             <div class="pt-2 pb-3 space-y-1">
                 @auth
+                    <a href="{{ route('posts.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Bài viết</a>
+
                     @if(auth()->user()->is_admin)
                         <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Tổng quan</a>
-                        <a href="{{ route('posts.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Bài viết</a>
                         <a href="{{ route('categories.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Chuyên mục</a>
                         <a href="{{ route('tags.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Thẻ</a>
                         <a href="{{ route('users.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Người dùng</a>
