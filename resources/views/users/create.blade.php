@@ -6,7 +6,10 @@
 <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
     <div class="px-6 py-8 sm:p-10">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Tạo người dùng mới</h2>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                Tạo người dùng mới
+            </h2>
             <p class="text-slate-500 dark:text-slate-400 mt-2">Thêm tài khoản mới vào hệ thống của bạn.</p>
         </div>
 

@@ -5,7 +5,10 @@
 @section('content')
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Thẻ (Tags)</h1>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                Thẻ (Tags)
+            </h1>
             <p class="text-slate-500 dark:text-slate-400 mt-1">Quản lý từ khóa và thẻ cho bài viết.</p>
         </div>
         <a href="{{ route('tags.create') }}" class="bg-brand text-white px-5 py-2.5 rounded-xl shadow-md shadow-brand/30 hover:bg-brand-hover hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 font-medium">
@@ -33,7 +36,9 @@
                                 @if($tag->featured_image)
                                     <img src="{{ asset('storage/' . $tag->featured_image) }}" class="w-10 h-10 rounded-lg object-cover border border-slate-200 dark:border-slate-600 shadow-sm">
                                 @else
-                                    <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">🏷️</div>
+                                    <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 shadow-sm">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                                    </div>
                                 @endif
                             </td>
                             <td class="px-6 py-4">

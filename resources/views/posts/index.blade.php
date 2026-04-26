@@ -5,7 +5,10 @@
 @section('content')
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Bài viết của bạn</h1>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
+                Bài viết của bạn
+            </h1>
             <p class="text-slate-500 dark:text-slate-400 mt-1">Quản lý và chỉnh sửa các nội dung bạn đã chia sẻ.</p>
         </div>
         <a href="{{ route('posts.create') }}" class="bg-brand text-white px-5 py-2.5 rounded-xl shadow-md shadow-brand/30 hover:bg-brand-hover hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 font-medium">

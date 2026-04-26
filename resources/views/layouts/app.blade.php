@@ -55,7 +55,6 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- AI Chat Widget -->
     <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script>
 
     @guest
@@ -194,23 +193,21 @@
         "
         class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
 
-        <!-- Back to top -->
         <button x-show="showTop"
                 x-transition
                 @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
-                class="h-12 w-12 rounded-full bg-brand text-white shadow-lg hover:bg-brand-hover flex items-center justify-center text-xl">
-            ↑
+                class="h-12 w-12 rounded-full bg-brand text-white shadow-lg hover:bg-brand-hover flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
         </button>
 
-        <!-- Scroll to bottom -->
         <button x-show="showBottom"
                 x-transition
                 @click="window.scrollTo({
                     top: document.documentElement.scrollHeight,
                     behavior: 'smooth'
                 })"
-                class="h-12 w-12 rounded-full bg-slate-800 dark:bg-slate-700 text-white shadow-lg flex items-center justify-center text-xl">
-            ↓
+                class="h-12 w-12 rounded-full bg-slate-800 dark:bg-slate-700 text-white shadow-lg flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </button>
 
     </div>

@@ -5,7 +5,10 @@
 @section('content')
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Quản lý người dùng</h1>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Quản lý người dùng
+            </h1>
             <p class="text-slate-500 dark:text-slate-400 mt-1">Quản lý danh sách tài khoản và phân quyền hệ thống.</p>
         </div>
         <a href="{{ route('users.create') }}" class="bg-brand text-white px-5 py-2.5 rounded-xl shadow-md shadow-brand/30 hover:bg-brand-hover hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 font-medium">
@@ -86,8 +89,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
-                                Chưa có người dùng nào.
+                            <td colspan="6" class="px-6 py-16 text-center bg-slate-50/50 dark:bg-slate-800/50 border-t border-dashed border-slate-200 dark:border-slate-700">
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg class="w-12 h-12 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    <p class="text-slate-500 dark:text-slate-400 text-lg font-medium">Chưa có người dùng nào.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse

@@ -6,7 +6,10 @@
 <div class="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-300">
     <div class="px-6 py-8 sm:p-10">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Chỉnh sửa thẻ</h2>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                Chỉnh sửa thẻ
+            </h2>
             <p class="text-slate-500 dark:text-slate-400 mt-2">Cập nhật thông tin chi tiết cho thẻ <span class="text-brand">#{{ $tag->name }}</span>.</p>
         </div>
 

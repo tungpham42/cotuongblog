@@ -8,7 +8,6 @@
 
 @section('content')
 <div class="space-y-8">
-    {{-- Breadcrumbs Navigation --}}
     <nav aria-label="Breadcrumb" class="mb-2">
         <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
             <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors">Trang chủ</a></li>
@@ -17,7 +16,6 @@
         </ol>
     </nav>
 
-    {{-- Category Header Banner --}}
     <header class="relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 sm:p-12 text-center flex flex-col items-center justify-center overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-brand/5 to-transparent dark:from-brand/10 pointer-events-none"></div>
 
@@ -27,8 +25,8 @@
                     <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Ảnh đại diện chuyên mục {{ $category->name }}" class="w-full h-full object-cover">
                 </figure>
             @else
-                <div class="w-20 h-20 mb-6 rounded-2xl bg-brand/10 dark:bg-brand/20 flex items-center justify-center text-4xl shadow-inner">
-                    📂
+                <div class="w-20 h-20 mb-6 rounded-2xl bg-brand/10 dark:bg-brand/20 flex items-center justify-center shadow-inner text-brand">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                 </div>
             @endif
 
@@ -49,7 +47,6 @@
         </div>
     </header>
 
-    {{-- Posts Grid --}}
     <section aria-label="Danh sách bài viết trong chuyên mục">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             @forelse ($posts as $post)
@@ -59,12 +56,11 @@
                         @if($post->featured_image)
                             <img src="{{ asset('storage/' . $post->featured_image) }}" alt="Ảnh thu nhỏ của bài viết: {{ $post->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                         @else
-                            <div class="w-full h-full flex items-center justify-center text-5xl opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-500">
-                                🏆
+                            <div class="w-full h-full flex items-center justify-center text-slate-400 group-hover:text-brand opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-500">
+                                <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                             </div>
                         @endif
 
-                        {{-- Views Counter Badge --}}
                         <div class="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-sm">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             {{ number_format($post->views ?? 0) }}
@@ -87,7 +83,6 @@
                             </h3>
                         </header>
 
-                        {{-- Fallback to strip_tags(content) if excerpt is null to avoid broken HTML layouts --}}
                         <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 flex-grow leading-relaxed">
                             {{ Str::limit(strip_tags(Str::markdown($post->excerpt ?? $post->content ?? '')), 120) }}
                         </p>
@@ -96,7 +91,7 @@
             @empty
                 <div class="col-span-full py-20 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
                     <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-900 mb-4">
-                        <span class="text-4xl">📭</span>
+                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Chưa có bài viết nào</h3>
                     <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!</p>
@@ -108,7 +103,6 @@
         </div>
     </section>
 
-    {{-- Pagination Block --}}
     @if ($posts->hasPages())
         <div class="mt-10 flex justify-center">
             {{ $posts->links() }}
