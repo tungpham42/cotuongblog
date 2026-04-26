@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
@@ -26,8 +27,37 @@ Route::get('/test-redis', function () {
 });
 
 // Public Front Page
-Route::get('/', function () {
-    $posts = Post::where('is_published', true)->latest()->paginate(12);
+Route::get('/', function (Request $request) {
+    $query = Post::where('is_published', true);
+
+    // Xử lý Tìm kiếm
+    if ($request->has('search') && $request->search != '') {
+        $query->where(function($q) use ($request) {
+            $q->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('content', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    // Xử lý Sắp xếp
+    $sort = $request->input('sort', 'latest');
+    switch ($sort) {
+        case 'oldest':
+            $query->oldest();
+            break;
+        case 'alpha_asc':
+            $query->orderBy('title', 'asc');
+            break;
+        case 'alpha_desc':
+            $query->orderBy('title', 'desc');
+            break;
+        case 'latest':
+        default:
+            $query->latest();
+            break;
+    }
+
+    $posts = $query->paginate(12)->withQueryString();
+
     // Make sure both Categories and Tags are sorted by order
     $categories = Category::orderBy('order', 'asc')->get();
     $tags = Tag::orderBy('order', 'asc')->get();
@@ -48,16 +78,13 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
         return view('dashboard', compact('stats'));
     })->name('dashboard');
 
-    // Thêm Route xử lý kéo thả chuyên mục
     Route::post('categories/update-order', [CategoryController::class, 'updateOrder'])->name('categories.update-order');
-    // Thêm Route xử lý kéo thả thẻ
     Route::post('tags/update-order', [TagController::class, 'updateOrder'])->name('tags.update-order');
 
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
     Route::resource('users', UserController::class);
 
-    // Route duyệt bài viết dành riêng cho Admin
     Route::patch('/posts/{post}/approve', [PostController::class, 'approve'])->name('posts.approve');
 
     Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
@@ -66,7 +93,6 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 
 // Normal Authenticated Users (Chỉ cần đăng nhập)
 Route::middleware(['auth'])->group(function () {
-    // Quản lý bài viết cho mọi user
     Route::resource('posts', PostController::class)->except(['show']);
     Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('image.upload');
 

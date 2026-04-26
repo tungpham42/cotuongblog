@@ -87,13 +87,40 @@ class TagController extends Controller
         return redirect()->route('tags.index')->with('success', 'Thẻ đã được xóa!');
     }
 
-    public function show(Tag $tag)
+    public function show(Request $request, Tag $tag)
     {
-        // Lấy các bài viết có gắn thẻ này, phân trang 12 bài / trang
-        $posts = $tag->posts()
-                     ->where('is_published', true)
-                     ->latest()
-                     ->paginate(12);
+        // Bắt đầu query các bài viết thuộc tag này
+        $query = $tag->posts()->where('is_published', true);
+
+        // Xử lý Tìm kiếm
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Xử lý Sắp xếp
+        $sort = $request->input('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'alpha_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'alpha_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+
+        // Phân trang và giữ nguyên query string trên URL
+        $posts = $query->paginate(12)->withQueryString();
+
         return view('tags.show', compact('tag', 'posts'));
     }
 }

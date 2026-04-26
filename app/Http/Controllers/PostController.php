@@ -12,16 +12,42 @@ use League\CommonMark\CommonMarkConverter;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $query = Post::with(['category', 'author', 'tags'])->latest();
+        $query = Post::with(['category', 'author', 'tags']);
 
         // Nếu không phải admin, chỉ hiển thị bài viết của chính họ
         if (!auth()->user()->is_admin) {
             $query->where('user_id', auth()->id());
         }
 
-        $posts = $query->paginate(12);
+        // Xử lý Tìm kiếm
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Xử lý Sắp xếp
+        $sort = $request->input('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'alpha_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'alpha_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+
+        $posts = $query->paginate(12)->withQueryString();
         return view('posts.index', compact('posts'));
     }
 

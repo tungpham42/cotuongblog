@@ -32,11 +32,31 @@
         </div>
     </div>
 
-    {{-- Grid Layout --}}
+    {{-- Bộ lọc Tìm kiếm và Sắp xếp --}}
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            Danh sách bài viết
+        </h2>
+
+        <form action="{{ route('tags.show', $tag->slug) }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <div class="relative w-full sm:w-64">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm trong thẻ..." class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full pl-10 p-2.5 outline-none transition-all">
+                <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <select name="sort" onchange="this.form.submit()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full sm:w-auto p-2.5 outline-none cursor-pointer">
+                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
+                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
+                <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>Từ A - Z</option>
+                <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Từ Z - A</option>
+            </select>
+        </form>
+    </div>
+
+    {{-- Grid Layout Danh sách bài viết (giữ nguyên như cũ) --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         @forelse ($posts as $post)
             <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:border-brand/40 dark:hover:border-brand/50 transition-all duration-300 transform hover:-translate-y-1">
-
                 <a href="{{ route('posts.show', $post->slug) }}" class="block aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
                     @if($post->featured_image)
                         <img src="{{ asset('storage/' . $post->featured_image) }}" alt="Ảnh thu nhỏ của bài viết: {{ $post->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
@@ -46,7 +66,6 @@
                         </div>
                     @endif
 
-                    {{-- Views Counter Badge --}}
                     <div class="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-sm">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         {{ number_format($post->views ?? 0) }}
@@ -69,7 +88,6 @@
                         </h3>
                     </header>
 
-                    {{-- Fallback to strip_tags(content) if excerpt is null to avoid broken HTML layouts --}}
                     <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 flex-grow leading-relaxed">
                         {{ Str::limit(strip_tags(Str::markdown($post->excerpt ?? $post->content ?? '')), 120) }}
                     </p>
@@ -81,8 +99,8 @@
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Chưa có nội dung</h3>
-                <p class="text-slate-500 dark:text-slate-400 mb-6">Không có bài viết nào được gắn thẻ này.</p>
-                <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-2 bg-brand text-white rounded-xl hover:bg-brand-hover shadow-lg shadow-brand/30 transition-all">← Quay về trang chủ</a>
+                <p class="text-slate-500 dark:text-slate-400 mb-6">Không có bài viết nào phù hợp với tìm kiếm hoặc được gắn thẻ này.</p>
+                <a href="{{ route('tags.show', $tag->slug) }}" class="inline-flex items-center px-6 py-2 bg-brand text-white rounded-xl hover:bg-brand-hover shadow-lg shadow-brand/30 transition-all">Làm mới lại</a>
             </div>
         @endforelse
     </div>

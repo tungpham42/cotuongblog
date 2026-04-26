@@ -91,13 +91,38 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', 'Chuyên mục đã được xóa!');
     }
 
-    public function show(Category $category)
+    public function show(Request $request, Category $category)
     {
-        // Lấy các bài viết thuộc chuyên mục, phân trang 12 bài / trang
-        $posts = $category->posts()
-                          ->where('is_published', true)
-                          ->latest()
-                          ->paginate(12);
+        $query = $category->posts()->where('is_published', true);
+
+        // Xử lý Tìm kiếm
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Xử lý Sắp xếp
+        $sort = $request->input('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'alpha_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'alpha_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+
+        $posts = $query->paginate(12)->withQueryString();
+
         return view('categories.show', compact('category', 'posts'));
     }
 }

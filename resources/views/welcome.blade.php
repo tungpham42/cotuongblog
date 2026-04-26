@@ -64,10 +64,32 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div class="lg:col-span-2 space-y-6">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-4">
-                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
-                Bài viết mới nhất
-            </h2>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
+                    {{ request('search') ? 'Kết quả tìm kiếm' : 'Bài viết mới nhất' }}
+                </h2>
+
+                <form action="{{ route('home') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+
+                    {{-- Thanh tìm kiếm tinh tế (Mở rộng mượt mà khi focus) --}}
+                    <div class="relative w-full sm:w-auto group">
+                        <input type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Tìm bài viết..."
+                            class="bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-brand dark:focus:border-brand focus:shadow-sm text-slate-700 dark:text-slate-300 text-sm rounded-lg block w-full sm:w-36 focus:w-full sm:focus:w-56 pl-9 p-2.5 outline-none transition-all duration-300 ease-out placeholder-slate-400 cursor-pointer focus:cursor-text">
+                        <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400 group-hover:text-brand transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+
+                    <select name="sort" onchange="this.form.submit()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full sm:w-auto p-2.5 outline-none cursor-pointer">
+                        <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
+                        <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>Tên A - Z</option>
+                        <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Tên Z - A</option>
+                    </select>
+                </form>
+            </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 @forelse ($posts as $post)

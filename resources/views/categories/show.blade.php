@@ -46,7 +46,23 @@
             </div>
         </div>
     </header>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Danh sách bài viết</h2>
 
+        <form action="{{ route('categories.show', $category->slug) }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <div class="relative w-full sm:w-64">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm trong chuyên mục..." class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full pl-10 p-2.5 outline-none">
+                <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <select name="sort" onchange="this.form.submit()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full sm:w-auto p-2.5 outline-none cursor-pointer">
+                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
+                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
+                <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>Từ A - Z</option>
+                <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Từ Z - A</option>
+            </select>
+        </form>
+    </div>
     <section aria-label="Danh sách bài viết trong chuyên mục">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             @forelse ($posts as $post)
