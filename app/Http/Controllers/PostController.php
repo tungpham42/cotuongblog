@@ -27,8 +27,8 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::withCount('posts')->get();
-        $tags = Tag::withCount('posts')->get();
+        $categories = Category::withCount('posts')->orderBy('order', 'asc')->get();
+        $tags = Tag::withCount('posts')->orderBy('order', 'asc')->get();
         return view('posts.create', compact('categories', 'tags'));
     }
 
@@ -77,8 +77,8 @@ class PostController extends Controller
         // Phân quyền: User thường không được sửa bài của người khác
         abort_if(!auth()->user()->is_admin && $post->user_id !== auth()->id(), 403);
 
-        $categories = Category::withCount('posts')->get();
-        $tags = Tag::withCount('posts')->get();
+        $categories = Category::withCount('posts')->orderBy('order', 'asc')->get();
+        $tags = Tag::withCount('posts')->orderBy('order', 'asc')->get();
         return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
