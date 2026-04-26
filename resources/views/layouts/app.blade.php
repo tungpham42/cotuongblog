@@ -86,23 +86,41 @@
                     @auth
                         <a href="{{ route('posts.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bài viết</a>
 
-                        @if(auth()->user()->is_admin)
-                            <a href="{{ route('dashboard') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Tổng quan</a>
-                            <a href="{{ route('categories.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Chuyên mục</a>
-                            <a href="{{ route('tags.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Thẻ</a>
-                            <a href="{{ route('users.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Người dùng</a>
-                            <a href="{{ route('comments.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bình luận</a>
-                        @else
-                            <span class="text-slate-600 dark:text-slate-300 font-medium">Xin chào, {{ auth()->user()->name }}</span>
-                        @endif
+                        <div class="relative" x-data="{ dropdownOpen: false }">
+                            <button @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition focus:outline-none">
+                                <span>{{ auth()->user()->name }}</span>
+                                <svg :class="{'rotate-180': dropdownOpen}" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
 
-                        <form method="POST" action="{{ route('logout') }}" class="inline m-0">
-                            @csrf
-                            <button type="submit" class="text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-500 font-medium transition">Đăng xuất</button>
-                        </form>
+                            <div x-show="dropdownOpen"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="absolute right-0 mt-4 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-100 dark:border-slate-700 py-1 z-50"
+                                style="display: none;">
+
+                                @if(auth()->user()->is_admin)
+                                    <div class="px-4 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Quản trị</div>
+                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand transition">Tổng quan</a>
+                                    <a href="{{ route('categories.index') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand transition">Chuyên mục</a>
+                                    <a href="{{ route('tags.index') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand transition">Thẻ</a>
+                                    <a href="{{ route('users.index') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand transition">Người dùng</a>
+                                    <a href="{{ route('comments.index') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand transition">Bình luận</a>
+                                    <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+                                @endif
+
+                                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition">Đăng xuất</button>
+                                </form>
+                            </div>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Đăng nhập</a>
-                        <a href="{{ route('register') }}" class="bg-brand hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium transition">Đăng ký</a>
+                        <a href="{{ route('register') }}" class="bg-brand hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium transition shadow-sm hover:shadow">Đăng ký</a>
                     @endauth
 
                     <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
@@ -116,7 +134,7 @@
                         <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                         <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </button>
-                    <button @click="open = !open" class="text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none">
+                    <button @click="open = !open" class="text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none transition">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" style="display: none;" />
@@ -129,19 +147,22 @@
         <div x-show="open" class="sm:hidden border-t border-slate-100 dark:border-slate-700" style="display: none;" x-transition>
             <div class="pt-2 pb-3 space-y-1">
                 @auth
+                    <div class="block pl-3 pr-4 py-3 border-l-4 border-brand text-slate-800 dark:text-white font-medium bg-slate-50 dark:bg-slate-700/50">
+                        Xin chào, {{ auth()->user()->name }}
+                    </div>
+
                     <a href="{{ route('posts.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Bài viết</a>
 
                     @if(auth()->user()->is_admin)
+                        <div class="pl-3 pr-4 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-2">Quản trị</div>
                         <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Tổng quan</a>
                         <a href="{{ route('categories.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Chuyên mục</a>
                         <a href="{{ route('tags.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Thẻ</a>
                         <a href="{{ route('users.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Người dùng</a>
                         <a href="{{ route('comments.index') }}" class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Bình luận</a>
-                    @else
-                        <div class="block pl-3 pr-4 py-3 border-l-4 border-transparent text-slate-500 font-medium">Xin chào, {{ auth()->user()->name }}</div>
                     @endif
 
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="mt-2">
                         @csrf
                         <button type="submit" class="w-full text-left block pl-3 pr-4 py-3 border-l-4 border-transparent text-red-500 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium">Đăng xuất</button>
                     </form>
