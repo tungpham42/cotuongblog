@@ -10,9 +10,24 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        // Kèm theo số lượng bài viết của mỗi chuyên mục
-        $categories = Category::withCount('posts')->latest()->paginate(12);
+        // Xóa phân trang để hiển thị toàn bộ danh sách khi kéo thả
+        $categories = Category::withCount('posts')->orderBy('order', 'asc')->get();
         return view('categories.index', compact('categories'));
+    }
+
+    // Thêm method xử lý kéo thả
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'exists:categories,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Category::where('id', $id)->update(['order' => $index]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     public function create()

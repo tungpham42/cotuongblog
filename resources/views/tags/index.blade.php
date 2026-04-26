@@ -9,7 +9,7 @@
                 <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                 Thẻ (Tags)
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 mt-1">Quản lý từ khóa và thẻ cho bài viết.</p>
+            <p class="text-slate-500 dark:text-slate-400 mt-1">Quản lý và sắp xếp các thẻ (Kéo thả để đổi vị trí).</p>
         </div>
         <a href="{{ route('tags.create') }}" class="bg-brand text-white px-5 py-2.5 rounded-xl shadow-md shadow-brand/30 hover:bg-brand-hover hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2 font-medium">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -22,6 +22,7 @@
             <table class="w-full text-left text-sm text-slate-500 dark:text-slate-400">
                 <thead class="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-100 dark:border-slate-700">
                     <tr>
+                        <th scope="col" class="px-4 py-4 w-10"></th>
                         <th scope="col" class="px-6 py-4 w-16">Ảnh</th>
                         <th scope="col" class="px-6 py-4">Tên thẻ</th>
                         <th scope="col" class="px-6 py-4">Slug</th>
@@ -29,9 +30,12 @@
                         <th scope="col" class="px-6 py-4 text-right">Thao tác</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                <tbody id="sortable-tags" class="divide-y divide-slate-100 dark:divide-slate-700">
                     @forelse($tags as $tag)
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <tr data-id="{{ $tag->id }}" class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-white dark:bg-slate-800">
+                            <td class="px-4 py-4 text-center cursor-move drag-handle text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg>
+                            </td>
                             <td class="px-6 py-4">
                                 @if($tag->featured_image)
                                     <img src="{{ asset('storage/' . $tag->featured_image) }}" class="w-10 h-10 rounded-lg object-cover border border-slate-200 dark:border-slate-600 shadow-sm">
@@ -66,7 +70,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                            <td colspan="6" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
                                 Chưa có thẻ nào. <a href="{{ route('tags.create') }}" class="text-brand hover:underline font-medium">Tạo mới ngay</a>.
                             </td>
                         </tr>
@@ -75,14 +79,56 @@
             </table>
         </div>
     </div>
-
-    <div class="mt-8">
-        {{ $tags->links() }}
-    </div>
 @endsection
 
 @stack('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Drag and Drop Logic
+        var el = document.getElementById('sortable-tags');
+        if (el) {
+            Sortable.create(el, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'opacity-50', // Tailwind class cho row đang kéo
+                onEnd: function () {
+                    let order = [];
+                    document.querySelectorAll('#sortable-tags tr').forEach(function (row) {
+                        order.push(row.getAttribute('data-id'));
+                    });
+
+                    fetch('{{ route("tags.update-order") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ order: order })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const isDark = document.documentElement.classList.contains('dark');
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: "Đã lưu vị trí thẻ!",
+                                showConfirmButton: false,
+                                timer: 2000,
+                                background: isDark ? '#1e293b' : '#ffffff',
+                                color: isDark ? '#f8fafc' : '#0f172a',
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error updating tag order:', error));
+                }
+            });
+        }
+    });
+
     function confirmDelete(id) {
         const isDark = document.documentElement.classList.contains('dark');
         Swal.fire({

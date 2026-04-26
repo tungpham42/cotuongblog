@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
-    protected $fillable = ['name', 'slug', 'description', 'featured_image'];
+    protected $fillable = ['name', 'slug', 'description', 'featured_image', 'order'];
     public function posts(): BelongsToMany {
         return $this->belongsToMany(Post::class);
     }

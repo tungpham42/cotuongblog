@@ -10,8 +10,24 @@ class TagController extends Controller
 {
     public function index()
     {
-        $tags = Tag::withCount('posts')->latest()->paginate(12);
+        // Xóa phân trang, sắp xếp theo order
+        $tags = Tag::withCount('posts')->orderBy('order', 'asc')->get();
         return view('tags.index', compact('tags'));
+    }
+
+    // Thêm method xử lý kéo thả
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'exists:tags,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Tag::where('id', $id)->update(['order' => $index]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     public function create()

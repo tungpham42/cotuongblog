@@ -28,8 +28,10 @@ Route::get('/test-redis', function () {
 // Public Front Page
 Route::get('/', function () {
     $posts = Post::where('is_published', true)->latest()->paginate(12);
-    $categories = Category::all();
-    $tags = Tag::all();
+    // Make sure both Categories and Tags are sorted by order
+    $categories = Category::orderBy('order', 'asc')->get();
+    $tags = Tag::orderBy('order', 'asc')->get();
+
     return view('welcome', compact('posts', 'categories', 'tags'));
 })->name('home');
 
@@ -45,6 +47,11 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
         ];
         return view('dashboard', compact('stats'));
     })->name('dashboard');
+
+    // Thêm Route xử lý kéo thả chuyên mục
+    Route::post('categories/update-order', [CategoryController::class, 'updateOrder'])->name('categories.update-order');
+    // Thêm Route xử lý kéo thả thẻ
+    Route::post('tags/update-order', [TagController::class, 'updateOrder'])->name('tags.update-order');
 
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
