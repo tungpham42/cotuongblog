@@ -85,14 +85,30 @@
 
 <script>
     function chatWidget() {
+        // Lưu trữ tin nhắn mặc định ban đầu
+        const defaultMessages = [
+            { id: 1, role: 'ai', content: '<p>Xin chào! Tôi là <strong>Trợ lý Cờ tướng</strong>. Bạn muốn hỏi gì về các bài viết trên blog của chúng tôi?</p>' }
+        ];
+
         return {
             chatOpen: false,
-            // Sử dụng HTML do backend giờ sẽ trả về HTML
-            messages: [
-                { id: 1, role: 'ai', content: '<p>Xin chào! Tôi là <strong>Trợ lý Cờ tướng</strong>. Bạn muốn hỏi gì về các bài viết trên blog của chúng tôi?</p>' }
-            ],
+            messages: JSON.parse(JSON.stringify(defaultMessages)),
             newMessage: '',
             isLoading: false,
+
+            // Khởi tạo và theo dõi trạng thái đóng/mở chat
+            init() {
+                this.$watch('chatOpen', (isOpen) => {
+                    if (!isOpen) {
+                        // Đợi 200ms để hiệu ứng đóng (transition) hoàn tất trước khi xóa dữ liệu
+                        setTimeout(() => {
+                            this.messages = JSON.parse(JSON.stringify(defaultMessages));
+                            this.newMessage = '';
+                            this.isLoading = false;
+                        }, 200);
+                    }
+                });
+            },
 
             async sendMessage() {
                 if (!this.newMessage.trim()) return;
@@ -129,6 +145,7 @@
                     this.scrollToBottom();
                 }
             },
+
             scrollToBottom() {
                 setTimeout(() => {
                     const box = document.getElementById('chat-messages');
