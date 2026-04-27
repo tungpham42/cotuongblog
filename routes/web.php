@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ChatController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Post;
 use App\Models\Category;
@@ -115,3 +116,4 @@ Route::middleware('guest')->group(function () {
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/api/v1/posts', [PostController::class, 'apiIndex'])->name('api.posts.index');
+Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');

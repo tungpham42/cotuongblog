@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Cờ tướng')</title>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
     <meta name="keywords" content="cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng">
     <meta name="author" content="Tùng Phạm">
@@ -55,7 +57,7 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script>
+    {{-- <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script> --}}
 
     @guest
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
@@ -211,6 +213,7 @@
         </button>
 
     </div>
+    @include('components.chat-widget')
     @if(session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
