@@ -31,13 +31,13 @@ class ChatController extends Controller
         try {
             $response = Http::withToken(env('GROQ_API_KEY'))
                 ->post('https://api.groq.com/openai/v1/chat/completions', [
-                    'model' => 'openai/gpt-oss-120b',
+                    'model' => 'meta-llama/llama-4-scout-17b-16e-instruct',
                     'messages' => [
                         ['role' => 'system', 'content' => $systemPrompt],
                         ['role' => 'user', 'content' => $request->message],
                     ],
-                    'temperature' => 0.3,
-                    'max_tokens' => 3000,
+                    'temperature' => 2,
+                    'max_tokens' => 4096,
                 ]);
 
             if ($response->successful()) {
