@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
-      x-init="$watch('darkMode', val => {
-          localStorage.setItem('darkMode', val);
-          window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
-      })"
+      x-data="{
+          darkMode: document.documentElement.classList.contains('dark'),
+          initTheme() {
+              // Lưu trạng thái và dispatch event khi người dùng bấm nút
+              this.$watch('darkMode', val => {
+                  localStorage.setItem('darkMode', val);
+                  window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
+              });
+
+              // Lắng nghe thay đổi trực tiếp từ hệ điều hành (Windows/macOS/iOS...)
+              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                  // Chỉ tự động đổi nếu người dùng chưa từng set cứng trong localStorage
+                  if (!localStorage.getItem('darkMode')) {
+                      this.darkMode = e.matches;
+                  }
+              });
+          }
+      }"
+      x-init="initTheme()"
       :class="{ 'dark': darkMode }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Cờ tướng')</title>
+
+    <script>
+        if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
