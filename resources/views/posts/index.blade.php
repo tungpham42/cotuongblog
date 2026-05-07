@@ -31,6 +31,8 @@
                 <select name="sort" class="py-2.5 pl-4 pr-10 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-brand focus:border-brand transition-colors appearance-none">
                     <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
+                    <option value="views_desc" {{ request('sort') == 'views_desc' ? 'selected' : '' }}>Lượt xem (Nhiều nhất)</option>
+                    <option value="views_asc" {{ request('sort') == 'views_asc' ? 'selected' : '' }}>Lượt xem (Ít nhất)</option>
                     <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>A-Z</option>
                     <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Z-A</option>
                 </select>

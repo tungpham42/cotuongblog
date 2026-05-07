@@ -85,6 +85,8 @@
                     <select name="sort" onchange="this.form.submit()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full sm:w-auto p-2.5 outline-none cursor-pointer">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
                         <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
+                        <option value="views_desc" {{ request('sort') == 'views_desc' ? 'selected' : '' }}>Lượt xem (Nhiều nhất)</option>
+                        <option value="views_asc" {{ request('sort') == 'views_asc' ? 'selected' : '' }}>Lượt xem (Ít nhất)</option>
                         <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>Tên A - Z</option>
                         <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Tên Z - A</option>
                     </select>
