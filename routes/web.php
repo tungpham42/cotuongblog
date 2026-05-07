@@ -51,6 +51,12 @@ Route::get('/', function (Request $request) {
         case 'alpha_desc':
             $query->orderBy('title', 'desc');
             break;
+        case 'views_desc': // Added
+            $query->orderBy('views', 'desc');
+            break;
+        case 'views_asc': // Added
+            $query->orderBy('views', 'asc');
+            break;
         case 'latest':
         default:
             $query->latest();
