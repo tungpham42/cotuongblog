@@ -112,6 +112,12 @@ class TagController extends Controller
             case 'alpha_desc':
                 $query->orderBy('title', 'desc');
                 break;
+            case 'views_desc': // Lượt xem giảm dần
+                $query->orderBy('views', 'desc');
+                break;
+            case 'views_asc': // Lượt xem tăng dần
+                $query->orderBy('views', 'asc');
+                break;
             case 'latest':
             default:
                 $query->latest();
