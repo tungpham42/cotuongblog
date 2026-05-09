@@ -21,7 +21,7 @@
 
         <div class="relative z-10 flex flex-col items-center">
             @if($category->featured_image)
-                <figure class="w-24 h-24 sm:w-28 sm:h-28 mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
+                <figure class="w-full max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
                     <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Ảnh đại diện chuyên mục {{ $category->name }}" class="w-full h-full object-cover">
                 </figure>
             @else
@@ -70,7 +70,7 @@
             @forelse ($posts as $post)
                 <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:border-brand/40 dark:hover:border-brand/50 transition-all duration-300 transform hover:-translate-y-1">
 
-                    <a href="{{ route('posts.show', $post->slug) }}" class="block aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
+                    <a href="{{ route('posts.show', $post->slug) }}" class="block aspect-[1200/630] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
                         @if($post->featured_image)
                             <img src="{{ asset('storage/' . $post->featured_image) }}" alt="Ảnh thu nhỏ của bài viết: {{ $post->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                         @else

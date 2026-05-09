@@ -11,9 +11,9 @@
     {{-- Header Section --}}
     <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 sm:p-12 text-center flex flex-col items-center">
         @if($tag->featured_image)
-            <div class="w-24 h-24 mb-6 rounded-2xl overflow-hidden shadow-md border border-white dark:border-slate-600">
+            <figure class="w-full max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
                 <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
-            </div>
+            </figure>
         @endif
 
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4 flex items-center justify-center gap-3">
@@ -59,7 +59,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         @forelse ($posts as $post)
             <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:border-brand/40 dark:hover:border-brand/50 transition-all duration-300 transform hover:-translate-y-1">
-                <a href="{{ route('posts.show', $post->slug) }}" class="block aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
+                <a href="{{ route('posts.show', $post->slug) }}" class="block aspect-[1200/630] w-full bg-slate-100 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
                     @if($post->featured_image)
                         <img src="{{ asset('storage/' . $post->featured_image) }}" alt="Ảnh thu nhỏ của bài viết: {{ $post->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                     @else

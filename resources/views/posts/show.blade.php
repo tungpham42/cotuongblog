@@ -226,7 +226,7 @@ $toc = [];
             @forelse ($relatedPosts as $rPost)
                 <a href="{{ route('posts.show', $rPost->slug) }}" class="group flex flex-col sm:flex-row bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-md hover:border-brand/50 transition-all duration-300">
                     {{-- Thumbnail --}}
-                    <div class="sm:w-40 aspect-[16/9] sm:aspect-square flex-shrink-0 bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
+                    <div class="sm:w-40 aspect-[1200/630] sm:aspect-square flex-shrink-0 bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
                         @if($rPost->featured_image)
                             <img src="{{ asset('storage/' . $rPost->featured_image) }}" alt="{{ $rPost->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         @else
