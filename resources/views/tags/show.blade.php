@@ -11,7 +11,7 @@
     {{-- Header Section --}}
     <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 sm:p-12 text-center flex flex-col items-center">
         @if($tag->featured_image)
-            <figure class="w-full max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
+            <figure class="w-50 max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
                 <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
             </figure>
         @endif
