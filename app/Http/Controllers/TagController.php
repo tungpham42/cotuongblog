@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
 
 class TagController extends Controller
 {
@@ -89,6 +90,7 @@ class TagController extends Controller
 
     public function show(Request $request, Tag $tag)
     {
+        App::setLocale('vi');
         // Bắt đầu query các bài viết thuộc tag này
         $query = $tag->posts()->where('is_published', true);
 

@@ -8,12 +8,14 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\App;
 use League\CommonMark\CommonMarkConverter;
 
 class PostController extends Controller
 {
     public function index(Request $request)
     {
+        App::setLocale('vi');
         $query = Post::with(['category', 'author', 'tags']);
 
         // Nếu không phải admin, chỉ hiển thị bài viết của chính họ

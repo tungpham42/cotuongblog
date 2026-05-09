@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
 
 class CategoryController extends Controller
 {
@@ -93,6 +94,7 @@ class CategoryController extends Controller
 
     public function show(Request $request, Category $category)
     {
+        App::setLocale('vi');
         $query = $category->posts()->where('is_published', true);
 
         // Xử lý Tìm kiếm
