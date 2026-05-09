@@ -67,7 +67,14 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
-                    {{ request('search') ? 'Kết quả tìm kiếm' : 'Bài viết mới nhất' }}
+                    {{ request('search') ? 'Kết quả tìm kiếm' : match(request('sort')) {
+                        'oldest' => 'Bài viết cũ nhất',
+                        'views_desc' => 'Bài viết xem nhiều nhất',
+                        'views_asc' => 'Bài viết xem ít nhất',
+                        'alpha_asc' => 'Bài viết theo tên (A - Z)',
+                        'alpha_desc' => 'Bài viết theo tên (Z - A)',
+                        default => 'Bài viết mới nhất',
+                    } }}
                 </h2>
 
                 <form action="{{ route('home') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
