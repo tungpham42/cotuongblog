@@ -21,7 +21,7 @@
 
         <div class="relative z-10 flex flex-col items-center">
             @if($category->featured_image)
-                <figure class="w-50 max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
+                <figure class="w-1/2 max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
                     <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Ảnh đại diện chuyên mục {{ $category->name }}" class="w-full h-full object-cover">
                 </figure>
             @else
