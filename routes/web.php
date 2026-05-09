@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
@@ -69,6 +70,7 @@ Route::get('/', function (Request $request) {
     $categories = Category::orderBy('order', 'asc')->get();
     $tags = Tag::orderBy('order', 'asc')->get();
 
+    App::setLocale('vi');
     return view('welcome', compact('posts', 'categories', 'tags'));
 })->name('home');
 
