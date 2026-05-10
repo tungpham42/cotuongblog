@@ -286,7 +286,7 @@
     <div x-data="{ showTocBtn: false }"
             @scroll.window="
             const toc = document.getElementById('toc-container');
-            showTocBtn = toc ? window.scrollY > (toc.offsetTop + toc.offsetHeight + 200) : false;
+            showTocBtn = toc ? window.scrollY > (toc.offsetTop + toc.offsetHeight + 42) : false;
             "
             x-show="showTocBtn"
             x-transition:enter="transition ease-out duration-700"
