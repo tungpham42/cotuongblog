@@ -3,11 +3,15 @@
       x-data="{
           darkMode: document.documentElement.classList.contains('dark'),
           initTheme() {
+              // Lưu trạng thái và dispatch event khi người dùng bấm nút
               this.$watch('darkMode', val => {
                   localStorage.setItem('darkMode', val);
                   window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
               });
+
+              // Lắng nghe thay đổi trực tiếp từ hệ điều hành (Windows/macOS/iOS...)
               window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                  // Chỉ tự động đổi nếu người dùng chưa từng set cứng trong localStorage
                   if (!localStorage.getItem('darkMode')) {
                       this.darkMode = e.matches;
                   }
@@ -19,15 +23,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    {{-- SEO: Optimized Title Tag Formulation (Đã fix lỗi cú pháp Blade) --}}
-    <title>@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}</title>
-
-    {{-- SEO: Canonical URL to prevent duplicate content indexing --}}
-    <link rel="canonical" href="{{ url()->current() }}">
-
-    {{-- SEO: Meta Robots Directives for optimal crawling --}}
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <title>@yield('title', 'Cờ tướng')</title>
 
     <script>
         if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -39,35 +35,22 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- SEO: Standard Meta Tags --}}
     <meta name="description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
     <meta name="keywords" content="cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng">
     <meta name="author" content="Tùng Phạm">
-
-    {{-- SEO: Complete Open Graph Protocol (Facebook, LinkedIn, Zalo) --}}
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}">
+    <meta property="og:title" content="@yield('title', 'Cờ tướng')">
     <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
+
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="@yield('title', 'Cờ tướng 2 người')">
-
-    {{-- SEO: Twitter Cards for better visibility on X/Twitter --}}
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}">
-    <meta name="twitter:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
-    <meta name="twitter:image" content="@yield('og_image', asset('img/og_image.jpg'))">
-
-    {{-- Favicons & App Icons --}}
+    <meta property="og:image:width" content="1200" >
+    <meta property="og:image:height" content="630" >
+    <meta property="og:image:alt" content="Cờ tướng 2 người" >
     <link rel="apple-touch-icon" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-game.png">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-game.png">
     <link rel="apple-touch-icon" sizes="120x120" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-retina-game.png">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-retina-game.png">
-    <link rel="icon" sizes="32x32" href="{{ url('/') }}/img/favicon-32x32-game.png">
+    <link rel="icon" sizes="32x32" href="{{ url('/') }}/img/favicon-32x32-game.png" >
 
-    {{-- Performance: Preconnect to Font APIs --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -96,21 +79,7 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    {{-- SEO: Base Schema.org JSON-LD for Site Definition and Sitelinks Search Box --}}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Cộng Đồng Cờ Tướng",
-      "url": "{{ url('/') }}",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "{{ route('home') }}?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
+    {{-- <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script> --}}
 
     @guest
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
@@ -118,6 +87,7 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+
             gtag('config', 'G-QEW6K9YPY7');
         </script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
@@ -129,8 +99,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <a href="/" title="Trang chủ Cờ Tướng" class="text-2xl font-bold text-brand flex items-center gap-2">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path></svg>
+                    <a href="/" class="text-2xl font-bold text-brand flex items-center gap-2">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path></svg>
                         Cờ tướng
                     </a>
                 </div>
@@ -140,9 +110,9 @@
                         <a href="{{ route('posts.index') }}" class="text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition">Bài viết</a>
 
                         <div class="relative" x-data="{ dropdownOpen: false }">
-                            <button aria-expanded="dropdownOpen" aria-label="Menu người dùng" @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition focus:outline-none">
+                            <button @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand font-medium transition focus:outline-none">
                                 <span>{{ auth()->user()->name }}</span>
-                                <svg aria-hidden="true" :class="{'rotate-180': dropdownOpen}" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                <svg :class="{'rotate-180': dropdownOpen}" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
 
                             <div x-show="dropdownOpen"
@@ -176,19 +146,19 @@
                         <a href="{{ route('register') }}" class="bg-brand hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium transition shadow-sm hover:shadow">Đăng ký</a>
                     @endauth
 
-                    <button aria-label="Chuyển đổi chế độ sáng/tối" @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
-                        <svg aria-hidden="true" x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                        <svg aria-hidden="true" x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                        <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </button>
                 </div>
 
                 <div class="flex items-center sm:hidden gap-4">
-                    <button aria-label="Chuyển đổi chế độ sáng/tối" @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
-                        <svg aria-hidden="true" x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                        <svg aria-hidden="true" x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                        <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </button>
-                    <button aria-label="Mở menu điều hướng" @click="open = !open" class="text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none transition">
-                        <svg aria-hidden="true" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button @click="open = !open" class="text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none transition">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" style="display: none;" />
                         </svg>
@@ -232,7 +202,6 @@
     </main>
 
     @stack('scripts')
-
     <div x-data="{ showTop: false, showBottom: true }"
         x-init="
             const toggleButtons = () => {
@@ -248,27 +217,25 @@
         "
         class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
 
-        <button aria-label="Cuộn lên đầu trang"
-                x-show="showTop"
+        <button x-show="showTop"
                 x-transition
                 @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
                 class="h-12 w-12 rounded-full bg-brand text-white shadow-lg hover:bg-brand-hover flex items-center justify-center">
-            <svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
         </button>
 
-        <button aria-label="Cuộn xuống cuối trang"
-                x-show="showBottom"
+        <button x-show="showBottom"
                 x-transition
                 @click="window.scrollTo({
                     top: document.documentElement.scrollHeight,
                     behavior: 'smooth'
                 })"
                 class="h-12 w-12 rounded-full bg-slate-800 dark:bg-slate-700 text-white shadow-lg flex items-center justify-center">
-            <svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </button>
 
     </div>
-
+    {{-- @include('components.chat-widget') --}}
     @if(session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
