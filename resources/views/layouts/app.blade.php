@@ -235,7 +235,7 @@
         </button>
 
     </div>
-    @include('components.chat-widget')
+    {{-- @include('components.chat-widget') --}}
     @if(session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
