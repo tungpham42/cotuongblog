@@ -8,6 +8,13 @@
 
 @section('content')
 <div class="space-y-8">
+    <nav aria-label="Breadcrumb" class="mb-2">
+        <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
+            <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors">Trang chủ</a></li>
+            <li><span class="mx-1">/</span></li>
+            <li class="font-medium text-slate-900 dark:text-slate-200" aria-current="page">{{ $tag->name }}</li>
+        </ol>
+    </nav>
     {{-- Header Section --}}
     <header class="relative bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgba(249,115,22,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden p-6 sm:p-8 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
 
