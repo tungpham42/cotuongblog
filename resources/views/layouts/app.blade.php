@@ -20,8 +20,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{-- SEO: Optimized Title Tag Formulation --}}
-    <title>@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif</title>
+    {{-- SEO: Optimized Title Tag Formulation (Đã fix lỗi cú pháp Blade) --}}
+    <title>@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}</title>
 
     {{-- SEO: Canonical URL to prevent duplicate content indexing --}}
     <link rel="canonical" href="{{ url()->current() }}">
@@ -47,7 +47,7 @@
     {{-- SEO: Complete Open Graph Protocol (Facebook, LinkedIn, Zalo) --}}
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
+    <meta property="og:title" content="@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}">
     <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
     <meta property="og:image:width" content="1200">
@@ -56,7 +56,7 @@
 
     {{-- SEO: Twitter Cards for better visibility on X/Twitter --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
+    <meta name="twitter:title" content="@yield('title'){{ View::hasSection('title') ? ' | Cộng Đồng Cờ Tướng' : 'Cộng Đồng Cờ Tướng Việt Nam' }}">
     <meta name="twitter:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
     <meta name="twitter:image" content="@yield('og_image', asset('img/og_image.jpg'))">
 
@@ -270,22 +270,22 @@
     </div>
 
     @if(session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const isDark = document.documentElement.classList.contains('dark');
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'success',
-                    title: "{{ session('success') }}",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    background: isDark ? '#1e293b' : '#ffffff',
-                    color: isDark ? '#f8fafc' : '#0f172a',
-                });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isDark = document.documentElement.classList.contains('dark');
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: isDark ? '#1e293b' : '#ffffff',
+                color: isDark ? '#f8fafc' : '#0f172a',
             });
-        </script>
+        });
+    </script>
     @endif
 </body>
 </html>
