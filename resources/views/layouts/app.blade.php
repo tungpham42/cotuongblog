@@ -107,6 +107,8 @@
         </script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
     @endguest
+    {{-- SEO: Base Schema.org JSON-LD dynamically generated via Spatie --}}
+    {!! $globalSchema->toScript() !!}
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-300">
 
