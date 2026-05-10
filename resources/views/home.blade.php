@@ -220,46 +220,40 @@
             @endif
         </div>
 
-        <div class="space-y-8 sticky top-28 self-start lg:block">
+        <div class="space-y-6 sticky top-28 self-start lg:block">
 
             {{-- Widget Chuyên mục --}}
-            <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 p-6 sm:p-8 relative overflow-hidden group/widget">
+            <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 p-5 sm:p-6 relative overflow-hidden group/widget">
                 <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand/5 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/15 transition-colors duration-700"></div>
 
-                <h3 class="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-3 relative z-10">
-                    <div class="p-2.5 bg-brand-light dark:bg-brand/20 rounded-xl text-brand shadow-sm">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                <h3 class="text-lg font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2.5 relative z-10">
+                    <div class="p-2 bg-brand-light dark:bg-brand/20 rounded-xl text-brand shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     </div>
                     Chuyên mục
                 </h3>
 
-                <ul class="space-y-2.5 relative z-10">
+                <ul class="space-y-1 relative z-10">
                     @forelse ($categories as $category)
                         <li>
-                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700/50 border border-transparent hover:border-slate-100 dark:hover:border-slate-600 transition-all duration-300">
-                                <div class="flex-shrink-0 w-14 h-14 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center transition-all duration-300">
+                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700/50 border border-transparent hover:border-slate-100 dark:hover:border-slate-600 transition-all duration-300">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center transition-all duration-300">
                                     @if($category->featured_image)
                                         <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
                                     @else
                                         <span class="text-slate-300 dark:text-slate-600 group-hover:text-brand transition-colors duration-300">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         </span>
                                     @endif
                                 </div>
 
                                 <div class="flex-grow flex items-center justify-between min-w-0">
-                                    <span class="font-bold text-[15px] text-slate-700 dark:text-slate-200 group-hover:text-brand transition-colors truncate pr-2">{{ $category->name }}</span>
-
-                                    <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-slate-700 flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 shrink-0">
-                                        <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </div>
+                                    <span class="font-bold text-[14px] text-slate-700 dark:text-slate-200 group-hover:text-brand transition-colors truncate pr-2">{{ $category->name }}</span>
                                 </div>
                             </a>
                         </li>
                     @empty
-                        <li class="p-5 text-sm text-slate-500 dark:text-slate-400 font-medium text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                        <li class="p-4 text-sm text-slate-500 dark:text-slate-400 font-medium text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
                             Chưa có chuyên mục.
                         </li>
                     @endforelse
@@ -267,23 +261,23 @@
             </div>
 
             {{-- Widget Thẻ nổi bật --}}
-            <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 p-6 sm:p-8 relative overflow-hidden group/widget">
+            <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 p-5 sm:p-6 relative overflow-hidden group/widget">
                 <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-brand/5 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/15 transition-colors duration-700"></div>
 
-                <h3 class="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-3 relative z-10">
-                    <div class="p-2.5 bg-brand-light dark:bg-brand/20 rounded-xl text-brand shadow-sm">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                <h3 class="text-lg font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2.5 relative z-10">
+                    <div class="p-2 bg-brand-light dark:bg-brand/20 rounded-xl text-brand shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                     </div>
                     Thẻ nổi bật
                 </h3>
 
-                <div class="flex flex-wrap gap-2.5 relative z-10">
+                <div class="flex flex-wrap gap-2 relative z-10">
                     @forelse ($tags as $tag)
-                        <a href="{{ route('tags.show', $tag->slug) }}" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand hover:text-white dark:hover:bg-brand dark:hover:text-white hover:border-brand dark:hover:border-brand shadow-sm hover:shadow-[0_8px_15px_rgba(249,115,22,0.25)] transition-all duration-300 transform hover:-translate-y-1">
+                        <a href="{{ route('tags.show', $tag->slug) }}" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand hover:text-white dark:hover:bg-brand dark:hover:text-white hover:border-brand dark:hover:border-brand shadow-sm hover:shadow-[0_4px_10px_rgba(249,115,22,0.25)] transition-all duration-300 transform hover:-translate-y-0.5">
                             #{{ $tag->name }}
                         </a>
                     @empty
-                        <span class="text-sm font-medium text-slate-500 dark:text-slate-400 text-center w-full bg-slate-50 dark:bg-slate-900/50 py-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                        <span class="text-sm font-medium text-slate-500 dark:text-slate-400 text-center w-full bg-slate-50 dark:bg-slate-900/50 py-3 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
                             Chưa có thẻ nào.
                         </span>
                     @endforelse
