@@ -281,7 +281,7 @@
     @endif
 </div>
 
-{{-- Nút Trở về Mục lục (Floating tinh tế) --}}
+{{-- Nút Trở về Mục lục (Floating nổi bật) --}}
 @if(!empty($toc))
     <div x-data="{ showTocBtn: false }"
             @scroll.window="
@@ -289,23 +289,26 @@
             showTocBtn = toc ? window.scrollY > (toc.offsetTop + toc.offsetHeight + 42) : false;
             "
             x-show="showTocBtn"
-            x-transition:enter="transition ease-out duration-700"
-            x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0 translate-y-8 scale-90"
+            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
             x-transition:leave="transition ease-in duration-300"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-4"
-            class="fixed bottom-6 left-6 lg:left-8 z-40 hidden sm:block"
+            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+            x-transition:leave-end="opacity-0 translate-y-8 scale-90"
+            class="fixed bottom-6 left-6 lg:left-8 z-50 hidden sm:block"
             style="display: none;">
 
         <button @click="document.getElementById('toc-heading').scrollIntoView({ behavior: 'smooth' })"
-                class="flex items-center gap-2 px-4 py-2.5 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 shadow-lg shadow-slate-200/10 dark:shadow-slate-900/10 rounded-full text-slate-500 dark:text-slate-400 hover:text-brand dark:hover:text-brand hover:border-brand/40 dark:hover:border-brand/40 hover:bg-white/95 dark:hover:bg-slate-800/95 transition-all duration-300 group opacity-50 hover:opacity-100 hover:-translate-y-1 outline-none">
-            <svg class="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+                class="flex items-center gap-2.5 px-5 py-3.5 bg-brand text-white shadow-[0_10px_25px_rgba(249,115,22,0.4)] dark:shadow-[0_10px_25px_rgba(249,115,22,0.3)] rounded-full hover:bg-brand-hover transition-all duration-300 group hover:-translate-y-1.5 outline-none font-bold ring-4 ring-white/50 dark:ring-slate-800/50 hover:ring-brand/30">
+
+            <svg class="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path>
             </svg>
-            <span class="text-sm font-semibold tracking-wide">Mục lục</span>
-            <svg class="w-3.5 h-3.5 ml-1 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:-translate-y-2 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+
+            <span class="text-sm tracking-wide">Mục lục</span>
+
+            <svg class="w-4 h-4 ml-0.5 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
             </svg>
         </button>
     </div>
