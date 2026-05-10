@@ -72,8 +72,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div class="lg:col-span-2 space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
-                <div class="flex flex-col gap-5 border-b border-slate-200 dark:border-slate-700 pb-5">
+            <div class="flex flex-col gap-5 border-b border-slate-200 dark:border-slate-700 pb-5">
 
                 {{-- Thanh tìm kiếm và bộ lọc chiếm toàn bộ chiều rộng --}}
                 <form action="{{ route('home') }}" method="GET" class="relative z-30 w-full">
