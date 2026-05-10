@@ -89,14 +89,52 @@
                         <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400 group-hover:text-brand transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
 
-                    <select name="sort" onchange="this.form.submit()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-brand focus:border-brand block w-full sm:w-auto p-2.5 outline-none cursor-pointer">
-                        <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
-                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
-                        <option value="views_desc" {{ request('sort') == 'views_desc' ? 'selected' : '' }}>Lượt xem (Nhiều nhất)</option>
-                        <option value="views_asc" {{ request('sort') == 'views_asc' ? 'selected' : '' }}>Lượt xem (Ít nhất)</option>
-                        <option value="alpha_asc" {{ request('sort') == 'alpha_asc' ? 'selected' : '' }}>Tên A - Z</option>
-                        <option value="alpha_desc" {{ request('sort') == 'alpha_desc' ? 'selected' : '' }}>Tên Z - A</option>
-                    </select>
+                    <div x-data="{
+                            open: false,
+                            selected: '{{ request('sort', 'latest') }}',
+                            options: {
+                                'latest': 'Mới nhất',
+                                'oldest': 'Cũ nhất',
+                                'views_desc': 'Lượt xem (Nhiều nhất)',
+                                'views_asc': 'Lượt xem (Ít nhất)',
+                                'alpha_asc': 'Tên A - Z',
+                                'alpha_desc': 'Tên Z - A'
+                            },
+                            selectOption(value) {
+                                this.selected = value;
+                                this.open = false;
+                                setTimeout(() => this.$el.closest('form').submit(), 50);
+                            }
+                        }" class="relative w-full sm:w-56" @click.away="open = false">
+
+                        <input type="hidden" name="sort" :value="selected">
+
+                        <button type="button" @click="open = !open" class="flex items-center justify-between w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-2 focus:ring-brand focus:border-brand p-2.5 outline-none cursor-pointer transition-colors">
+                            <span x-text="options[selected]" class="truncate"></span>
+                            <svg class="w-4 h-4 ml-2 shrink-0 transition-transform duration-200 text-slate-500" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+
+                        <div x-show="open"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 z-50 w-full mt-1.5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden"
+                            style="display: none;">
+                            <div class="py-1">
+                                <template x-for="(label, value) in options" :key="value">
+                                    <div @click="selectOption(value)"
+                                        class="px-4 py-2.5 text-sm cursor-pointer hover:bg-brand/5 hover:text-brand dark:hover:bg-brand/10 transition-colors flex items-center justify-between"
+                                        :class="{'text-brand bg-brand/5 dark:bg-brand/10 font-medium': selected === value, 'text-slate-700 dark:text-slate-300': selected !== value}">
+                                        <span x-text="label"></span>
+                                        <svg x-show="selected === value" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
 
