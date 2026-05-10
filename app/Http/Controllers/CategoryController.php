@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Spatie\SchemaOrg\Schema;
 
 class CategoryController extends Controller
 {
@@ -131,6 +132,29 @@ class CategoryController extends Controller
 
         $posts = $query->paginate(12)->withQueryString();
 
-        return view('categories.show', compact('category', 'posts'));
+        // SEO: Build the CollectionPage & ItemList Schema
+        $itemListElements = [];
+
+        // Loop through the paginated posts to create the ItemList
+        foreach ($posts as $index => $post) {
+            $itemListElements[] = Schema::listItem()
+                ->position($index + 1)
+                ->url(route('posts.show', $post->slug))
+                ->name($post->title);
+        }
+
+        $categorySchema = Schema::collectionPage()
+            ->name($category->name)
+            ->description($category->description ?? 'Tuyển tập các bài viết thuộc chuyên mục ' . $category->name . ' trên Cộng Đồng Cờ Tướng.')
+            ->url(route('categories.show', $category->slug))
+            ->mainEntity(
+                Schema::itemList()->itemListElement($itemListElements)
+            );
+
+        if ($category->featured_image) {
+            $categorySchema->image(asset('storage/' . $category->featured_image));
+        }
+
+        return view('categories.show', compact('category', 'posts', 'categorySchema'));
     }
 }

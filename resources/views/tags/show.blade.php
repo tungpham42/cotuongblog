@@ -122,7 +122,7 @@
         </form>
     </div>
 
-    {{-- Grid Layout Danh sách bài viết (giữ nguyên như cũ) --}}
+    {{-- Grid Layout Danh sách bài viết --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         @forelse ($posts as $post)
             <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden hover:shadow-[0_20px_40px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_20px_40px_rgba(249,115,22,0.12)] hover:border-brand/40 dark:hover:border-brand/40 transition-all duration-500 transform hover:-translate-y-2 relative">
@@ -202,3 +202,8 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+{{-- SEO: Dynamic CollectionPage & ItemList Schema.org JSON-LD --}}
+{!! $tagSchema->toScript() !!}
+@endpush

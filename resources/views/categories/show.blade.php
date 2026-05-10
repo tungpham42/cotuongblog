@@ -199,3 +199,8 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+{{-- SEO: Dynamic CollectionPage & ItemList Schema.org JSON-LD --}}
+{!! $categorySchema->toScript() !!}
+@endpush

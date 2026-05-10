@@ -6,6 +6,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Spatie\SchemaOrg\Schema;
 
 class TagController extends Controller
 {
@@ -129,6 +130,28 @@ class TagController extends Controller
         // Phân trang và giữ nguyên query string trên URL
         $posts = $query->paginate(12)->withQueryString();
 
-        return view('tags.show', compact('tag', 'posts'));
+        // SEO: Build the CollectionPage & ItemList Schema
+        $itemListElements = [];
+
+        foreach ($posts as $index => $post) {
+            $itemListElements[] = Schema::listItem()
+                ->position($index + 1)
+                ->url(route('posts.show', $post->slug))
+                ->name($post->title);
+        }
+
+        $tagSchema = Schema::collectionPage()
+            ->name('Thẻ: ' . $tag->name)
+            ->description($tag->description ?? 'Tuyển tập các bài viết được gắn thẻ #' . $tag->name . ' trên Cộng Đồng Cờ Tướng.')
+            ->url(route('tags.show', $tag->slug))
+            ->mainEntity(
+                Schema::itemList()->itemListElement($itemListElements)
+            );
+
+        if ($tag->featured_image) {
+            $tagSchema->image(asset('storage/' . $tag->featured_image));
+        }
+
+        return view('tags.show', compact('tag', 'posts', 'tagSchema'));
     }
 }
