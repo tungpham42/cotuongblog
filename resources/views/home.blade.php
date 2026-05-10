@@ -85,61 +85,85 @@
                     } }}
                 </h2>
 
-                <form action="{{ route('home') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <form action="{{ route('home') }}" method="GET" class="relative z-30 w-full sm:w-auto flex justify-end">
 
-                    {{-- Thanh tìm kiếm tinh tế (Mở rộng mượt mà khi focus) --}}
-                    <div class="relative w-full sm:w-auto group">
-                        <input type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Tìm bài viết..."
-                            class="bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-brand dark:focus:border-brand focus:shadow-sm text-slate-700 dark:text-slate-300 text-sm rounded-lg block w-full sm:w-36 focus:w-full sm:focus:w-56 pl-9 p-2.5 outline-none transition-all duration-300 ease-out placeholder-slate-400 cursor-pointer focus:cursor-text">
-                        <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400 group-hover:text-brand transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
+                    {{-- Container chính (Giao diện viên thuốc hiện đại) --}}
+                    <div class="flex flex-col sm:flex-row items-center w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-[2rem] sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-200/80 dark:border-slate-700/80 p-1.5 gap-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_15px_40px_rgba(249,115,22,0.1)] hover:border-brand/40 focus-within:ring-4 focus-within:ring-brand/10 focus-within:border-brand dark:focus-within:border-brand">
 
-                    <div x-data="{
-                            open: false,
-                            selected: '{{ request('sort', 'latest') }}',
-                            options: {
-                                'latest': 'Mới nhất',
-                                'oldest': 'Cũ nhất',
-                                'views_desc': 'Lượt xem (Nhiều nhất)',
-                                'views_asc': 'Lượt xem (Ít nhất)',
-                                'alpha_asc': 'Tên A - Z',
-                                'alpha_desc': 'Tên Z - A'
-                            },
-                            selectOption(value) {
-                                this.selected = value;
-                                this.open = false;
-                                setTimeout(() => this.$el.closest('form').submit(), 50);
-                            }
-                        }" class="relative w-full sm:w-56" @click.away="open = false">
+                        {{-- Khu vực Tìm kiếm --}}
+                        <div class="relative flex items-center w-full sm:w-[280px] group/search">
+                            <div class="absolute left-4 text-brand/60 group-focus-within/search:text-brand transition-colors duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                placeholder="Bạn muốn tìm gì hôm nay? ✨"
+                                class="w-full bg-transparent border-none outline-none focus:ring-0 text-slate-800 dark:text-slate-100 placeholder-slate-400 pl-11 pr-4 py-2.5 text-[15px] font-medium transition-all duration-300 placeholder:font-normal">
+                        </div>
 
-                        <input type="hidden" name="sort" :value="selected">
+                        {{-- Vạch chia cách (Chỉ hiện trên desktop) --}}
+                        <div class="hidden sm:block w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-700 to-transparent"></div>
 
-                        <button type="button" @click="open = !open" class="flex items-center justify-between w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-2 focus:ring-brand focus:border-brand p-2.5 outline-none cursor-pointer transition-colors">
-                            <span x-text="options[selected]" class="truncate"></span>
-                            <svg class="w-4 h-4 ml-2 shrink-0 transition-transform duration-200 text-slate-500" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
+                        {{-- Khu vực Sắp xếp (Alpine.js) --}}
+                        <div x-data="{
+                                open: false,
+                                selected: '{{ request('sort', 'latest') }}',
+                                options: {
+                                    'latest': 'Mới nhất',
+                                    'oldest': 'Cũ nhất',
+                                    'views_desc': 'Lượt xem (Cao - Thấp)',
+                                    'views_asc': 'Lượt xem (Thấp - Cao)',
+                                    'alpha_asc': 'Tên (A - Z)',
+                                    'alpha_desc': 'Tên (Z - A)'
+                                },
+                                selectOption(value) {
+                                    this.selected = value;
+                                    this.open = false;
+                                    setTimeout(() => this.$el.closest('form').submit(), 150);
+                                }
+                            }" class="relative w-full sm:w-auto" @click.away="open = false">
 
-                        <div x-show="open"
-                            x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="transform opacity-0 scale-95"
-                            x-transition:enter-end="transform opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="transform opacity-100 scale-100"
-                            x-transition:leave-end="transform opacity-0 scale-95"
-                            class="absolute right-0 z-50 w-full mt-1.5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden"
-                            style="display: none;">
-                            <div class="py-1">
-                                <template x-for="(label, value) in options" :key="value">
-                                    <div @click="selectOption(value)"
-                                        class="px-4 py-2.5 text-sm cursor-pointer hover:bg-brand/5 hover:text-brand dark:hover:bg-brand/10 transition-colors flex items-center justify-between"
-                                        :class="{'text-brand bg-brand/5 dark:bg-brand/10 font-medium': selected === value, 'text-slate-700 dark:text-slate-300': selected !== value}">
-                                        <span x-text="label"></span>
-                                        <svg x-show="selected === value" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <input type="hidden" name="sort" :value="selected">
+
+                            {{-- Nút Dropdown --}}
+                            <button type="button" @click="open = !open"
+                                class="flex items-center justify-between w-full sm:w-[200px] bg-slate-50 dark:bg-slate-900/50 hover:bg-brand dark:hover:bg-brand text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white rounded-[1.5rem] sm:rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 ease-out cursor-pointer group/btn">
+
+                                <div class="flex items-center gap-2.5">
+                                    <div class="p-1 rounded-md bg-slate-200/50 dark:bg-slate-700/50 group-hover/btn:bg-white/20 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
                                     </div>
-                                </template>
+                                    <span x-text="options[selected]" class="truncate tracking-wide"></span>
+                                </div>
+
+                                <svg class="w-4 h-4 ml-2 transition-transform duration-300 group-hover/btn:scale-110" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+
+                            {{-- Menu Dropdown --}}
+                            <div x-show="open"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                                x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                                x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                                class="absolute right-0 z-50 w-full sm:w-[240px] mt-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl border border-slate-100 dark:border-slate-700/80 rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] overflow-hidden p-2 origin-top-right"
+                                style="display: none;">
+
+                                <div class="space-y-1">
+                                    <template x-for="(label, value) in options" :key="value">
+                                        <button type="button" @click="selectOption(value)"
+                                            class="w-full text-left px-4 py-3 text-[14px] rounded-xl flex items-center justify-between transition-all duration-200"
+                                            :class="{
+                                                'bg-brand text-white font-bold shadow-md shadow-brand/20 transform scale-[1.02]': selected === value,
+                                                'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-brand dark:hover:text-brand font-medium': selected !== value
+                                            }">
+                                            <span x-text="label"></span>
+                                            <svg x-show="selected === value" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                        </button>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
