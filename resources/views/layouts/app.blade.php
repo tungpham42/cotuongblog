@@ -23,15 +23,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    {{-- SEO: Optimized Title Tag Formulation --}}
-    <title>@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif</title>
-
-    {{-- SEO: Canonical URL to prevent duplicate content indexing --}}
-    <link rel="canonical" href="{{ url()->current() }}">
-
-    {{-- SEO: Meta Robots Directives for optimal crawling --}}
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <title>@yield('title', 'Cờ tướng')</title>
 
     <script>
         if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -43,35 +35,22 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- SEO: Standard Meta Tags --}}
     <meta name="description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
     <meta name="keywords" content="cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng">
     <meta name="author" content="Tùng Phạm">
-
-    {{-- SEO: Complete Open Graph Protocol (Facebook, LinkedIn, Zalo) --}}
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
+    <meta property="og:title" content="@yield('title', 'Cờ tướng')">
     <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
+
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="@yield('title', 'Cờ tướng 2 người')">
-
-    {{-- SEO: Twitter Cards for better visibility on X/Twitter --}}
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
-    <meta name="twitter:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
-    <meta name="twitter:image" content="@yield('og_image', asset('img/og_image.jpg'))">
-
-    {{-- Favicons & App Icons --}}
+    <meta property="og:image:width" content="1200" >
+    <meta property="og:image:height" content="630" >
+    <meta property="og:image:alt" content="Cờ tướng 2 người" >
     <link rel="apple-touch-icon" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-game.png">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-game.png">
     <link rel="apple-touch-icon" sizes="120x120" href="{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-retina-game.png">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ url('/') }}/img/app-icons/apple-touch-icon-ipad-retina-game.png">
-    <link rel="icon" sizes="32x32" href="{{ url('/') }}/img/favicon-32x32-game.png">
+    <link rel="icon" sizes="32x32" href="{{ url('/') }}/img/favicon-32x32-game.png" >
 
-    {{-- Performance: Preconnect to Font APIs --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -100,21 +79,7 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    {{-- SEO: Base Schema.org JSON-LD for Site Definition and Sitelinks Search Box --}}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Cộng Đồng Cờ Tướng",
-      "url": "{{ url('/') }}",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "{{ route('home') }}?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
+    {{-- <script src="https://saas.soft.io.vn/api/saas/v1/embed.js?api_key=sk_live_WhRPej0eygp530wUxpAibb5y" defer></script> --}}
 
     @guest
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEW6K9YPY7"></script>
@@ -122,6 +87,7 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+
             gtag('config', 'G-QEW6K9YPY7');
         </script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
