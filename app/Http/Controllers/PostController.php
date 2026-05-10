@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use League\CommonMark\CommonMarkConverter;
+use Spatie\SchemaOrg\Schema;
 
 class PostController extends Controller
 {
@@ -238,7 +239,28 @@ class PostController extends Controller
                             ->take(4)
                             ->get();
 
-        return view('posts.show', compact('post', 'relatedPosts'));
+        // SEO: Build the BlogPosting Schema for this specific post
+        $postSchema = Schema::blogPosting()
+            ->mainEntityOfPage(Schema::webPage()->identifier(route('posts.show', $post->slug)))
+            ->headline($post->title)
+            ->description(Str::limit(strip_tags($post->excerpt ?? $post->content), 150))
+            ->datePublished($post->created_at->toIso8601String())
+            ->dateModified($post->updated_at->toIso8601String())
+            ->author(
+                Schema::person()->name($post->author->name ?? 'Tác giả ẩn danh')
+            )
+            ->publisher(
+                Schema::organization()
+                    ->name('Cộng Đồng Cờ Tướng')
+                    // Provide a default logo path for the organization publisher
+                    ->logo(Schema::imageObject()->url(asset('img/favicon-32x32-game.png')))
+            );
+
+        if ($post->featured_image) {
+            $postSchema->image(asset('storage/' . $post->featured_image));
+        }
+
+        return view('posts.show', compact('post', 'relatedPosts', 'postSchema'));
     }
 
     public function uploadImage(Request $request)

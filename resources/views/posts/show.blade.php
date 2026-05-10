@@ -315,6 +315,9 @@
 @endif
 
 @push('scripts')
+{{-- SEO: Dynamic BlogPosting Schema.org JSON-LD --}}
+{!! $postSchema->toScript() !!}
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const deleteForms = document.querySelectorAll('.delete-comment-form');
