@@ -270,22 +270,22 @@
     </div>
 
     @if(session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const isDark = document.documentElement.classList.contains('dark');
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                background: isDark ? '#1e293b' : '#ffffff',
-                color: isDark ? '#f8fafc' : '#0f172a',
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: isDark ? '#1e293b' : '#ffffff',
+                    color: isDark ? '#f8fafc' : '#0f172a',
+                });
             });
-        });
-    </script>
+        </script>
     @endif
 </body>
 </html>
