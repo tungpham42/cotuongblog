@@ -12,47 +12,55 @@
         </div>
     @endif
 
-    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden text-center py-20 px-6 sm:px-12">
-        <div class="absolute inset-0 bg-gradient-to-b from-brand/5 to-transparent dark:from-brand/10"></div>
+    <div class="relative bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.1)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden text-center py-12 px-6 sm:px-12 sm:py-16 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[3rem]"></div>
+            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[3rem]"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-transparent dark:via-slate-800/50"></div>
+        </div>
 
         <div class="relative z-10">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
-                Cộng đồng <span class="text-brand">Cờ Tướng</span> Việt Nam
-                <svg class="w-10 h-10 inline-block text-yellow-500 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
+                Cộng đồng <span class="text-brand inline-block transform hover:scale-105 transition-transform duration-300 cursor-default">Cờ Tướng</span> Việt Nam
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 inline-block text-yellow-500 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
             </h1>
-            <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
                 Nơi giao lưu, học hỏi và chia sẻ những ván cờ hay, khai cuộc sắc bén và tàn cuộc đỉnh cao.
-                <svg class="w-6 h-6 inline-block text-yellow-400 align-text-bottom ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                <svg class="w-5 h-5 inline-block text-yellow-400 align-text-bottom ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
             </p>
 
-            <div class="flex flex-wrap justify-center gap-4">
+            <div class="flex flex-wrap justify-center gap-4 relative z-20">
                 @auth
                     @if(auth()->user()->is_admin)
-                        <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold text-white bg-brand hover:bg-brand-hover rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5">
+                        <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-bold text-white bg-brand hover:bg-brand-hover rounded-2xl shadow-lg shadow-brand/30 transition-all duration-300 hover:-translate-y-1">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Vào trang quản trị
                         </a>
                     @else
-                        <div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-700/50 px-6 py-3 rounded-xl border border-slate-100 dark:border-slate-600">
-                            <span class="text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-2">
-                                <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path></svg>
+                        <div class="flex items-center gap-4 bg-white dark:bg-slate-800 shadow-[0_4px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.2)] px-6 py-3 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-brand/30 transition-colors duration-300">
+                            <span class="text-slate-800 dark:text-slate-200 font-bold flex items-center gap-2">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand/10 text-brand text-sm">
+                                    {{ mb_substr(auth()->user()->name, 0, 1) }}
+                                </span>
                                 Chào mừng, {{ auth()->user()->name }}!
                             </span>
+                            <div class="w-px h-6 bg-slate-200 dark:bg-slate-700"></div>
                             <form method="POST" action="{{ route('logout') }}" class="m-0 flex items-center">
                                 @csrf
-                                <button type="submit" class="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors flex items-center gap-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                <button type="submit" class="text-slate-500 hover:text-red-500 dark:text-slate-400 dark:hover:text-red-400 font-semibold transition-colors flex items-center gap-1.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                     Đăng xuất
                                 </button>
                             </form>
                         </div>
                     @endif
                 @else
-                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold text-white bg-brand hover:bg-brand-hover rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5">
+                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-bold text-white bg-brand hover:bg-brand-hover rounded-2xl shadow-lg shadow-brand/30 transition-all duration-300 hover:-translate-y-1">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v8l9-11h-7z"></path></svg>
                         Đăng ký ngay
                     </a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-xl transition-all duration-200">
+                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base font-bold text-slate-700 dark:text-slate-200 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-slate-700 transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:text-brand">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                         Đăng nhập
                     </a>
