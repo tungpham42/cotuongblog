@@ -9,28 +9,40 @@
 @section('content')
 <div class="space-y-8">
     {{-- Header Section --}}
-    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 p-8 sm:p-12 text-center flex flex-col items-center">
-        @if($tag->featured_image)
-            <figure class="w-1/2 max-w-2xl aspect-[1200/630] mb-6 rounded-2xl overflow-hidden shadow-md border border-white/50 dark:border-slate-600 bg-white dark:bg-slate-700">
-                <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
-            </figure>
-        @endif
+    <header class="relative bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.1)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden text-center py-12 px-6 sm:px-12 sm:py-16 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-center">
 
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4 flex items-center justify-center gap-3">
-            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-            <span>Thẻ: <span class="text-brand">#{{ $tag->name }}</span></span>
-        </h1>
-
-        @if($tag->description)
-            <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-6 text-lg leading-relaxed">
-                {{ $tag->description }}
-            </p>
-        @endif
-
-        <div class="px-5 py-1.5 rounded-full bg-brand/10 text-brand text-sm font-bold border border-brand/20 shadow-sm">
-            {{ $posts->total() }} bài viết liên quan
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[3rem]"></div>
+            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[3rem]"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-transparent dark:via-slate-800/50"></div>
         </div>
-    </div>
+
+        <div class="relative z-10 flex flex-col items-center w-full">
+            @if($tag->featured_image)
+                <figure class="w-full max-w-lg aspect-[16/9] mb-8 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 transform hover:scale-[1.02] hover:rotate-1 transition-all duration-500">
+                    <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
+                </figure>
+            @endif
+
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight relative flex items-center justify-center gap-3">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-brand transform hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                <span>Thẻ: <span class="text-brand relative inline-block transform hover:scale-105 transition-transform duration-300 cursor-default">#{{ $tag->name }}</span></span>
+            </h1>
+
+            @if($tag->description)
+                <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
+                    {{ $tag->description }}
+                </p>
+            @endif
+
+            <div class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-bold shadow-[0_4px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.2)] border border-slate-100 dark:border-slate-700 relative z-20">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand/10 text-brand mr-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </span>
+                {{ $posts->total() }} bài viết liên quan
+            </div>
+        </div>
+    </header>
 
     {{-- Bộ lọc Tìm kiếm và Sắp xếp --}}
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
