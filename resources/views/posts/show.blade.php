@@ -100,7 +100,7 @@
                     <div class="p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm text-brand">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                     </div>
-                    <h3 class="text-xl font-black text-slate-900 dark:text-white">Nội dung chính</h3>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white">Mục lục</h3>
                 </div>
                 <ul class="space-y-3 text-slate-700 dark:text-slate-300 font-medium relative z-10">
                     @foreach($toc as $item)
@@ -285,7 +285,7 @@
     <div x-data="{ showTocBtn: false }"
             @scroll.window="
             const toc = document.getElementById('toc-container');
-            showTocBtn = toc ? window.scrollY > (toc.offsetTop + toc.offsetHeight + 100) : false;
+            showTocBtn = toc ? window.scrollY > (toc.offsetTop + toc.offsetHeight + 200) : false;
             "
             x-show="showTocBtn"
             x-transition:enter="transition ease-out duration-700"
