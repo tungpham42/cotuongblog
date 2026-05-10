@@ -29,50 +29,8 @@ Route::get('/test-redis', function () {
 });
 
 // Public Front Page
-Route::get('/', function (Request $request) {
-    $query = Post::where('is_published', true);
-
-    // Xử lý Tìm kiếm
-    if ($request->has('search') && $request->search != '') {
-        $query->where(function($q) use ($request) {
-            $q->where('title', 'like', '%' . $request->search . '%')
-              ->orWhere('content', 'like', '%' . $request->search . '%');
-        });
-    }
-
-    // Xử lý Sắp xếp
-    $sort = $request->input('sort', 'latest');
-    switch ($sort) {
-        case 'oldest':
-            $query->oldest();
-            break;
-        case 'alpha_asc':
-            $query->orderBy('title', 'asc');
-            break;
-        case 'alpha_desc':
-            $query->orderBy('title', 'desc');
-            break;
-        case 'views_desc': // Added
-            $query->orderBy('views', 'desc');
-            break;
-        case 'views_asc': // Added
-            $query->orderBy('views', 'asc');
-            break;
-        case 'latest':
-        default:
-            $query->latest();
-            break;
-    }
-
-    $posts = $query->paginate(12)->withQueryString();
-
-    // Make sure both Categories and Tags are sorted by order
-    $categories = Category::orderBy('order', 'asc')->get();
-    $tags = Tag::orderBy('order', 'asc')->get();
-
-    App::setLocale('vi');
-    return view('welcome', compact('posts', 'categories', 'tags'));
-})->name('home');
+// Public Front Page
+Route::get('/', [PostController::class, 'home'])->name('home');
 
 // Admin Routes (Chỉ Admin mới được vào)
 Route::middleware(['auth', IsAdmin::class])->group(function () {

@@ -13,6 +13,52 @@ use League\CommonMark\CommonMarkConverter;
 
 class PostController extends Controller
 {
+    public function home(Request $request)
+    {
+        App::setLocale('vi');
+        $query = Post::where('is_published', true);
+
+        // Xử lý Tìm kiếm
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Xử lý Sắp xếp
+        $sort = $request->input('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'alpha_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'alpha_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'views_desc':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'views_asc':
+                $query->orderBy('views', 'asc');
+                break;
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+
+        $posts = $query->paginate(12)->withQueryString();
+
+        // Make sure both Categories and Tags are sorted by order
+        $categories = Category::orderBy('order', 'asc')->get();
+        $tags = Tag::orderBy('order', 'asc')->get();
+
+        return view('welcome', compact('posts', 'categories', 'tags'));
+    }
+
     public function index(Request $request)
     {
         App::setLocale('vi');
