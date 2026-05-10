@@ -49,7 +49,7 @@
 
         {{-- Ảnh bìa --}}
         @if($post->featured_image)
-            <figure class="w-full aspect-[16/9] sm:aspect-[2/1] relative overflow-hidden bg-slate-100 dark:bg-slate-900 group">
+            <figure class="w-full aspect-[1200/630] sm:aspect-[2/1] relative overflow-hidden bg-slate-100 dark:bg-slate-900 group">
                 <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transform transition-transform duration-1000 ease-out hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
             </figure>

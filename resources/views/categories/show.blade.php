@@ -26,7 +26,7 @@
 
         <div class="relative z-10 flex flex-col items-center">
             @if($category->featured_image)
-                <figure class="w-full max-w-lg aspect-[16/9] mb-8 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 transform hover:scale-[1.02] hover:rotate-1 transition-all duration-500">
+                <figure class="w-full max-w-lg aspect-[1200/630] mb-8 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 transform hover:scale-[1.02] hover:rotate-1 transition-all duration-500">
                     <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Ảnh đại diện chuyên mục {{ $category->name }}" class="w-full h-full object-cover">
                 </figure>
             @else
