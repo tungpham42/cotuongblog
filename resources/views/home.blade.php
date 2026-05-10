@@ -214,8 +214,8 @@
                 @endforelse
             </div>
             @if ($posts->hasPages())
-                <div class="mt-8">
-                    {{ $posts->links() }}
+                <div class="mt-12 flex justify-center">
+                    {{ $posts->onEachSide(1)->links('components.pagination') }}
                 </div>
             @endif
         </div>
