@@ -56,7 +56,7 @@ class PostController extends Controller
         $categories = Category::orderBy('order', 'asc')->get();
         $tags = Tag::orderBy('order', 'asc')->get();
 
-        return view('welcome', compact('posts', 'categories', 'tags'));
+        return view('home', compact('posts', 'categories', 'tags'));
     }
 
     public function index(Request $request)
