@@ -100,7 +100,7 @@
                     <div class="p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm text-brand">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                     </div>
-                    <h3 class="text-xl font-black text-slate-900 dark:text-white">Mục lục</h3>
+                    <h3 id="toc-heading" class="text-xl font-black text-slate-900 dark:text-white" style="scroll-margin-top: 6rem;">Mục lục</h3>
                 </div>
                 <ul class="space-y-3 text-slate-700 dark:text-slate-300 font-medium relative z-10">
                     @foreach($toc as $item)
@@ -280,6 +280,7 @@
         </section>
     @endif
 </div>
+
 {{-- Nút Trở về Mục lục (Floating tinh tế) --}}
 @if(!empty($toc))
     <div x-data="{ showTocBtn: false }"
@@ -297,7 +298,7 @@
             class="fixed bottom-6 left-6 lg:left-8 z-40 hidden sm:block"
             style="display: none;">
 
-        <button @click="document.getElementById('toc-container').scrollIntoView({ behavior: 'smooth' })"
+        <button @click="document.getElementById('toc-heading').scrollIntoView({ behavior: 'smooth' })"
                 class="flex items-center gap-2 px-4 py-2.5 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50 shadow-lg shadow-slate-200/10 dark:shadow-slate-900/10 rounded-full text-slate-500 dark:text-slate-400 hover:text-brand dark:hover:text-brand hover:border-brand/40 dark:hover:border-brand/40 hover:bg-white/95 dark:hover:bg-slate-800/95 transition-all duration-300 group opacity-50 hover:opacity-100 hover:-translate-y-1 outline-none">
             <svg class="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
@@ -309,6 +310,7 @@
         </button>
     </div>
 @endif
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
