@@ -9,37 +9,47 @@
 @section('content')
 <div class="space-y-8">
     {{-- Header Section --}}
-    <header class="relative bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.1)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden text-center py-12 px-6 sm:px-12 sm:py-16 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-center">
+    <header class="relative bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgba(249,115,22,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden p-6 sm:p-8 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
 
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[3rem]"></div>
-            <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[3rem]"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-transparent dark:via-slate-800/50"></div>
+            <div class="absolute -top-20 -left-20 w-48 h-48 bg-brand/10 dark:bg-brand/20 rounded-full blur-[2.5rem]"></div>
+            <div class="absolute -bottom-20 -right-20 w-48 h-48 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[2.5rem]"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent dark:via-slate-800/40"></div>
         </div>
 
-        <div class="relative z-10 flex flex-col items-center w-full">
-            @if($tag->featured_image)
-                <figure class="w-full max-w-lg aspect-[1200/630] mb-8 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 transform hover:scale-[1.02] hover:rotate-1 transition-all duration-500">
-                    <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="{{ $tag->name }}" class="w-full h-full object-cover">
-                </figure>
-            @endif
+        <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6">
 
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight relative flex items-center justify-center gap-3">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-brand transform hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                <span>Thẻ: <span class="text-brand relative inline-block transform hover:scale-105 transition-transform duration-300 cursor-default">#{{ $tag->name }}</span></span>
-            </h1>
+            <div class="shrink-0 group">
+                @if($tag->featured_image)
+                    <figure class="w-24 h-24 sm:w-28 sm:h-28 rounded-[1.25rem] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white dark:border-slate-700/50 relative">
+                        <img src="{{ asset('storage/' . $tag->featured_image) }}" alt="Thẻ {{ $tag->name }}" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-2 transition-all duration-500 ease-out">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    </figure>
+                @else
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-[1.25rem] bg-gradient-to-br from-brand/20 to-brand/5 dark:from-brand/30 dark:to-brand/10 flex items-center justify-center shadow-[0_4px_15px_rgba(249,115,22,0.1)] text-brand transform group-hover:scale-105 group-hover:-rotate-2 transition-all duration-500 border border-white dark:border-slate-700/50">
+                        <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                    </div>
+                @endif
+            </div>
 
-            @if($tag->description)
-                <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 font-medium leading-relaxed">
-                    {{ $tag->description }}
-                </p>
-            @endif
+            <div class="flex flex-col text-center sm:text-left flex-grow justify-center min-h-[6rem] sm:min-h-[7rem]">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2 sm:mb-3">
+                    <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center justify-center sm:justify-start gap-2">
+                        <span class="text-slate-400 dark:text-slate-500 text-xl sm:text-2xl font-bold">Thẻ:</span>
+                        <span class="text-brand">#{{ $tag->name }}</span>
+                    </h1>
 
-            <div class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-bold shadow-[0_4px_15px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.2)] border border-slate-100 dark:border-slate-700 relative z-20">
-                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand/10 text-brand mr-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                </span>
-                {{ $posts->total() }} bài viết liên quan
+                    <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-brand/10 dark:bg-brand/20 text-brand dark:text-brand-light text-xs font-bold whitespace-nowrap self-center shadow-sm border border-brand/5">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        {{ $posts->total() }} bài viết
+                    </span>
+                </div>
+
+                @if($tag->description)
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed max-w-3xl mb-0 line-clamp-2">
+                        {{ $tag->description }}
+                    </p>
+                @endif
             </div>
         </div>
     </header>
