@@ -238,7 +238,7 @@
                 @foreach ($relatedPosts as $rPost)
                     <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden hover:shadow-[0_20px_40px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_20px_40px_rgba(249,115,22,0.12)] hover:border-brand/40 transition-all duration-500 transform hover:-translate-y-2 relative">
 
-                        <a href="{{ route('posts.show', $rPost->slug) }}" class="block aspect-[16/10] w-full bg-slate-50 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
+                        <a href="{{ route('posts.show', $rPost->slug) }}" class="block aspect-[1200/630] w-full bg-slate-50 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
                             @if($rPost->featured_image)
                                 <img src="{{ asset('storage/' . $rPost->featured_image) }}" alt="{{ $rPost->title }}" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                             @else
