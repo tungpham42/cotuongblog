@@ -92,6 +92,30 @@
         </script>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
     @endguest
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "@yield('title', 'Cờ tướng')",
+      "description": "Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.",
+      "url": "{{ url('/') }}",
+      "inLanguage": "{{ str_replace('_', '-', app()->getLocale()) }}",
+      "author": {
+        "@type": "Person",
+        "name": "Tùng Phạm"
+      },
+      "keywords": "cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng",
+      "image": "@yield('og_image', asset('img/og_image.jpg'))",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Cờ tướng Blog",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ url('/') }}/img/app-icons/apple-touch-icon-iphone-retina-game.png"
+        }
+      }
+    }
+    </script>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-300">
 
