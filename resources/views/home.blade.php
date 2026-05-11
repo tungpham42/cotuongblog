@@ -117,7 +117,7 @@
                             <input type="hidden" name="sort" :value="selected">
 
                             <button type="button" @click="open = !open"
-                                class="flex items-center justify-between w-full sm:w-[220px] bg-orange-50/80 dark:bg-slate-900/50 hover:bg-brand text-slate-800 hover:text-white rounded-[1.5rem] sm:rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 group/btn">
+                                class="flex items-center justify-between w-full sm:w-[220px] bg-orange-50/80 dark:bg-slate-900/50 hover:bg-brand dark:hover:bg-brand text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white rounded-[1.5rem] sm:rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 group/btn">
 
                                 <div class="flex items-center gap-2.5">
                                     <div class="p-1 rounded-md bg-brand/10 group-hover/btn:bg-white/20 text-brand group-hover/btn:text-white transition-colors">
@@ -144,8 +144,8 @@
                                         <button type="button" @click="selectOption(value)"
                                             class="w-full text-left px-4 py-3 text-[14px] rounded-xl flex items-center justify-between transition-all duration-200"
                                             :class="{
-                                                'bg-gradient-to-r from-brand to-orange-400 text-white font-bold shadow-md shadow-brand/30 transform scale-[1.02]': selected === value,
-                                                'text-slate-700 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-700/50 hover:text-brand font-bold': selected !== value
+                                                'bg-brand text-white font-bold shadow-md shadow-brand/20 transform scale-[1.02]': selected === value,
+                                                'text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-700/50 hover:text-brand dark:hover:text-brand font-medium': selected !== value
                                             }">
                                             <span x-text="label"></span>
                                             <svg x-show="selected === value" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
