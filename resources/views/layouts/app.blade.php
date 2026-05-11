@@ -127,8 +127,6 @@
 
                     <div class="hidden sm:flex sm:items-center sm:space-x-2">
                         @auth
-                            <a href="{{ route('posts.index') }}" class="px-4 py-2 text-slate-600 dark:text-slate-300 hover:text-brand dark:hover:text-brand hover:bg-brand/10 dark:hover:bg-slate-700/50 rounded-xl font-semibold transition-all duration-300">Bài viết</a>
-
                             <div class="relative ml-2" x-data="{ dropdownOpen: false }">
                                 <button aria-expanded="dropdownOpen" aria-label="Menu người dùng" @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="flex items-center gap-2 pl-3 pr-2 py-1.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600 rounded-full hover:bg-brand-light/50 dark:hover:bg-slate-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand/30">
                                     <div class="w-7 h-7 rounded-full bg-brand flex items-center justify-center text-white font-bold text-xs shadow-sm">
@@ -165,6 +163,10 @@
                                             <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/5 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-medium rounded-xl transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                                                 Tổng quan
+                                            </a>
+                                            <a href="{{ route('posts.index') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/5 dark:hover:bg-slate-700 hover:text-brand font-medium rounded-xl transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                Bài viết
                                             </a>
                                             <a href="{{ route('categories.index') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/5 dark:hover:bg-slate-700 hover:text-brand font-medium rounded-xl transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -244,16 +246,15 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('posts.index') }}" class="block px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-semibold transition-colors">Bài viết</a>
-
                         @if(auth()->user()->is_admin)
                             <div class="px-4 pt-4 pb-1 text-xs font-black text-brand uppercase tracking-wider">Quản trị</div>
                             <div class="grid grid-cols-2 gap-2">
                                 <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Tổng quan</a>
+                                <a href="{{ route('posts.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Bài viết</a>
                                 <a href="{{ route('categories.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Chuyên mục</a>
                                 <a href="{{ route('tags.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Thẻ (Tags)</a>
                                 <a href="{{ route('users.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Người dùng</a>
-                                <a href="{{ route('comments.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium col-span-2">Bình luận</a>
+                                <a href="{{ route('comments.index') }}" class="block px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 text-sm text-slate-600 dark:text-slate-300 hover:bg-brand/10 hover:text-brand font-medium">Bình luận</a>
                             </div>
                         @endif
 
