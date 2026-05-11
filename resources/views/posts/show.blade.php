@@ -71,7 +71,7 @@
             </div>
 
             {{-- Tiêu đề --}}
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-snug mb-8">
+            <h1 class="text-[clamp(1.75rem,5vw,3rem)] font-black text-slate-900 dark:text-white tracking-tight leading-snug mb-8">
                 {{ $post->title }}
             </h1>
 
