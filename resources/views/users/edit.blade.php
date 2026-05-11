@@ -44,7 +44,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Chỉ điền nếu bạn muốn thay đổi mật khẩu hiện tại của người dùng này. Bỏ trống để giữ nguyên mật khẩu cũ.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-50">
                     <div>
                         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Mật khẩu mới</label>
                         <input type="password" name="password" placeholder="Để trống nếu không đổi"
