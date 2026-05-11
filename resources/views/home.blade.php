@@ -251,7 +251,7 @@
                 <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand/10 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/20 transition-colors duration-700"></div>
 
                 <h3 class="text-lg font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2.5 relative z-10">
-                    <div class="p-2 bg-gradient-to-br from-brand-light to-white dark:bg-brand/20 rounded-xl text-brand shadow-[0_4px_10px_rgba(249,115,22,0.15)]">
+                    <div class="p-2 bg-brand/10 dark:bg-brand/20 border border-brand/20 rounded-xl text-brand shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     </div>
                     Chuyên mục
@@ -289,7 +289,7 @@
                 <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-brand/10 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/20 transition-colors duration-700"></div>
 
                 <h3 class="text-lg font-black text-slate-900 dark:text-white mb-4 flex items-center gap-2.5 relative z-10">
-                    <div class="p-2 bg-gradient-to-br from-brand-light to-white dark:bg-brand/20 rounded-xl text-brand shadow-[0_4px_10px_rgba(249,115,22,0.15)]">
+                    <div class="p-2 bg-brand/10 dark:bg-brand/20 border border-brand/20 rounded-xl text-brand shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                     </div>
                     Thẻ nổi bật
