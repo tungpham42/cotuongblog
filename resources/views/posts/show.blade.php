@@ -13,6 +13,13 @@
 @php
     $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
 
+    // TÍNH THỜI GIAN ĐỌC TRUNG BÌNH
+    $plainText = strip_tags($htmlContent); // Loại bỏ thẻ HTML
+    // Đếm số từ (hỗ trợ tốt tiếng Việt UTF-8)
+    $wordCount = count(preg_split('~[^\p{L}\p{N}\']+~u', $plainText, -1, PREG_SPLIT_NO_EMPTY));
+    $readingTime = ceil($wordCount / 250); // Giả sử tốc độ đọc là 250 từ/phút
+    if ($readingTime < 1) $readingTime = 1; // Tối thiểu là 1 phút
+
     $toc = [];
     $htmlContent = preg_replace_callback(
         '/<h([1-6])(.*?)>(.*?)<\/h\1>/is',
@@ -57,17 +64,30 @@
 
         <div class="p-6 sm:p-10 lg:p-12">
 
-            {{-- Category & Date --}}
+            {{-- Category, Date & Reading Time --}}
             <div class="flex flex-wrap items-center gap-4 mb-6">
                 @if($post->category)
                     <a href="{{ route('categories.show', $post->category) }}" class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-brand bg-brand-light dark:bg-brand/20 dark:text-brand-light px-3.5 py-1.5 rounded-xl shadow-sm hover:-translate-y-0.5 transition-transform">
                         {{ $post->category->name }}
                     </a>
                 @endif
-                <span class="text-slate-500 dark:text-slate-400 text-sm font-semibold flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    {{ $post->created_at->format('d/m/Y') }}
-                </span>
+
+                <div class="flex items-center gap-3">
+                    {{-- Ngày đăng --}}
+                    <span class="text-slate-500 dark:text-slate-400 text-sm font-semibold flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        {{ $post->created_at->format('d/m/Y') }}
+                    </span>
+
+                    {{-- Dấu chấm phân cách --}}
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+
+                    {{-- Thời gian đọc --}}
+                    <span class="text-slate-500 dark:text-slate-400 text-sm font-semibold flex items-center gap-1.5" title="Thời gian đọc ước tính">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {{ $readingTime }} phút đọc
+                    </span>
+                </div>
             </div>
 
             {{-- Tiêu đề --}}
