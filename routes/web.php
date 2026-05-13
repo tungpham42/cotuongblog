@@ -29,7 +29,6 @@ Route::get('/test-redis', function () {
 });
 
 // Public Front Page
-// Public Front Page
 Route::get('/', [PostController::class, 'home'])->name('home');
 
 // Admin Routes (Chỉ Admin mới được vào)
@@ -48,8 +47,8 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::post('categories/update-order', [CategoryController::class, 'updateOrder'])->name('categories.update-order');
     Route::post('tags/update-order', [TagController::class, 'updateOrder'])->name('tags.update-order');
 
-    Route::resource('categories', CategoryController::class);
-    Route::resource('tags', TagController::class);
+    Route::resource('categories', CategoryController::class)->except(['show']);;
+    Route::resource('tags', TagController::class)->except(['show']);;
     Route::resource('users', UserController::class);
 
     Route::patch('/posts/{post}/approve', [PostController::class, 'approve'])->name('posts.approve');
@@ -67,10 +66,28 @@ Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// Route hiển thị bài viết public
-Route::get('/posts/{post:slug}', [PostController::class, 'show'])->where('is_published', true)->name('posts.show');
-Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
-Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
+// ==========================================
+// 301 Redirects for Old URLs
+// ==========================================
+Route::get('/posts/{slug}', function ($slug) {
+    return redirect('/' . $slug, 301);
+});
+
+Route::get('/categories/{slug}', function ($slug) {
+    return redirect('/chuyen-muc/' . $slug, 301);
+});
+
+Route::get('/tags/{slug}', function ($slug) {
+    return redirect('/the/' . $slug, 301);
+});
+
+
+// ==========================================
+// New Public Routes for Categories and Tags
+// ==========================================
+Route::get('/chuyen-muc/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/the/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
+
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
@@ -83,3 +100,12 @@ Route::middleware('guest')->group(function () {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/api/v1/posts', [PostController::class, 'apiIndex'])->name('api.posts.index');
 Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
+
+
+// ==========================================
+// New Public Route for Post
+// IMPORTANT: Keep this at the absolute bottom
+// so it doesn't intercept other root requests
+// (like /login or /sitemap.xml)
+// ==========================================
+Route::get('/{post:slug}', [PostController::class, 'show'])->name('posts.show');
