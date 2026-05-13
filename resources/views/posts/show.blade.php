@@ -46,7 +46,7 @@
         $htmlContent
     );
 
-    // CHÈN QUẢNG CÁO NGẪU NHIÊN VÀO NỘI DUNG
+    // CHÈN QUẢNG CÁO VÀO NỘI DUNG
     $adCode = '
     <div class="my-8 w-full overflow-hidden flex justify-center not-prose">
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
@@ -65,13 +65,29 @@
     $paragraphs = explode('</p>', $htmlContent);
     $totalParagraphs = count($paragraphs);
 
-    // Nếu bài viết đủ dài (ví dụ: hơn 3 đoạn), chèn quảng cáo
-    if ($totalParagraphs > 3) {
-        // Chọn ngẫu nhiên một vị trí ở giữa bài viết (từ đoạn thứ 2 đến đoạn áp chót)
-        // Bạn có thể tùy chỉnh logic này để chèn nhiều quảng cáo nếu bài viết rất dài
-        $randomInsertPosition = rand(2, $totalParagraphs - 2);
+    // Logic chèn quảng cáo ít nhất 2 lần (nếu bài viết có từ 3 đoạn trở lên)
+    if ($totalParagraphs >= 3) {
+        // Lấy mốc 1/3 và 2/3 bài viết để chèn
+        $pos1 = (int) round($totalParagraphs * 0.33);
+        $pos2 = (int) round($totalParagraphs * 0.66);
 
-        $paragraphs[$randomInsertPosition] .= $adCode;
+        // Đảm bảo 2 vị trí không trùng nhau nếu bài viết quá ngắn
+        if ($pos1 === $pos2) {
+            $pos2 = $pos1 + 1;
+        }
+
+        // Chèn vào vị trí 1
+        if (isset($paragraphs[$pos1])) {
+            $paragraphs[$pos1] .= $adCode;
+        }
+
+        // Chèn vào vị trí 2
+        if (isset($paragraphs[$pos2]) && $pos2 < $totalParagraphs) {
+            $paragraphs[$pos2] .= $adCode;
+        }
+    } elseif ($totalParagraphs == 2) {
+        // Dự phòng cho bài cực ngắn, chèn 1 cái ở giữa
+        $paragraphs[1] .= $adCode;
     }
 
     // Nối các đoạn lại với nhau
