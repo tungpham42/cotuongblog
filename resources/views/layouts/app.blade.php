@@ -94,14 +94,28 @@
             gtag('js', new Date());
             gtag('config', 'G-QEW6K9YPY7');
         </script>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
     @endguest
     {!! $globalSchema->toScript() !!}
 </head>
 {{-- Changed from bg-slate-50 to a warm, inviting radial gradient for light mode --}}
 <body class="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-50 via-orange-50/30 to-orange-100/20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-500 min-h-screen">
 
-    <div class="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 pointer-events-none">
+    {{-- Top AdSense Banner (Full Width, 300px Height) --}}
+    <div class="w-full overflow-hidden block">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block; width:100%; height:300px;"
+             data-ad-client="ca-pub-3585118770961536"
+             data-ad-slot="5187852886"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 pointer-events-none mt-4">
         {{-- Navbar now uses a softer white and warm border/shadows in light mode --}}
         <nav class="pointer-events-auto max-w-7xl mx-auto bg-white/75 dark:bg-slate-800/85 backdrop-blur-2xl shadow-[0_10px_30px_rgba(249,115,22,0.08)] dark:shadow-brand/5 border border-brand/20 dark:border-slate-700/50 rounded-2xl transition-all duration-300" x-data="{ open: false }">
             <div class="px-4 sm:px-6 lg:px-8">
