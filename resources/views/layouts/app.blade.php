@@ -100,12 +100,12 @@
 {{-- Changed from bg-slate-50 to a warm, inviting radial gradient for light mode --}}
 <body class="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-50 via-orange-50/30 to-orange-100/20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-500 min-h-screen">
 
-    {{-- Top AdSense Banner (Full Width, 300px Height) --}}
-    <div class="w-full overflow-hidden block">
+    {{-- Top AdSense Banner (Centered, Full Width, 300px Height) --}}
+    <div class="w-full overflow-hidden flex justify-center">
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536"
              crossorigin="anonymous"></script>
         <ins class="adsbygoogle"
-             style="display:block; width:100%; height:300px;"
+             style="display:block; width:100%; height:300px; text-align:center; margin:0 auto;"
              data-ad-client="ca-pub-3585118770961536"
              data-ad-slot="5187852886"
              data-ad-format="auto"
