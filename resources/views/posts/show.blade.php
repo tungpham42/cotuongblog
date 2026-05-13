@@ -14,12 +14,12 @@
     $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
 
     // TÍNH THỜI GIAN ĐỌC TRUNG BÌNH
-    $plainText = strip_tags($htmlContent); // Loại bỏ thẻ HTML
-    // Đếm số từ (hỗ trợ tốt tiếng Việt UTF-8)
+    $plainText = strip_tags($htmlContent);
     $wordCount = count(preg_split('~[^\p{L}\p{N}\']+~u', $plainText, -1, PREG_SPLIT_NO_EMPTY));
-    $readingTime = ceil($wordCount / 250); // Giả sử tốc độ đọc là 250 từ/phút
-    if ($readingTime < 1) $readingTime = 1; // Tối thiểu là 1 phút
+    $readingTime = ceil($wordCount / 250);
+    if ($readingTime < 1) $readingTime = 1;
 
+    // TẠO MỤC LỤC (TOC)
     $toc = [];
     $htmlContent = preg_replace_callback(
         '/<h([1-6])(.*?)>(.*?)<\/h\1>/is',
@@ -45,6 +45,38 @@
         },
         $htmlContent
     );
+
+    // CHÈN QUẢNG CÁO NGẪU NHIÊN VÀO NỘI DUNG
+    $adCode = '
+    <div class="my-8 w-full overflow-hidden flex justify-center not-prose">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3585118770961536" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block; text-align:center;"
+             data-ad-layout="in-article"
+             data-ad-format="fluid"
+             data-ad-client="ca-pub-3585118770961536"
+             data-ad-slot="5187852886"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>';
+
+    // Tách nội dung thành các đoạn (paragraphs)
+    $paragraphs = explode('</p>', $htmlContent);
+    $totalParagraphs = count($paragraphs);
+
+    // Nếu bài viết đủ dài (ví dụ: hơn 3 đoạn), chèn quảng cáo
+    if ($totalParagraphs > 3) {
+        // Chọn ngẫu nhiên một vị trí ở giữa bài viết (từ đoạn thứ 2 đến đoạn áp chót)
+        // Bạn có thể tùy chỉnh logic này để chèn nhiều quảng cáo nếu bài viết rất dài
+        $randomInsertPosition = rand(2, $totalParagraphs - 2);
+
+        $paragraphs[$randomInsertPosition] .= $adCode;
+    }
+
+    // Nối các đoạn lại với nhau
+    $htmlContent = implode('</p>', $paragraphs);
+
 @endphp
 
 <div class="max-w-4xl mx-auto relative">
