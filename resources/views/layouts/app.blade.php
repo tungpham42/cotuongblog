@@ -108,7 +108,7 @@
              style="display:block; width:100%; height:300px; text-align:center; margin:0 auto;"
              data-ad-client="ca-pub-3585118770961536"
              data-ad-slot="5187852886"
-             data-ad-format="fluid"
+             data-ad-format="auto"
              data-full-width-responsive="true"></ins>
         <script>
              (adsbygoogle = window.adsbygoogle || []).push({});
