@@ -46,7 +46,9 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                <span class="font-medium text-slate-900 dark:text-white block">#{{ $tag->name }}</span>
+                                <a href="{{ route('tags.show', $tag) }}" class="font-medium text-slate-900 dark:text-white hover:text-brand dark:hover:text-brand transition-colors block">
+                                    #{{ $tag->name }}
+                                </a>
                                 @if($tag->description)
                                     <span class="text-xs text-slate-400 mt-1 line-clamp-1 block">{{ $tag->description }}</span>
                                 @endif

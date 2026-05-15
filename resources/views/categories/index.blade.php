@@ -43,7 +43,9 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                <span class="font-medium text-slate-900 dark:text-white block">{{ $category->name }}</span>
+                                <a href="{{ route('categories.show', $category) }}" class="font-medium text-slate-900 dark:text-white hover:text-brand dark:hover:text-brand transition-colors block">
+                                    {{ $category->name }}
+                                </a>
                                 @if($category->description)
                                     <span class="text-xs text-slate-400 mt-1 line-clamp-1 block">{{ $category->description }}</span>
                                 @endif
