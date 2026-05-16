@@ -61,7 +61,7 @@
             <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">
                 Cộng đồng
                 <span class="relative inline-block whitespace-nowrap">
-                    <a target="_blank" href="https://cotuong.top" class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-brand via-rose-500 to-amber-500 animate-gradient-x hover:scale-105 inline-block transition-transform duration-300 drop-shadow-md pb-2">
+                    <a target="_blank" href="https://cotuong.top" class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-brand via-rose-500 to-amber-500 animate-gradient-x hover:scale-105 inline-block transition-transform duration-300 drop-shadow-md pb-3">
                         Cờ Tướng
                     </a>
                     <span class="absolute -bottom-1 left-0 w-full h-4 bg-brand/20 dark:bg-brand/30 blur-md rounded-full -z-10"></span>
