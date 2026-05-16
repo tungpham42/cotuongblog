@@ -206,7 +206,6 @@
                 </div>
 
                 <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-sm font-bold text-slate-500 dark:text-slate-400 mr-2 uppercase tracking-wider">Chia sẻ</span>
 
                     {{-- Facebook --}}
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-slate-500 hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] shadow-sm hover:shadow-[0_4px_15px_rgba(24,119,242,0.3)] transition-all duration-300 hover:-translate-y-1" title="Chia sẻ qua Facebook">
