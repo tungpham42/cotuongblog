@@ -252,12 +252,12 @@
                         @if(auth()->user()->is_admin)
                             <div class="px-4 pt-4 pb-1 text-xs font-black text-brand uppercase tracking-wider">Quản trị</div>
                             <div class="grid grid-cols-2 gap-2">
-                                <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Tổng quan</a>
-                                <a href="{{ route('posts.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Bài viết</a>
-                                <a href="{{ route('categories.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Chuyên mục</a>
-                                <a href="{{ route('tags.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Thẻ (Tags)</a>
-                                <a href="{{ route('users.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Người dùng</a>
-                                <a href="{{ route('comments.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-brand/10 hover:text-brand font-bold">Bình luận</a>
+                                <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Tổng quan</a>
+                                <a href="{{ route('posts.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Bài viết</a>
+                                <a href="{{ route('categories.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Chuyên mục</a>
+                                <a href="{{ route('tags.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Thẻ (Tags)</a>
+                                <a href="{{ route('users.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Người dùng</a>
+                                <a href="{{ route('comments.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Bình luận</a>
                             </div>
                         @endif
 
