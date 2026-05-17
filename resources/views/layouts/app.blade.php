@@ -1,26 +1,40 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      x-data="{
-          darkMode: document.documentElement.classList.contains('dark'),
-          initTheme() {
-              this.$watch('darkMode', val => {
-                  localStorage.setItem('darkMode', val);
-                  window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
-              });
-              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                  if (!localStorage.getItem('darkMode')) {
-                      this.darkMode = e.matches;
-                  }
-              });
-          }
-      }"
-      x-init="initTheme()"
+      x-data="themeHandler()"
       :class="{ 'dark': darkMode }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif</title>
+
+    <script>
+        // 1. Initial dark mode check to prevent flash of light theme
+        if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // 2. Alpine.js logic safely isolated away from HTML tag attributes
+        function themeHandler() {
+            return {
+                darkMode: document.documentElement.classList.contains('dark'),
+                init() {
+                    // Alpine 3 automatically runs the init() function
+                    this.$watch('darkMode', val => {
+                        localStorage.setItem('darkMode', val);
+                        window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
+                    });
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                        if (!localStorage.getItem('darkMode')) {
+                            this.darkMode = e.matches;
+                        }
+                    });
+                }
+            }
+        }
+    </script>
     <link rel="canonical" href="{{ url()->current() }}">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
