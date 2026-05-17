@@ -5,11 +5,11 @@
     $isEn = $category->slug === 'english-articles';
 @endphp
 
-@section('title', $category->name . ($isEn ? ' - Xiangqi' : ' - Cờ tướng'))
+@section('title', $category->name . ($isEn ? ' - Global Xiangqi Portal' : ' - Cờ tướng'))
 @if($category->featured_image)
     @section('og_image', asset('storage/' . $category->featured_image))
 @endif
-@section('meta_description', $category->description ? Str::limit($category->description, 150) : ($isEn ? 'Explore fascinating articles in ' . $category->name : 'Khám phá các bài viết hấp dẫn trong chuyên mục ' . $category->name))
+@section('meta_description', $category->description ? Str::limit($category->description, 150) : ($isEn ? 'Join our global community and explore fascinating Xiangqi articles in ' . $category->name : 'Khám phá các bài viết hấp dẫn trong chuyên mục ' . $category->name))
 
 @section('content')
 <div class="space-y-8">
@@ -17,7 +17,7 @@
         <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
             <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors font-semibold">{{ $isEn ? 'Home' : 'Trang chủ' }}</a></li>
             <li><span class="mx-1 opacity-50">/</span></li>
-            <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $category->name }}</li>
+            <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $isEn ? 'Global Portal' : $category->name }}</li>
         </ol>
     </nav>
 
@@ -40,57 +40,110 @@
     <div x-data="{ mounted: false }" x-init="setTimeout(() => mounted = true, 100)"
          class="transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
 
-        <header class="relative bg-white/60 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-700/60 overflow-hidden p-8 sm:p-10 lg:p-12 transition-all duration-700 hover:shadow-[0_25px_50px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_25px_50px_rgba(0,0,0,0.5)] group">
+        @if($isEn)
+            {{-- ========================================== --}}
+            {{-- ENGLISH PORTAL HERO (GLOBAL AUDIENCE)      --}}
+            {{-- ========================================== --}}
+            <header class="relative bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 sm:p-12 lg:p-16 border border-slate-700/60 group">
+                {{-- Global Abstract Background --}}
+                <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand/30 rounded-full blur-[6rem] animate-float opacity-70"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[6rem] animate-float-delayed opacity-70"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
+                </div>
 
-            {{-- Animated Background Orbs --}}
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
-                <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
-                <div class="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-white/60 dark:via-slate-800/50 dark:to-slate-900/80 z-0"></div>
-            </div>
+                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="flex flex-col text-center lg:text-left max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-blue-200 text-xs font-bold uppercase tracking-widest w-max mx-auto lg:mx-0 mb-6 backdrop-blur-md">
+                            <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            International Edition
+                        </div>
 
-            <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6">
+                            Global <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-400 to-yellow-500 animate-gradient-x">Xiangqi</span> Hub
+                        </h1>
 
-                <div class="shrink-0 group/img relative">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-brand to-amber-400 rounded-[1.5rem] blur opacity-25 group-hover/img:opacity-50 transition duration-500"></div>
+                        <p class="text-lg sm:text-xl text-slate-300 font-medium leading-relaxed mb-8">
+                            {{ $category->description ?? 'Discover the ancient art of Chinese Chess. Explore grandmaster strategies, cultural histories, and connect with players from around the world in our english portal.' }}
+                        </p>
+
+                        {{-- Portal Quick Links --}}
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                            <a href="#articles" class="px-6 py-3 rounded-full bg-brand hover:bg-orange-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:scale-105">
+                                Browse Articles ({{ $posts->total() }})
+                            </a>
+                            <a href="#" class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold border border-white/10 transition-all backdrop-blur-md">
+                                Learn the Basics
+                            </a>
+                        </div>
+                    </div>
+
                     @if($category->featured_image)
-                        <figure class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] overflow-hidden shadow-xl border-2 border-white dark:border-slate-700/80 relative z-10 bg-white dark:bg-slate-800">
-                            <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover transform group-hover/img:scale-110 group-hover/img:rotate-3 transition-all duration-700 ease-out">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
-                        </figure>
+                        <div class="shrink-0 lg:block hidden relative group/img">
+                            <div class="absolute -inset-4 bg-gradient-to-r from-brand to-blue-500 rounded-full blur opacity-30 group-hover/img:opacity-60 transition duration-700"></div>
+                            <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Global Xiangqi" class="w-64 h-64 object-cover rounded-full border-4 border-slate-800 relative z-10 shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
+                        </div>
                     @else
-                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] bg-gradient-to-br from-brand/20 to-brand/5 dark:from-brand/30 dark:to-brand/10 flex items-center justify-center shadow-xl text-brand transform group-hover/img:scale-105 group-hover/img:-rotate-3 transition-all duration-500 border-2 border-white dark:border-slate-700/80 relative z-10 backdrop-blur-sm">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        <div class="shrink-0 lg:flex hidden relative group/img items-center justify-center w-64 h-64 rounded-full bg-gradient-to-br from-brand/20 to-blue-500/20 border-4 border-slate-700 backdrop-blur-md shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
+                            <svg class="w-32 h-32 text-brand drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                     @endif
                 </div>
+            </header>
+        @else
+            {{-- ========================================== --}}
+            {{-- VIETNAMESE CATEGORY HEADER (ORIGINAL)      --}}
+            {{-- ========================================== --}}
+            <header class="relative bg-white/60 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-700/60 overflow-hidden p-8 sm:p-10 lg:p-12 transition-all duration-700 hover:shadow-[0_25px_50px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_25px_50px_rgba(0,0,0,0.5)] group">
+                <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
+                    <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-white/60 dark:via-slate-800/50 dark:to-slate-900/80 z-0"></div>
+                </div>
 
-                <div class="flex flex-col text-center sm:text-left flex-grow justify-center min-h-[7rem]">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-3 sm:mb-4">
-                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-500 to-rose-500 animate-gradient-x pb-1 inline-block">
-                                {{ $category->name }}
-                            </span>
-                        </h1>
-
-                        <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap self-center shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
-                            <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                            {{ $posts->total() }} {{ $isEn ? 'articles' : 'bài viết' }}
-                        </span>
+                <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                    <div class="shrink-0 group/img relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand to-amber-400 rounded-[1.5rem] blur opacity-25 group-hover/img:opacity-50 transition duration-500"></div>
+                        @if($category->featured_image)
+                            <figure class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] overflow-hidden shadow-xl border-2 border-white dark:border-slate-700/80 relative z-10 bg-white dark:bg-slate-800">
+                                <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover transform group-hover/img:scale-110 group-hover/img:rotate-3 transition-all duration-700 ease-out">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
+                            </figure>
+                        @else
+                            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] bg-gradient-to-br from-brand/20 to-brand/5 dark:from-brand/30 dark:to-brand/10 flex items-center justify-center shadow-xl text-brand transform group-hover/img:scale-105 group-hover/img:-rotate-3 transition-all duration-500 border-2 border-white dark:border-slate-700/80 relative z-10 backdrop-blur-sm">
+                                <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                            </div>
+                        @endif
                     </div>
 
-                    @if($category->description)
-                        <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm">
-                            {{ $category->description }}
-                        </p>
-                    @endif
+                    <div class="flex flex-col text-center sm:text-left flex-grow justify-center min-h-[7rem]">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-3 sm:mb-4">
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm">
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-500 to-rose-500 animate-gradient-x pb-1 inline-block">
+                                    {{ $category->name }}
+                                </span>
+                            </h1>
+
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap self-center shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
+                                <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                                {{ $posts->total() }} bài viết
+                            </span>
+                        </div>
+
+                        @if($category->description)
+                            <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm">
+                                {{ $category->description }}
+                            </p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        @endif
     </div>
 
-    <div class="flex flex-col gap-5 border-b border-slate-200 dark:border-slate-700 pb-5 mb-6">
-        {{-- Thanh tìm kiếm --}}
+    {{-- Search & Sorting Bar --}}
+    <div id="articles" class="flex flex-col gap-5 border-b border-slate-200 dark:border-slate-700 pb-5 mb-6 pt-4">
         <form action="{{ route($isEn ? 'categories.show.en' : 'categories.show', $category->slug) }}" method="GET" class="relative z-30 w-full">
             <div class="flex flex-col sm:flex-row items-center w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-[2rem] sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-200/80 dark:border-slate-700/80 p-1.5 gap-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_15px_40px_rgba(249,115,22,0.1)] hover:border-brand/40 focus-within:ring-4 focus-within:ring-brand/10 focus-within:border-brand dark:focus-within:border-brand">
 
@@ -102,7 +155,7 @@
                     <input type="text"
                         name="search"
                         value="{{ request('search') }}"
-                        placeholder="{{ $isEn ? 'Search articles...' : 'Tìm trong chuyên mục...' }}"
+                        placeholder="{{ $isEn ? 'Search global resources, strategies, authors...' : 'Tìm trong chuyên mục...' }}"
                         class="w-full bg-transparent border-none outline-none focus:ring-0 text-slate-800 dark:text-slate-100 placeholder-slate-400 pl-11 pr-14 py-2.5 text-[15px] font-medium transition-all duration-300 placeholder:font-normal [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s] [&:-webkit-autofill]:[-webkit-text-fill-color:#1e293b] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f8fafc]">
 
                     <button type="submit" aria-label="Tìm kiếm" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-brand/10 hover:bg-brand text-brand hover:text-white dark:bg-brand/20 dark:hover:bg-brand transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand/50 group-focus-within/search:scale-105">
@@ -116,10 +169,10 @@
                         open: false,
                         selected: '{{ request('sort', 'latest') }}',
                         options: {
-                            'latest': '{{ $isEn ? "Latest" : "Mới nhất" }}',
-                            'oldest': '{{ $isEn ? "Oldest" : "Cũ nhất" }}',
-                            'views_desc': '{{ $isEn ? "Most Viewed" : "Lượt xem (Cao - Thấp)" }}',
-                            'views_asc': '{{ $isEn ? "Least Viewed" : "Lượt xem (Thấp - Cao)" }}',
+                            'latest': '{{ $isEn ? "Latest Updates" : "Mới nhất" }}',
+                            'oldest': '{{ $isEn ? "Archived" : "Cũ nhất" }}',
+                            'views_desc': '{{ $isEn ? "Trending Worldwide" : "Lượt xem (Cao - Thấp)" }}',
+                            'views_asc': '{{ $isEn ? "Hidden Gems" : "Lượt xem (Thấp - Cao)" }}',
                             'alpha_asc': '{{ $isEn ? "A - Z" : "Tên (A - Z)" }}',
                             'alpha_desc': '{{ $isEn ? "Z - A" : "Tên (Z - A)" }}'
                         },
@@ -177,13 +230,13 @@
             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
             @php
                 if ($isEn) {
-                    $headerText = request('search') ? 'Search Results' : match(request('sort')) {
-                        'oldest' => 'Oldest Articles',
-                        'views_desc' => 'Most Viewed',
-                        'views_asc' => 'Least Viewed',
+                    $headerText = request('search') ? 'Global Search Results' : match(request('sort')) {
+                        'oldest' => 'Archived Resources',
+                        'views_desc' => 'Trending Worldwide',
+                        'views_asc' => 'Hidden Gems',
                         'alpha_asc' => 'Alphabetical (A - Z)',
                         'alpha_desc' => 'Alphabetical (Z - A)',
-                        default => 'Latest Articles',
+                        default => 'Latest International Content',
                     };
                 } else {
                     $headerText = request('search') ? 'Kết quả tìm kiếm' : match(request('sort')) {
@@ -225,7 +278,7 @@
                     <div class="p-6 sm:p-8 flex flex-col flex-grow relative bg-white dark:bg-slate-800 z-10 rounded-b-[2rem]">
 
                         <div class="absolute -top-5 left-6 sm:left-8">
-                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-brand to-orange-400 text-white text-[11px] uppercase tracking-wider font-black px-4 py-2.5 rounded-xl shadow-lg shadow-brand/40 transform group-hover:-translate-y-1 transition-transform duration-500">
+                            <span class="inline-flex items-center gap-1.5 bg-gradient-to-r {{ $isEn ? 'from-blue-600 to-brand' : 'from-brand to-orange-400' }} text-white text-[11px] uppercase tracking-wider font-black px-4 py-2.5 rounded-xl shadow-lg shadow-brand/40 transform group-hover:-translate-y-1 transition-transform duration-500">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 {{ $post->created_at->locale($isEn ? 'en' : 'vi')->diffForHumans() }}
                             </span>
@@ -250,12 +303,12 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">{{ $isEn ? 'Author' : 'Tác giả' }}</span>
-                                    <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ $post->author->name ?? ($isEn ? 'Anonymous' : 'Ẩn danh') }}</span>
+                                    <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ $post->author->name ?? ($isEn ? 'Community' : 'Ẩn danh') }}</span>
                                 </div>
                             </div>
 
                             <a href="{{ route('posts.show', $post->slug) }}" class="flex items-center gap-1.5 text-sm font-black text-brand opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 focus:outline-none">
-                                {{ $isEn ? 'Read now' : 'Đọc ngay' }}
+                                {{ $isEn ? 'Read Article' : 'Đọc ngay' }}
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
                         </div>
@@ -266,10 +319,10 @@
                     <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-900 mb-4">
                         <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $isEn ? 'No articles found' : 'Chưa có bài viết nào' }}</h3>
-                    <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">{{ $isEn ? 'This category currently has no articles. Please check back later!' : 'Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!' }}</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $isEn ? 'No Content Available Yet' : 'Chưa có bài viết nào' }}</h3>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">{{ $isEn ? 'We are currently translating and preparing new global resources. Please check back soon!' : 'Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!' }}</p>
                     <a href="{{ route('home') }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-brand text-white font-medium rounded-xl hover:bg-brand-hover transition-colors shadow-sm shadow-brand/30">
-                        ← {{ $isEn ? 'Back to Home' : 'Quay về trang chủ' }}
+                        ← {{ $isEn ? 'Return to Home' : 'Quay về trang chủ' }}
                     </a>
                 </div>
             @endforelse
