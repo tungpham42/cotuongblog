@@ -331,6 +331,11 @@
                 background: isDark ? '#1e293b' : '#ffffff',
                 color: isDark ? '#f8fafc' : '#0f172a',
             });
+        });
+    </script>
+    @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             // Give the browser a moment to apply ad-blocking rules
             setTimeout(function() {
                 // Create a "bait" element with classes commonly targeted by AdBlockers
@@ -371,6 +376,5 @@
             }, 1500);
         });
     </script>
-    @endif
 </body>
 </html>
