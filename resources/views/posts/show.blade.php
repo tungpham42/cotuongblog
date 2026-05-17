@@ -1,29 +1,12 @@
 @extends('layouts.app')
 
-@php
-    // 1. Chuyển đổi Markdown sang HTML trước để xử lý
-    $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
-
-    // 2. Lọc bỏ toàn bộ thẻ HTML để lấy văn bản thuần
-    $plainText = strip_tags($htmlContent);
-
-    // 3. Xử lý Meta Description an toàn (Bỏ khoảng trắng thừa & Escape dấu ngoặc kép)
-    $rawDesc = $post->excerpt ?: $plainText;
-    $cleanDesc = trim(preg_replace('/\s+/', ' ', $rawDesc));
-    // Dùng htmlspecialchars để đảm bảo chuỗi không làm hỏng thẻ <meta content="...">
-    $metaDesc = htmlspecialchars(\Illuminate\Support\Str::limit($cleanDesc, 160), ENT_QUOTES, 'UTF-8');
-
-    // 4. Xử lý Tiêu đề an toàn (phòng trường hợp title có chứa dấu ngoặc kép)
-    $safeTitle = htmlspecialchars($post->title, ENT_QUOTES, 'UTF-8');
-@endphp
-
-@section('title', $safeTitle)
+@section('title', $post->title)
 
 @if($post->featured_image)
     @section('og_image', asset('storage/' . $post->featured_image))
 @endif
 
-@section('meta_description', $metaDesc)
+@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit($post->excerpt ?? $post->content, 160))
 
 @section('content')
 
@@ -31,7 +14,10 @@
     // KIỂM TRA BÀI VIẾT TIẾNG ANH
     $isEnglish = $post->category && $post->category->slug === 'english-articles';
 
-    // TÍNH THỜI GIAN ĐỌC TRUNG BÌNH (Sử dụng lại $plainText đã tạo ở trên)
+    $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
+
+    // TÍNH THỜI GIAN ĐỌC TRUNG BÌNH
+    $plainText = strip_tags($htmlContent);
     $wordCount = count(preg_split('~[^\p{L}\p{N}\']+~u', $plainText, -1, PREG_SPLIT_NO_EMPTY));
     $readingTime = ceil($wordCount / 250);
     if ($readingTime < 1) $readingTime = 1;
