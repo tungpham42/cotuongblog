@@ -1,21 +1,36 @@
 User-agent: *
-# Allow crawling of public content
+# Allow crawling of public content and new URL structures
 Allow: /
-Allow: /posts/*
-Allow: /categories/*
-Allow: /tags/*
 
-# Disallow administrative and private routes
+# Disallow administrative, auth, and private routes
 Disallow: /dashboard
-Disallow: /posts/create
-Disallow: /posts/*/edit
-Disallow: /categories/create
-Disallow: /categories/*/edit
-Disallow: /tags/create
-Disallow: /tags/*/edit
 Disallow: /users
+Disallow: /comments
 Disallow: /login
 Disallow: /register
+Disallow: /logout
+
+# Disallow Post management & actions
+Disallow: /posts/create
+Disallow: /posts/*/edit
+Disallow: /posts/*/approve
+Disallow: /posts/*/comments
+
+# Disallow Category management
+Disallow: /categories/create
+Disallow: /categories/*/edit
+Disallow: /categories/update-order
+
+# Disallow Tag management
+Disallow: /tags/create
+Disallow: /tags/*/edit
+Disallow: /tags/update-order
+
+# Disallow utility, upload, and API routes
+Disallow: /upload-image
+Disallow: /test-redis
+Disallow: /chat
+Disallow: /api/
 
 # Sitemap location
 Sitemap: https://blog.cotuong.top/sitemap.xml
