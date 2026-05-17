@@ -333,7 +333,7 @@
 
     @if ($posts->hasPages())
         <div class="mt-12 flex justify-center">
-            {{ $posts->onEachSide(1)->links('components.pagination') }}
+            {{ $posts->onEachSide(1)->links($isEn ? 'components.pagination-en' : 'components.pagination') }}
         </div>
     @endif
 </div>
