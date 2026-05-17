@@ -331,6 +331,44 @@
                 background: isDark ? '#1e293b' : '#ffffff',
                 color: isDark ? '#f8fafc' : '#0f172a',
             });
+            // Give the browser a moment to apply ad-blocking rules
+            setTimeout(function() {
+                // Create a "bait" element with classes commonly targeted by AdBlockers
+                const bait = document.createElement('div');
+                bait.className = 'ad-banner adsbox doubleclick ad-placement ad-container';
+                bait.style.position = 'absolute';
+                bait.style.left = '-9999px';
+                bait.style.height = '10px';
+                document.body.appendChild(bait);
+
+                // Check if the element was hidden or collapsed
+                setTimeout(function() {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const isAdblocked = bait.offsetHeight === 0 || window.getComputedStyle(bait).display === 'none';
+
+                    if (isAdblocked) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Bạn đang dùng Trình chặn quảng cáo?',
+                            text: 'Các quảng cáo giúp chúng tôi có chi phí duy trì và phát triển Cộng Đồng Cờ Tướng. Xin vui lòng thêm trang web vào danh sách ngoại lệ (whitelist) hoặc tắt AdBlock để ủng hộ tác giả nhé!',
+                            confirmButtonText: 'Tôi đã tắt AdBlock',
+                            confirmButtonColor: '#f97316', // Matches your brand.DEFAULT color
+                            background: isDark ? '#1e293b' : '#ffffff',
+                            color: isDark ? '#f8fafc' : '#0f172a',
+                            allowOutsideClick: false, // Forces user to acknowledge
+                            allowEscapeKey: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Reload page to attempt fetching ads again
+                                window.location.reload();
+                            }
+                        });
+                    }
+
+                    // Clean up the DOM
+                    bait.remove();
+                }, 100);
+            }, 1500);
         });
     </script>
     @endif
