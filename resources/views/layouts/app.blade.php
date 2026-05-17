@@ -337,40 +337,77 @@
     {{-- AdBlocker Detection --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Give the browser a moment to apply ad-blocking rules
-            setTimeout(function() {
-                const isDark = document.documentElement.classList.contains('dark');
-                let adBlockDetected = false;
+            const isDark = document.documentElement.classList.contains('dark');
 
-                const triggerAdBlockAlert = () => {
-                    if (adBlockDetected) return; // Prevent multiple alerts
-                    adBlockDetected = true;
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Bạn đang dùng Trình chặn quảng cáo?',
-                        text: 'Các quảng cáo giúp chúng tôi có chi phí duy trì và phát triển Cộng Đồng Cờ Tướng. Xin vui lòng thêm trang web vào danh sách ngoại lệ (whitelist) hoặc tắt AdBlock để ủng hộ tác giả nhé!',
-                        confirmButtonText: 'Tôi đã tắt AdBlock',
-                        confirmButtonColor: '#f97316', // Matches brand.DEFAULT color
-                        background: isDark ? '#1e293b' : '#ffffff',
-                        color: isDark ? '#f8fafc' : '#0f172a',
-                        allowOutsideClick: false, // Forces user to acknowledge
-                        allowEscapeKey: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    });
-                };
-                const adElement = document.querySelector('.adsbygoogle');
-                if (adElement) {
-                    const adStyle = window.getComputedStyle(adElement);
-                    if (adElement.offsetHeight === 0 || adStyle.display === 'none') {
-                        triggerAdBlockAlert();
-                        return; // Stop here if already detected
+            // 1. The SweetAlert Trigger
+            const triggerAdBlockAlert = () => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bạn đang dùng Trình chặn quảng cáo?',
+                    text: 'Các quảng cáo giúp chúng tôi có chi phí duy trì và phát triển Cộng Đồng Cờ Tướng. Xin vui lòng thêm trang web vào danh sách ngoại lệ (whitelist) hoặc tắt AdBlock để ủng hộ tác giả nhé!',
+                    confirmButtonText: 'Tôi đã tắt AdBlock',
+                    confirmButtonColor: '#f97316', // Matches brand.DEFAULT color
+                    background: isDark ? '#1e293b' : '#ffffff',
+                    color: isDark ? '#f8fafc' : '#0f172a',
+                    allowOutsideClick: false, // Forces user to acknowledge
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
                     }
+                });
+            };
+
+            // 2. DOM "Bait" Check (Catches cosmetic/element hiders)
+            const checkDOMBlock = () => {
+                const bait = document.createElement('div');
+                bait.innerHTML = '&nbsp;';
+                // Common classes targeted by adblockers
+                bait.className = 'adsbox ad-placement adsbygoogle';
+                bait.style.height = '1px';
+                bait.style.width = '1px';
+                bait.style.position = 'absolute';
+                bait.style.top = '-9999px';
+                bait.style.left = '-9999px';
+                document.body.appendChild(bait);
+
+                const adStyle = window.getComputedStyle(bait);
+                const isBlocked = bait.offsetHeight === 0 || adStyle.display === 'none' || adStyle.visibility === 'hidden';
+
+                document.body.removeChild(bait);
+                return isBlocked;
+            };
+
+            // 3. Network Check (Catches request blockers like uBlock Origin)
+            const checkNetworkBlock = async () => {
+                try {
+                    await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
+                        method: 'HEAD',
+                        mode: 'no-cors',
+                        cache: 'no-store'
+                    });
+                    return false; // Request succeeded
+                } catch (error) {
+                    return true; // Request intercepted/blocked
                 }
-            }, 1500); // 1.5 seconds gives the extension enough time to block elements
+            };
+
+            // 4. Execute Detection
+            const runDetection = async () => {
+                // Quick synchronous DOM check first
+                if (checkDOMBlock()) {
+                    triggerAdBlockAlert();
+                    return;
+                }
+
+                // Fallback to asynchronous network check
+                if (await checkNetworkBlock()) {
+                    triggerAdBlockAlert();
+                }
+            };
+
+            // Run detection after a brief moment to ensure browser extensions have initialized
+            setTimeout(runDetection, 300);
         });
     </script>
 </body>
