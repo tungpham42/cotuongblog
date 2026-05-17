@@ -297,7 +297,7 @@
                 <a href="{{ route('categories.show', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden">
 
                     {{-- Hình ảnh Banner (Sửa lại đường dẫn ảnh cho đúng) --}}
-                    <img src="{{ asset('storage/categories/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full aspect-[1200/630] object-cover transform group-hover/enwidget:scale-105 transition-transform duration-700 ease-out">
+                    <img src="{{ asset('img/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full aspect-[1200/630] object-cover transform group-hover/enwidget:scale-105 transition-transform duration-700 ease-out">
 
                     {{-- Lớp phủ tối màu (Overlay) --}}
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
