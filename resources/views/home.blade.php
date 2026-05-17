@@ -291,33 +291,50 @@
         </div>
 
         <div class="space-y-6 sticky top-28 self-start lg:block">
-            {{-- Widget Đặc biệt: English Articles --}}
-            <div class="bg-slate-900 dark:bg-slate-950 rounded-[2rem] shadow-[0_15px_30px_rgba(0,0,0,0.2)] border border-slate-700/80 p-1.5 relative overflow-hidden group/enwidget transform hover:-translate-y-1 transition-all duration-500">
-                {{-- Lưu ý: Sửa 'english-articles' thành slug thực tế của bạn --}}
-                <a href="{{ route('categories.show.en', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden">
+            {{-- Widget Đặc biệt: English Articles (Thiết kế mới: Ấm áp & Bắt mắt) --}}
+            <div class="bg-gradient-to-br from-brand/5 via-white/80 to-amber-50/80 dark:from-slate-800 dark:via-slate-800/90 dark:to-slate-800/50 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_30px_rgba(249,115,22,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-brand/20 dark:border-brand/10 p-1.5 relative overflow-hidden group/enwidget transform hover:-translate-y-1 transition-all duration-500">
+
+                {{-- Hiệu ứng Glow nền --}}
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand/20 dark:bg-brand/10 rounded-full blur-2xl group-hover/enwidget:bg-brand/30 transition-colors duration-700 pointer-events-none"></div>
+
+                {{-- Lưu ý: Kiểm tra lại slug nếu cần --}}
+                <a href="{{ route('categories.show.en', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden bg-white dark:bg-slate-900/50">
 
                     {{-- Hình ảnh Banner (Sửa lại đường dẫn ảnh cho đúng) --}}
-                    <img src="{{ asset('img/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full aspect-[1200/630] object-cover transform group-hover/enwidget:scale-105 transition-transform duration-700 ease-out">
+                    <div class="relative w-full aspect-[1200/630] overflow-hidden rounded-t-[1.5rem]">
+                        <img src="{{ asset('img/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full h-full object-cover transform group-hover/enwidget:scale-105 group-hover/enwidget:rotate-1 transition-transform duration-700 ease-out">
 
-                    {{-- Lớp phủ tối màu (Overlay) --}}
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        {{-- Overlay mềm mại chuyển dần từ trong suốt (trên) xuống màu nền (dưới) --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-white/20 dark:via-slate-900/40 to-transparent"></div>
 
-                    {{-- Nội dung chữ --}}
-                    <div class="absolute bottom-0 left-0 w-full p-5">
-                        <div class="flex items-center gap-2 mb-1.5">
-                            <span class="flex w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                            <span class="text-blue-300 text-[11px] font-black uppercase tracking-widest">Global Readers</span>
+                        {{-- Huy hiệu (Badge) nổi trên ảnh --}}
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm border border-white/50 dark:border-slate-600">
+                            <span class="flex w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                            <span class="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">Global</span>
                         </div>
-                        <h3 class="text-white text-xl font-black leading-tight group-hover/enwidget:text-blue-400 transition-colors">
+                    </div>
+
+                    {{-- Nội dung chữ (Nền sáng/tối theo theme) --}}
+                    <div class="relative px-5 pb-5 pt-1 bg-white dark:bg-transparent">
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white group-hover/enwidget:text-brand transition-colors flex items-center gap-2">
                             English Articles
+                            {{-- Icon vẫy tay hoặc lá cờ --}}
+                            <span class="text-lg animate-bounce inline-block origin-bottom-right group-hover/enwidget:animate-none">👋</span>
                         </h3>
-                        <div class="mt-3 flex items-center gap-1.5 text-sm font-bold text-white/70 group-hover/enwidget:text-white transition-colors">
-                            Explore guides & tactics
-                            <svg class="w-4 h-4 transform group-hover/enwidget:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+
+                        <p class="mt-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 leading-snug">
+                            Master the art of Xiangqi with our detailed guides, strategies, and game analysis.
+                        </p>
+
+                        {{-- Nút "Read now" --}}
+                        <div class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-brand bg-brand/10 dark:bg-brand/20 px-4 py-2 rounded-xl group-hover/enwidget:bg-brand group-hover/enwidget:text-white transition-all duration-300">
+                            Start Reading
+                            <svg class="w-4 h-4 transform group-hover/enwidget:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </div>
                     </div>
                 </a>
             </div>
+
             {{-- Widget Chuyên mục --}}
             <div class="bg-white/90 backdrop-blur-xl dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgba(249,115,22,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-brand/10 dark:border-slate-700/80 p-5 sm:p-6 relative overflow-hidden group/widget">
                 <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand/10 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/20 transition-colors duration-700"></div>
