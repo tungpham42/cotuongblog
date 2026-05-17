@@ -291,7 +291,33 @@
         </div>
 
         <div class="space-y-6 sticky top-28 self-start lg:block">
+            {{-- Widget Đặc biệt: English Articles --}}
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-[2rem] shadow-[0_15px_30px_rgba(0,0,0,0.2)] border border-slate-700/80 p-1.5 relative overflow-hidden group/enwidget transform hover:-translate-y-1 transition-all duration-500">
+                {{-- Lưu ý: Sửa 'english-articles' thành slug thực tế của bạn --}}
+                <a href="{{ route('categories.show', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden">
 
+                    {{-- Hình ảnh Banner (Sửa lại đường dẫn ảnh cho đúng) --}}
+                    <img src="{{ asset('storage/categories/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full aspect-[1200/630] object-cover transform group-hover/enwidget:scale-105 transition-transform duration-700 ease-out">
+
+                    {{-- Lớp phủ tối màu (Overlay) --}}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+
+                    {{-- Nội dung chữ --}}
+                    <div class="absolute bottom-0 left-0 w-full p-5">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span class="flex w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
+                            <span class="text-blue-300 text-[11px] font-black uppercase tracking-widest">Global Readers</span>
+                        </div>
+                        <h3 class="text-white text-xl font-black leading-tight group-hover/enwidget:text-blue-400 transition-colors">
+                            English Articles
+                        </h3>
+                        <div class="mt-3 flex items-center gap-1.5 text-sm font-bold text-white/70 group-hover/enwidget:text-white transition-colors">
+                            Explore guides & tactics
+                            <svg class="w-4 h-4 transform group-hover/enwidget:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {{-- Widget Chuyên mục --}}
             <div class="bg-white/90 backdrop-blur-xl dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgba(249,115,22,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-brand/10 dark:border-slate-700/80 p-5 sm:p-6 relative overflow-hidden group/widget">
                 <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand/10 dark:bg-brand/10 rounded-full blur-3xl pointer-events-none group-hover/widget:bg-brand/20 transition-colors duration-700"></div>
@@ -305,23 +331,25 @@
 
                 <ul class="space-y-1 relative z-10">
                     @forelse ($categories as $category)
-                        <li>
-                            <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center gap-3 p-2 rounded-2xl hover:bg-orange-50 dark:hover:bg-slate-700/50 border border-transparent hover:border-brand/10 dark:hover:border-slate-600 transition-all duration-300">
-                                <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden shadow-sm group-hover:shadow-[0_4px_10px_rgba(249,115,22,0.2)] border border-brand/10 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center transition-all duration-300">
-                                    @if($category->featured_image)
-                                        <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
-                                    @else
-                                        <span class="text-brand/30 dark:text-slate-600 group-hover:text-brand transition-colors duration-300">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        </span>
-                                    @endif
-                                </div>
+                        @if($category->slug !== 'english-articles')
+                            <li>
+                                <a href="{{ route('categories.show', $category->slug) }}" class="group flex items-center gap-3 p-2 rounded-2xl hover:bg-orange-50 dark:hover:bg-slate-700/50 border border-transparent hover:border-brand/10 dark:hover:border-slate-600 transition-all duration-300">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden shadow-sm group-hover:shadow-[0_4px_10px_rgba(249,115,22,0.2)] border border-brand/10 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center transition-all duration-300">
+                                        @if($category->featured_image)
+                                            <img src="{{ asset('storage/' . $category->featured_image) }}" alt="{{ $category->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
+                                        @else
+                                            <span class="text-brand/30 dark:text-slate-600 group-hover:text-brand transition-colors duration-300">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            </span>
+                                        @endif
+                                    </div>
 
-                                <div class="flex-grow flex items-center justify-between min-w-0">
-                                    <span class="font-bold text-[14px] text-slate-700 dark:text-slate-200 group-hover:text-brand transition-colors truncate pr-2">{{ $category->name }}</span>
-                                </div>
-                            </a>
-                        </li>
+                                    <div class="flex-grow flex items-center justify-between min-w-0">
+                                        <span class="font-bold text-[14px] text-slate-700 dark:text-slate-200 group-hover:text-brand transition-colors truncate pr-2">{{ $category->name }}</span>
+                                    </div>
+                                </a>
+                            </li>
+                        @endif
                     @empty
                         <li class="p-4 text-sm text-slate-500 dark:text-slate-400 font-bold text-center bg-orange-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-brand/20 dark:border-slate-700">
                             Chưa có chuyên mục.
