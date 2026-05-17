@@ -335,7 +335,7 @@
             setTimeout(function() {
                 // Create a "bait" element with classes commonly targeted by AdBlockers
                 const bait = document.createElement('div');
-                bait.className = 'ad-banner adsbox doubleclick ad-placement ad-container';
+                bait.className = 'adsbygoogle ad-banner adsbox doubleclick ad-placement ad-container';
                 bait.style.position = 'absolute';
                 bait.style.left = '-9999px';
                 bait.style.height = '10px';
