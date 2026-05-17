@@ -107,7 +107,7 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <a href="{{ $post->is_published ? route('posts.show', $post) : '#' }}" class="text-base font-bold text-slate-900 dark:text-white hover:text-brand dark:hover:text-brand transition-colors line-clamp-1 mb-1">
+                                        <a href="{{ $post->is_published ? route('posts.show', $post) : '#' }}" class="text-base font-bold text-slate-900 dark:text-white hover:text-brand dark:hover:text-brand transition-colors line-clamp-1 mb-1" data-tippy-content="{{ $post->title }}">
                                             {{ $post->title }}
                                         </a>
                                         <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">

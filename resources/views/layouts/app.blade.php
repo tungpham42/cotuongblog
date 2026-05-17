@@ -66,6 +66,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script>
@@ -413,6 +416,18 @@
 
             // Run detection after a brief moment to ensure browser extensions have initialized
             setTimeout(runDetection, 300);
+        });
+    </script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            tippy('[data-tippy-content]', {
+                animation: 'scale', // Smooth scaling animation
+                arrow: true,        // Shows the little pointer arrow
+                delay: [200, 0],    // 200ms delay before showing, 0ms delay before hiding
+                theme: 'translucent', // Optional: you can omit this or customize via CSS
+            });
         });
     </script>
 </body>

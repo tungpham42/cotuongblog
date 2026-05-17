@@ -225,7 +225,7 @@
 
                     <header class="mb-4 mt-3">
                         <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-brand transition-colors duration-300 line-clamp-2 leading-tight">
-                            <a href="{{ route('posts.show', $post->slug) }}" class="focus:outline-none focus:text-brand">
+                            <a href="{{ route('posts.show', $post->slug) }}" class="focus:outline-none focus:text-brand" data-tippy-content="{{ $post->title }}">
                                 {{ $post->title }}
                             </a>
                         </h3>
