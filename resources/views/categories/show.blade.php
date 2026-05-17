@@ -44,37 +44,38 @@
             {{-- ========================================== --}}
             {{-- ENGLISH PORTAL HERO (GLOBAL AUDIENCE)      --}}
             {{-- ========================================== --}}
-            <header class="relative bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 sm:p-12 lg:p-16 border border-slate-700/60 group">
+            <header class="relative bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] shadow-xl dark:shadow-2xl overflow-hidden p-8 sm:p-12 lg:p-16 border border-slate-200 dark:border-slate-700/60 group transition-colors duration-500">
                 {{-- Global Abstract Background --}}
                 <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
-                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand/30 rounded-full blur-[6rem] animate-float opacity-70"></div>
-                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[6rem] animate-float-delayed opacity-70"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
+                    {{-- The SVG pattern inverts to dark dots in light mode and white dots in dark mode --}}
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-60 invert dark:invert-0 transition-all duration-500"></div>
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand/10 dark:bg-brand/30 rounded-full blur-[6rem] animate-float opacity-70"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[6rem] animate-float-delayed opacity-70"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 dark:from-slate-900 dark:via-slate-900/90 to-transparent transition-colors duration-500"></div>
                 </div>
 
                 <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
                     <div class="flex flex-col text-center lg:text-left max-w-3xl">
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-blue-200 text-xs font-bold uppercase tracking-widest w-max mx-auto lg:mx-0 mb-6 backdrop-blur-md">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-white/10 border border-blue-100 dark:border-white/20 text-blue-600 dark:text-blue-200 text-xs font-bold uppercase tracking-widest w-max mx-auto lg:mx-0 mb-6 backdrop-blur-md transition-colors duration-300">
                             <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             International Edition
                         </div>
 
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6 transition-colors duration-300">
                             Global <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-400 to-yellow-500 animate-gradient-x">Xiangqi</span> Hub
                         </h1>
 
-                        <p class="text-lg sm:text-xl text-slate-300 font-medium leading-relaxed mb-8">
+                        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 transition-colors duration-300">
                             {{ $category->description ?? 'Discover the ancient art of Chinese Chess. Explore grandmaster strategies, cultural histories, and connect with players from around the world in our english portal.' }}
                         </p>
 
                         {{-- Portal Quick Links --}}
                         <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                            <a href="#articles" class="px-6 py-3 rounded-full bg-brand hover:bg-orange-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:scale-105">
+                            <a href="#articles" class="px-6 py-3 rounded-full bg-brand hover:bg-orange-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:scale-105">
                                 Browse Articles ({{ $posts->total() }})
                             </a>
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'views_desc']) }}#articles" class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold border border-white/10 transition-all backdrop-blur-md flex items-center gap-2 group">
-                                <svg class="w-5 h-5 text-yellow-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'views_desc']) }}#articles" class="px-6 py-3 rounded-full bg-white dark:bg-white/10 hover:bg-slate-50 dark:hover:bg-white/20 text-slate-700 dark:text-white font-bold border border-slate-200 dark:border-white/10 transition-all backdrop-blur-md flex items-center gap-2 group shadow-sm dark:shadow-none">
+                                <svg class="w-5 h-5 text-amber-500 dark:text-yellow-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                                 Trending Now
                             </a>
                         </div>
@@ -82,12 +83,12 @@
 
                     @if($category->featured_image)
                         <div class="shrink-0 lg:block hidden relative group/img">
-                            <div class="absolute -inset-4 bg-gradient-to-r from-brand to-blue-500 rounded-full blur opacity-30 group-hover/img:opacity-60 transition duration-700"></div>
-                            <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Global Xiangqi" class="w-64 h-64 object-cover rounded-full border-4 border-slate-800 relative z-10 shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
+                            <div class="absolute -inset-4 bg-gradient-to-r from-brand to-blue-500 rounded-full blur opacity-20 dark:opacity-30 group-hover/img:opacity-40 dark:group-hover/img:opacity-60 transition duration-700"></div>
+                            <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Global Xiangqi" class="w-64 h-64 object-cover rounded-full border-4 border-white dark:border-slate-800 relative z-10 shadow-xl dark:shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
                         </div>
                     @else
-                        <div class="shrink-0 lg:flex hidden relative group/img items-center justify-center w-64 h-64 rounded-full bg-gradient-to-br from-brand/20 to-blue-500/20 border-4 border-slate-700 backdrop-blur-md shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
-                            <svg class="w-32 h-32 text-brand drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="shrink-0 lg:flex hidden relative group/img items-center justify-center w-64 h-64 rounded-full bg-gradient-to-br from-brand/5 to-blue-500/5 dark:from-brand/20 dark:to-blue-500/20 border-4 border-white dark:border-slate-700 backdrop-blur-md shadow-xl dark:shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
+                            <svg class="w-32 h-32 text-brand drop-shadow-[0_0_15px_rgba(249,115,22,0.2)] dark:drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                     @endif
                 </div>
