@@ -306,12 +306,6 @@
 
                         {{-- Overlay mềm mại chuyển dần từ trong suốt (trên) xuống màu nền (dưới) --}}
                         <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-white/20 dark:via-slate-900/40 to-transparent"></div>
-
-                        {{-- Huy hiệu (Badge) nổi trên ảnh --}}
-                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm border border-white/50 dark:border-slate-600">
-                            <span class="flex w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                            <span class="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">Global</span>
-                        </div>
                     </div>
 
                     {{-- Nội dung chữ (Nền sáng/tối theo theme) --}}
