@@ -313,7 +313,7 @@
                         <h3 class="text-xl font-black text-slate-900 dark:text-white group-hover/enwidget:text-brand transition-colors flex items-center gap-2">
                             English Articles
                             {{-- Icon SVG Trái Đất (Thay thế cho Emoji) --}}
-                            <svg class="w-6 h-6 text-blue-500 animate-bounce inline-block origin-bottom-right group-hover/enwidget:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            <svg class="w-6 h-6 text-brand-500 animate-bounce inline-block origin-bottom-right group-hover/enwidget:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                         </h3>
 
                         <p class="mt-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 leading-snug">
