@@ -138,6 +138,14 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         {{ $readingTime }} {{ $isEnglish ? 'min read' : 'phút đọc' }}
                     </span>
+
+                    {{-- Nút Sửa bài viết (Chỉ hiện với Admin hoặc Tác giả) --}}
+                    @if(auth()->check() && (auth()->user()->is_admin || auth()->id() === $post->user_id))
+                        <a href="{{ route('posts.edit', $post) }}" class="ml-auto inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white text-sm font-bold rounded-xl shadow-md hover:bg-brand dark:hover:bg-brand hover:-translate-y-0.5 transition-all duration-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            {{ $isEnglish ? 'Edit Post' : 'Sửa bài viết' }}
+                        </a>
+                    @endif
                 </div>
             </div>
 
