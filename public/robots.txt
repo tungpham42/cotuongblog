@@ -1,5 +1,10 @@
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
 User-agent: *
-# Allow crawling of public content and new URL structures
 Allow: /
 
 # Disallow administrative, auth, and private routes
