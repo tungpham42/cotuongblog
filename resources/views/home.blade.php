@@ -294,7 +294,7 @@
             {{-- Widget Đặc biệt: English Articles --}}
             <div class="bg-slate-900 dark:bg-slate-950 rounded-[2rem] shadow-[0_15px_30px_rgba(0,0,0,0.2)] border border-slate-700/80 p-1.5 relative overflow-hidden group/enwidget transform hover:-translate-y-1 transition-all duration-500">
                 {{-- Lưu ý: Sửa 'english-articles' thành slug thực tế của bạn --}}
-                <a href="{{ route('categories.show', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden">
+                <a href="{{ route('categories.show.en', 'english-articles') }}" class="block relative rounded-[1.5rem] overflow-hidden">
 
                     {{-- Hình ảnh Banner (Sửa lại đường dẫn ảnh cho đúng) --}}
                     <img src="{{ asset('img/xiangqi-english-banner.jpg') }}" alt="Xiangqi English Articles" class="w-full aspect-[1200/630] object-cover transform group-hover/enwidget:scale-105 transition-transform duration-700 ease-out">

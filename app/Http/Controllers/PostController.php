@@ -17,7 +17,10 @@ class PostController extends Controller
     public function home(Request $request)
     {
         App::setLocale('vi');
-        $query = Post::where('is_published', true);
+        $query = Post::where('is_published', true)
+                     ->whereHas('category', function($q) {
+                         $q->where('slug', '!=', 'english-articles');
+                     });
 
         // Xử lý Tìm kiếm
         if ($request->has('search') && $request->search != '') {

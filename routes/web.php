@@ -86,8 +86,11 @@ Route::get('/tags/{slug}', function ($slug) {
 // New Public Routes for Categories and Tags
 // ==========================================
 Route::get('/chuyen-muc/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
-Route::get('/the/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
+// Thêm Route dành riêng cho giao diện Tiếng Anh:
+Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('categories.show.en');
+
+Route::get('/the/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
