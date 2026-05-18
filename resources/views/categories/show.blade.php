@@ -340,6 +340,11 @@
 @endsection
 
 @push('scripts')
-{{-- SEO: Dynamic CollectionPage & ItemList Schema.org JSON-LD --}}
-{!! $categorySchema->toScript() !!}
+{{-- SEO: Dynamic CollectionPage, ItemList, and Breadcrumb Schema.org JSON-LD --}}
+@isset($categorySchema)
+    {!! $categorySchema->toScript() !!}
+@endisset
+@isset($breadcrumbSchema)
+    {!! $breadcrumbSchema->toScript() !!}
+@endisset
 @endpush

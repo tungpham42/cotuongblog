@@ -9,19 +9,16 @@
     <title>@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif</title>
 
     <script>
-        // 1. Initial dark mode check to prevent flash of light theme
         if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
 
-        // 2. Alpine.js logic safely isolated away from HTML tag attributes
         function themeHandler() {
             return {
                 darkMode: document.documentElement.classList.contains('dark'),
                 init() {
-                    // Alpine 3 automatically runs the init() function
                     this.$watch('darkMode', val => {
                         localStorage.setItem('darkMode', val);
                         window.dispatchEvent(new CustomEvent('theme-changed', { detail: val }));
@@ -35,17 +32,23 @@
             }
         }
     </script>
-    <link rel="canonical" href="{{ url()->current() }}">
+
+    {{-- SEO: Allow dynamic canonical URLs to handle pagination correctly --}}
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
-    <meta name="keywords" content="cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng">
+    <meta name="keywords" content="@yield('meta_keywords', 'cờ tướng, blog cờ tướng, chiến thuật cờ tướng, tin tức cờ tướng, học cờ tướng, cộng đồng cờ tướng')">
     <meta name="author" content="Tùng Phạm">
 
+    {{-- SEO: Enhanced Open Graph Tags --}}
+    <meta property="og:site_name" content="Cộng Đồng Cờ Tướng Việt Nam">
+    <meta property="og:locale" content="{{ str_replace('_', '-', app()->getLocale()) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
-    <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng. Học hỏi từ các kỳ thủ hàng đầu và tham gia cộng đồng yêu thích cờ tướng.')">
+    <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -103,9 +106,11 @@
             gtag('config', 'G-QEW6K9YPY7');
         </script>
     @endguest
-    {!! $globalSchema->toScript() !!}
+
+    @isset($globalSchema)
+        {!! $globalSchema->toScript() !!}
+    @endisset
 </head>
-{{-- Changed from bg-slate-50 to a warm, inviting radial gradient for light mode --}}
 <body class="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-50 via-orange-50/30 to-orange-100/20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-500 min-h-screen">
 
     {{-- Top AdSense Banner (Centered, Full Width, 300px Height) --}}

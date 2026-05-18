@@ -2,6 +2,8 @@
 
 @section('title', $post->title)
 
+@section('og_type', 'article')
+
 @if($post->featured_image)
     @section('og_image', asset('storage/' . $post->featured_image))
 @endif
@@ -15,6 +17,9 @@
     $isEnglish = $post->category && $post->category->slug === 'english-articles';
 
     $htmlContent = \Illuminate\Support\Str::markdown($post->content ?? '');
+
+    // SEO: Thêm loading="lazy" vào các thẻ img trong nội dung bài viết
+    $htmlContent = preg_replace('/<img((?:(?!loading=)[^>])+)\/?>/is', '<img$1 loading="lazy">', $htmlContent);
 
     // TÍNH THỜI GIAN ĐỌC TRUNG BÌNH
     $plainText = strip_tags($htmlContent);
@@ -108,7 +113,8 @@
         {{-- Ảnh bìa --}}
         @if($post->featured_image)
             <figure class="w-full aspect-[1200/630] sm:aspect-[2/1] relative overflow-hidden bg-slate-100 dark:bg-slate-900 group">
-                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transform transition-transform duration-1000 ease-out hover:scale-105">
+                {{-- SEO: Added fetchpriority="high" to prioritize LCP --}}
+                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" fetchpriority="high" class="w-full h-full object-cover transform transition-transform duration-1000 ease-out hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
             </figure>
         @endif
@@ -412,8 +418,11 @@
 @endif
 
 @push('scripts')
-{{-- SEO: Dynamic BlogPosting Schema.org JSON-LD --}}
+{{-- SEO: Dynamic BlogPosting & Breadcrumb Schema.org JSON-LD --}}
 {!! $postSchema->toScript() !!}
+@isset($breadcrumbSchema)
+    {!! $breadcrumbSchema->toScript() !!}
+@endisset
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

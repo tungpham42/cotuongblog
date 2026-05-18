@@ -132,10 +132,9 @@ class CategoryController extends Controller
 
         $posts = $query->paginate(12)->withQueryString();
 
-        // SEO: Build the CollectionPage & ItemList Schema
+// SEO: Build the CollectionPage & ItemList Schema
         $itemListElements = [];
 
-        // Loop through the paginated posts to create the ItemList
         foreach ($posts as $index => $post) {
             $itemListElements[] = Schema::listItem()
                 ->position($index + 1)
@@ -146,7 +145,7 @@ class CategoryController extends Controller
         $categorySchema = Schema::collectionPage()
             ->name($category->name)
             ->description($category->description ?? 'Tuyển tập các bài viết thuộc chuyên mục ' . $category->name . ' trên Cộng Đồng Cờ Tướng.')
-            ->url(route('categories.show', $category->slug))
+            ->url(url()->current()) // Better canonical URL for paginated states
             ->mainEntity(
                 Schema::itemList()->itemListElement($itemListElements)
             );
@@ -155,6 +154,14 @@ class CategoryController extends Controller
             $categorySchema->image(asset('storage/' . $category->featured_image));
         }
 
-        return view('categories.show', compact('category', 'posts', 'categorySchema'));
+        // SEO: Build Breadcrumb Schema for the Collection Page
+        $breadcrumbSchema = Schema::breadcrumbList()
+            ->itemListElement([
+                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+                Schema::listItem()->position(2)->name($category->name)->item(route('categories.show', $category->slug))
+            ]);
+
+        // Note: You will need to render {!! $breadcrumbSchema->toScript() !!} in your categories.show blade file
+        return view('categories.show', compact('category', 'posts', 'categorySchema', 'breadcrumbSchema'));
     }
 }

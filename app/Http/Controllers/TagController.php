@@ -12,12 +12,10 @@ class TagController extends Controller
 {
     public function index()
     {
-        // Xóa phân trang, sắp xếp theo order
         $tags = Tag::withCount('posts')->orderBy('order', 'asc')->get();
         return view('tags.index', compact('tags'));
     }
 
-    // Thêm method xử lý kéo thả
     public function updateOrder(Request $request)
     {
         $request->validate([
@@ -42,7 +40,7 @@ class TagController extends Controller
         $validated = $request->validate([
             'name'           => 'required|string|max:255|unique:tags,name',
             'description'    => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -66,7 +64,7 @@ class TagController extends Controller
         $validated = $request->validate([
             'name'           => 'required|string|max:255|unique:tags,name,' . $tag->id,
             'description'    => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', //
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -82,7 +80,6 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
-        // Xóa liên kết trong bảng trung gian (post_tag) trước khi xóa thẻ
         $tag->posts()->detach();
         $tag->delete();
 
@@ -92,10 +89,8 @@ class TagController extends Controller
     public function show(Request $request, Tag $tag)
     {
         App::setLocale('vi');
-        // Bắt đầu query các bài viết thuộc tag này
         $query = $tag->posts()->where('is_published', true);
 
-        // Xử lý Tìm kiếm
         if ($request->has('search') && $request->search != '') {
             $query->where(function($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->search . '%')
@@ -103,7 +98,6 @@ class TagController extends Controller
             });
         }
 
-        // Xử lý Sắp xếp
         $sort = $request->input('sort', 'latest');
         switch ($sort) {
             case 'oldest':
@@ -115,10 +109,10 @@ class TagController extends Controller
             case 'alpha_desc':
                 $query->orderBy('title', 'desc');
                 break;
-            case 'views_desc': // Lượt xem giảm dần
+            case 'views_desc':
                 $query->orderBy('views', 'desc');
                 break;
-            case 'views_asc': // Lượt xem tăng dần
+            case 'views_asc':
                 $query->orderBy('views', 'asc');
                 break;
             case 'latest':
@@ -127,7 +121,6 @@ class TagController extends Controller
                 break;
         }
 
-        // Phân trang và giữ nguyên query string trên URL
         $posts = $query->paginate(12)->withQueryString();
 
         // SEO: Build the CollectionPage & ItemList Schema
@@ -143,7 +136,7 @@ class TagController extends Controller
         $tagSchema = Schema::collectionPage()
             ->name('Thẻ: ' . $tag->name)
             ->description($tag->description ?? 'Tuyển tập các bài viết được gắn thẻ #' . $tag->name . ' trên Cộng Đồng Cờ Tướng.')
-            ->url(route('tags.show', $tag->slug))
+            ->url(url()->current()) // SEO: dynamic URL for pagination handling
             ->mainEntity(
                 Schema::itemList()->itemListElement($itemListElements)
             );
@@ -152,6 +145,13 @@ class TagController extends Controller
             $tagSchema->image(asset('storage/' . $tag->featured_image));
         }
 
-        return view('tags.show', compact('tag', 'posts', 'tagSchema'));
+        // SEO: Build Breadcrumb Schema for the Tag Page
+        $breadcrumbSchema = Schema::breadcrumbList()
+            ->itemListElement([
+                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+                Schema::listItem()->position(2)->name('Thẻ: ' . $tag->name)->item(route('tags.show', $tag->slug))
+            ]);
+
+        return view('tags.show', compact('tag', 'posts', 'tagSchema', 'breadcrumbSchema'));
     }
 }

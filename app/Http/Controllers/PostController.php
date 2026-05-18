@@ -242,20 +242,21 @@ class PostController extends Controller
                             ->take(4)
                             ->get();
 
-        // SEO: Build the BlogPosting Schema for this specific post
+        // SEO: Build the BlogPosting Schema
         $postSchema = Schema::blogPosting()
             ->mainEntityOfPage(Schema::webPage()->identifier(route('posts.show', $post->slug)))
             ->headline($post->title)
             ->description(Str::limit(strip_tags($post->excerpt ?? $post->content), 150))
             ->datePublished($post->created_at->toIso8601String())
             ->dateModified($post->updated_at->toIso8601String())
+            ->keywords($post->tags->pluck('name')->implode(', ')) // Added keywords
+            ->articleSection($post->category->name ?? 'General') // Added section
             ->author(
                 Schema::person()->name($post->author->name ?? 'Tác giả ẩn danh')
             )
             ->publisher(
                 Schema::organization()
                     ->name('Cộng Đồng Cờ Tướng')
-                    // Provide a default logo path for the organization publisher
                     ->logo(Schema::imageObject()->url(asset('img/favicon-32x32-game.png')))
             );
 
@@ -263,7 +264,31 @@ class PostController extends Controller
             $postSchema->image(asset('storage/' . $post->featured_image));
         }
 
-        return view('posts.show', compact('post', 'relatedPosts', 'postSchema'));
+        // SEO: Build Breadcrumb Schema
+        $breadcrumbElements = [
+            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home'))
+        ];
+
+        if ($post->category) {
+            $breadcrumbElements[] = Schema::listItem()
+                ->position(2)
+                ->name($post->category->name)
+                ->item(route('categories.show', $post->category->slug));
+
+            $breadcrumbElements[] = Schema::listItem()
+                ->position(3)
+                ->name($post->title)
+                ->item(route('posts.show', $post->slug));
+        } else {
+            $breadcrumbElements[] = Schema::listItem()
+                ->position(2)
+                ->name($post->title)
+                ->item(route('posts.show', $post->slug));
+        }
+
+        $breadcrumbSchema = Schema::breadcrumbList()->itemListElement($breadcrumbElements);
+
+        return view('posts.show', compact('post', 'relatedPosts', 'postSchema', 'breadcrumbSchema'));
     }
 
     public function uploadImage(Request $request)
