@@ -84,9 +84,12 @@
                     },
                     colors: {
                         brand: {
-                            DEFAULT: '#f97316',
-                            hover: '#ea580c',
-                            light: '#ffedd5',
+                            // DEFAULT: '#f97316',
+                            // hover: '#ea580c',
+                            // light: '#ffedd5',
+                            DEFAULT: '#D4AF37', // Luxury Metallic Gold
+                            hover: '#B8860B',   // Deep Dark Goldenrod
+                            light: '#FDF8E7',   // Champagne / Soft Gold
                         }
                     }
                 }
