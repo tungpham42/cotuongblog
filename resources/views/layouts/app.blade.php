@@ -87,9 +87,9 @@
                             // DEFAULT: '#f97316',
                             // hover: '#ea580c',
                             // light: '#ffedd5',
-                            DEFAULT: '#D4AF37', // Luxury Metallic Gold
-                            hover: '#B8860B',   // Deep Dark Goldenrod
-                            light: '#FDF8E7',   // Champagne / Soft Gold
+                            DEFAULT: '#B85D19',
+                            hover: '#8C400B',
+                            light: '#FDF3EC',
                         }
                     }
                 }
