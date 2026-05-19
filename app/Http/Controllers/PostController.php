@@ -136,7 +136,7 @@ class PostController extends Controller
 
         // Chỉ admin mới có quyền xuất bản ngay lập tức
         if (auth()->user()->is_admin) {
-            $validated['is_published'] = $request->has('is_published');
+            $validated['is_published'] = $request->boolean('is_published');
         } else {
             $validated['is_published'] = false; // Luôn là false để chờ duyệt
         }
@@ -186,7 +186,7 @@ class PostController extends Controller
 
         // Nếu user thường sửa bài, trạng thái sẽ bị đưa về chờ duyệt
         if (auth()->user()->is_admin) {
-            $validated['is_published'] = $request->has('is_published');
+            $validated['is_published'] = $request->boolean('is_published');
         } else {
             $validated['is_published'] = false;
         }

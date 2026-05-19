@@ -201,16 +201,23 @@
             </div>
 
             @if(auth()->user()->is_admin)
-                <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <input type="hidden" name="is_published" value="0">
-
-                    <input type="checkbox" name="is_published" id="is_published" value="1"
-                        {{ old('is_published', $post->is_published) == 1 ? 'checked' : '' }}
-                        class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
-                    <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
+                <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <label for="is_published" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Trạng thái xuất bản
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-normal">Bật để hiển thị bài viết công khai.</p>
                     </label>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 font-normal">
+                        Chọn trạng thái hiển thị cho bài viết này.
+                    </p>
+
+                    <select name="is_published" id="is_published"
+                        class="w-full md:w-1/2 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none cursor-pointer">
+                        <option value="1" {{ old('is_published', $post->is_published) == 1 ? 'selected' : '' }}>
+                            Có (Xuất bản công khai)
+                        </option>
+                        <option value="0" {{ old('is_published', $post->is_published) == 0 ? 'selected' : '' }}>
+                            Không (Lưu thành Bản nháp / Ẩn)
+                        </option>
+                    </select>
                 </div>
             @else
                 <div class="p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl flex items-start gap-3">
