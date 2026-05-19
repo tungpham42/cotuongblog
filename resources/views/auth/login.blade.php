@@ -31,10 +31,25 @@
                     class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none">
             </div>
 
-            <div class="flex items-center justify-between">
-                <label class="flex items-center">
-                    <input type="checkbox" name="remember" class="rounded border-slate-300 text-brand focus:ring-brand dark:bg-slate-900 dark:border-slate-600">
-                    <span class="ml-2 text-sm text-slate-600 dark:text-slate-400">Ghi nhớ đăng nhập</span>
+            <div class="flex items-center justify-between" x-data="{ remember: false }">
+                <label class="flex items-center cursor-pointer group">
+                    <div class="relative flex items-center justify-center w-5 h-5 mr-2">
+                        <input type="checkbox" name="remember" x-model="remember" class="peer sr-only">
+
+                        <div class="absolute inset-0 border-2 rounded border-slate-300 dark:border-slate-600 peer-focus:ring-2 peer-focus:ring-brand/50 peer-focus:ring-offset-2 dark:peer-focus:ring-offset-slate-800 transition-colors group-hover:border-brand"
+                            :class="remember ? 'bg-brand border-brand' : 'bg-white dark:bg-slate-900'">
+                        </div>
+
+                        <svg class="absolute w-3.5 h-3.5 text-white transform transition-transform duration-200 ease-out"
+                            :class="remember ? 'scale-100' : 'scale-0'"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+
+                    <span class="text-sm text-slate-600 dark:text-slate-400 select-none group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                        Ghi nhớ đăng nhập
+                    </span>
                 </label>
             </div>
 

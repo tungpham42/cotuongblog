@@ -201,12 +201,26 @@
             </div>
 
             @if(auth()->user()->is_admin)
-                <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700"
+                    x-data="{ isPublished: {{ old('is_published', $post->is_published ?? 0) ? 'true' : 'false' }} }">
+
                     <input type="hidden" name="is_published" value="0">
-                    <input type="checkbox" name="is_published" id="is_published" value="1"
-                        {{ old('is_published', $post->is_published) ? 'checked' : '' }}
-                        class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
-                    <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
+                    <input type="checkbox" name="is_published" id="is_published" value="1" class="hidden" x-model="isPublished">
+
+                    <button type="button"
+                        @click="isPublished = !isPublished"
+                        :class="isPublished ? 'bg-brand' : 'bg-slate-300 dark:bg-slate-600'"
+                        class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand/50 focus:ring-offset-2 dark:focus:ring-offset-slate-900 shadow-inner"
+                        role="switch"
+                        :aria-checked="isPublished.toString()">
+
+                        <span aria-hidden="true"
+                            :class="isPublished ? 'translate-x-5' : 'translate-x-0'"
+                            class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
+                        </span>
+                    </button>
+
+                    <label @click="isPublished = !isPublished" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer select-none">
                         Trạng thái xuất bản
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-normal">Bật để hiển thị bài viết công khai.</p>
                     </label>
