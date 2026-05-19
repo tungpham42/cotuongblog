@@ -203,12 +203,60 @@
             </div>
 
             @if(auth()->user()->is_admin)
-                <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <input type="checkbox" name="is_published" id="is_published" value="1" class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
-                    <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
-                        Xuất bản ngay
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-normal">Bài viết sẽ hiển thị công khai trên trang web.</p>
-                    </label>
+                <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Trạng thái xuất bản</label>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 font-normal">Chọn trạng thái hiển thị cho bài viết này khi tạo mới.</p>
+
+                    <div x-data="{
+                            open: false,
+                            selectedValue: '{{ old('is_published', '1') }}',
+                            selectedLabel: '',
+                            options: [
+                                { value: '1', label: 'Có (Xuất bản ngay)' },
+                                { value: '0', label: 'Không (Lưu thành Bản nháp)' }
+                            ],
+                            init() {
+                                let selected = this.options.find(o => o.value == this.selectedValue);
+                                if (selected) this.selectedLabel = selected.label;
+                            },
+                            selectOption(option) {
+                                this.selectedValue = option.value;
+                                this.selectedLabel = option.label;
+                                this.open = false;
+                            }
+                        }"
+                        class="relative w-full md:w-1/2"
+                        @click.away="open = false">
+
+                        {{-- Hidden input để gửi data về server --}}
+                        <input type="hidden" name="is_published" :value="selectedValue">
+
+                        <button type="button" @click="open = !open"
+                            class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand/50 focus:border-brand text-slate-900 dark:text-white transition-all outline-none flex justify-between items-center text-left shadow-sm">
+                            <span x-text="selectedLabel"></span>
+                            <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+
+                        <div x-show="open"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden"
+                            style="display: none;">
+                            <div class="py-1">
+                                <template x-for="option in options" :key="option.value">
+                                    <div @click="selectOption(option)"
+                                        class="px-4 py-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 flex justify-between items-center text-slate-700 dark:text-slate-300 transition-colors">
+                                        <span x-text="option.label"></span>
+                                        <svg x-show="selectedValue === option.value" class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="p-4 bg-brand-light/50 dark:bg-brand/10 border border-brand/20 rounded-xl flex items-start gap-3">
