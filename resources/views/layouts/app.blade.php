@@ -131,7 +131,7 @@
         </script>
     </div>
 
-    <div class="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 pointer-events-none mt-4">
+    <div class="sticky top-4 z-[999] px-4 sm:px-6 lg:px-8 pointer-events-none mt-4">
         {{-- Navbar now uses a softer white and warm border/shadows in light mode --}}
         <nav class="pointer-events-auto max-w-7xl mx-auto bg-white/75 dark:bg-slate-800/85 backdrop-blur-2xl shadow-[0_10px_30px_rgba(249,115,22,0.08)] dark:shadow-brand/5 border border-brand/20 dark:border-slate-700/50 rounded-2xl transition-all duration-300" x-data="{ open: false }">
             <div class="px-4 sm:px-6 lg:px-8">
