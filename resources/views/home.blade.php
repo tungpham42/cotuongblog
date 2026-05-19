@@ -32,33 +32,55 @@
         .animate-shine { background-size: 200% auto; animation: shine 3s linear infinite; }
     </style>
 
-    <div x-data="{ mounted: false }" x-init="setTimeout(() => mounted = true, 150)"
+    <div x-data="{
+            mounted: false,
+            mouseX: 0,
+            mouseY: 0,
+            calcParallax(e) {
+                const rect = this.$refs.heroBanner.getBoundingClientRect();
+                this.mouseX = (e.clientX - rect.left - rect.width / 2) / 25;
+                this.mouseY = (e.clientY - rect.top - rect.height / 2) / 25;
+            },
+            resetParallax() {
+                this.mouseX = 0;
+                this.mouseY = 0;
+            }
+         }"
+         x-init="setTimeout(() => mounted = true, 150)"
+         x-ref="heroBanner"
+         @mousemove="calcParallax($event)"
+         @mouseleave="resetParallax()"
+         style="perspective: 1000px;"
          class="relative bg-white/40 dark:bg-slate-800/60 backdrop-blur-3xl rounded-[3rem] shadow-[0_20px_50px_rgba(249,115,22,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] border border-white/60 dark:border-slate-700/60 overflow-hidden text-center py-16 px-6 sm:px-12 lg:py-24 transition-all duration-700 hover:shadow-[0_30px_60px_rgba(249,115,22,0.15)] group">
 
-        {{-- Animated Background Ambient Orbs --}}
+        {{-- Animated Background Ambient Orbs (Moves Opposite) --}}
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-40 -left-40 w-[30rem] h-[30rem] bg-brand/20 dark:bg-brand/20 rounded-full blur-[6rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
-            <div class="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[6rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
+            <div class="absolute inset-0 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`">
+                <div class="absolute -top-40 -left-40 w-[30rem] h-[30rem] bg-brand/20 dark:bg-brand/20 rounded-full blur-[6rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
+                <div class="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[6rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
+            </div>
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white/90 dark:via-slate-800/70 dark:to-slate-900/90 z-0"></div>
         </div>
 
-        {{-- Floating Decorative Icons --}}
-        <div class="absolute top-12 left-10 lg:left-20 text-brand/10 dark:text-brand/20 animate-float pointer-events-none hidden md:block">
+        {{-- Floating Decorative Icons (Midground - Moves Slightly Opposite) --}}
+        <div class="absolute top-12 left-10 lg:left-20 text-brand/10 dark:text-brand/20 animate-float pointer-events-none hidden md:block transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -0.8}px, ${mouseY * -0.8}px)`">
             <svg class="w-20 h-20 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3 4h-6l3-4zm-4 5h8v2H8V7zm-2 3h12v2H6v-2zm-2 3h16v2H4v-2zm3 3h10l-1 6H8l-1-6z"/></svg>
         </div>
-        <div class="absolute bottom-16 right-10 lg:right-20 text-amber-500/10 dark:text-amber-500/20 animate-float-delayed pointer-events-none hidden md:block">
+        <div class="absolute bottom-16 right-10 lg:right-20 text-amber-500/10 dark:text-amber-500/20 animate-float-delayed pointer-events-none hidden md:block transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.2}px, ${mouseY * -1.2}px)`">
             <svg class="w-24 h-24 transform rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1 2-4zm-6 18h12v2H6v-2z"/></svg>
         </div>
 
         <div class="relative z-10 transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'">
 
-            {{-- Pulsing Badge --}}
-            <div class="inline-flex items-center justify-center px-4 py-1.5 mb-8 rounded-full bg-white/80 dark:bg-slate-800/80 border border-brand/20 dark:border-brand/30 shadow-sm backdrop-blur-md hover:scale-105 transition-transform duration-300 cursor-default">
-                <span class="flex w-2.5 h-2.5 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest">Nền tảng cờ tướng hàng đầu</span>
+            {{-- Pulsing Badge (Foreground - Moves heavily) --}}
+            <div class="transition-transform duration-300 ease-out inline-block mb-8" :style="`transform: translate(${mouseX * 1.5}px, ${mouseY * 1.5}px)`">
+                <div class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 border border-brand/20 dark:border-brand/30 shadow-sm backdrop-blur-md hover:scale-105 transition-transform duration-300 cursor-default">
+                    <span class="flex w-2.5 h-2.5 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest">Nền tảng cờ tướng hàng đầu</span>
+                </div>
             </div>
 
-            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight mb-6 leading-tight transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.8}px, ${mouseY * 0.8}px)`">
                 Cộng đồng
                 <span class="relative inline-block whitespace-nowrap">
                     <a target="_blank" href="https://cotuong.top" class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-brand via-rose-500 to-amber-500 animate-gradient-x hover:scale-105 inline-block transition-transform duration-300 drop-shadow-md pb-3">
@@ -70,11 +92,11 @@
                 <svg class="w-10 h-10 sm:w-12 sm:h-12 inline-block text-amber-500 align-baseline drop-shadow-xl animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
             </h1>
 
-            <p class="text-lg sm:text-xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto mb-10 font-medium leading-relaxed drop-shadow-sm">
+            <p class="text-lg sm:text-xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto mb-10 font-medium leading-relaxed drop-shadow-sm transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.5}px, ${mouseY * 0.5}px)`">
                 Nơi giao lưu, học hỏi và chia sẻ những ván cờ hay, khai cuộc sắc bén và tàn cuộc đỉnh cao. Khám phá kỳ đạo ngay hôm nay!
             </p>
 
-            <div class="flex flex-wrap justify-center gap-5 relative z-20">
+            <div class="flex flex-wrap justify-center gap-5 relative z-20 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 1.2}px, ${mouseY * 1.2}px)`">
                 @auth
                     @if(auth()->user()->is_admin)
                         <a href="{{ route('dashboard') }}" class="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-brand via-rose-500 to-brand animate-shine rounded-2xl shadow-xl shadow-brand/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-white/20">

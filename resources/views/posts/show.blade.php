@@ -103,26 +103,65 @@
 
 @endphp
 
-<div class="max-w-4xl mx-auto relative">
-    <div class="absolute -top-20 -left-20 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[4rem] pointer-events-none"></div>
-    <div class="absolute top-40 -right-20 w-72 h-72 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[4rem] pointer-events-none"></div>
+{{-- Animations for the background orbs --}}
+<style>
+    @keyframes float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(2deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-float-delayed { animation: float 7s ease-in-out 3s infinite; }
+</style>
+
+<div class="max-w-4xl mx-auto relative"
+     x-data="{
+        mounted: false,
+        mouseX: 0,
+        mouseY: 0,
+        calcParallax(e) {
+            const rect = this.$refs.heroSection.getBoundingClientRect();
+            // Optional: reduce or stop effect when scrolling far down to save resources
+            if (rect.bottom < 0) return;
+            this.mouseX = (e.clientX - rect.left - rect.width / 2) / 25;
+            this.mouseY = (e.clientY - rect.top - 200) / 25;
+        },
+        resetParallax() {
+            this.mouseX = 0;
+            this.mouseY = 0;
+        }
+     }"
+     x-init="setTimeout(() => mounted = true, 100)"
+     @mousemove="calcParallax($event)"
+     @mouseleave="resetParallax()"
+     style="perspective: 1000px;">
+
+    {{-- Parallax Background Orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute inset-0 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`">
+            <div class="absolute -top-20 -left-20 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[4rem] pointer-events-none animate-float"></div>
+            <div class="absolute top-40 -right-20 w-72 h-72 bg-yellow-400/10 dark:bg-yellow-400/5 rounded-full blur-[4rem] pointer-events-none animate-float-delayed"></div>
+        </div>
+    </div>
 
     {{-- Khối bài viết chính --}}
-    <article class="relative z-10 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden transition-colors duration-300">
+    <article x-ref="heroSection" class="relative z-10 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.3)] border border-slate-100/80 dark:border-slate-700/80 overflow-hidden transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
 
         {{-- Ảnh bìa --}}
         @if($post->featured_image)
             <figure class="w-full aspect-[1200/630] sm:aspect-[2/1] relative overflow-hidden bg-slate-100 dark:bg-slate-900 group">
                 {{-- SEO: Added fetchpriority="high" to prioritize LCP --}}
-                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" fetchpriority="high" class="w-full h-full object-cover transform transition-transform duration-1000 ease-out hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
+                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" fetchpriority="high"
+                     class="w-full h-full object-cover transition-transform duration-300 ease-out"
+                     :style="`transform: scale(1.05) translate(${mouseX * 1.5}px, ${mouseY * 1.5}px)`">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 transition-opacity duration-300" :style="`transform: translate(${mouseX * -0.5}px, ${mouseY * -0.5}px)`"></div>
             </figure>
         @endif
 
         <div class="p-6 sm:p-10 lg:p-12">
 
-            {{-- Category, Date & Reading Time --}}
-            <div class="flex flex-wrap items-center gap-4 mb-6">
+            {{-- Category, Date & Reading Time (Midground Parallax) --}}
+            <div class="flex flex-wrap items-center gap-4 mb-6 transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.8}px, ${mouseY * 0.8}px)`">
                 @if($post->category)
                     <a href="{{ route($isEnglish ? 'categories.show.en' : 'categories.show', $post->category) }}" class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-brand bg-brand-light dark:bg-brand/20 dark:text-brand-light px-3.5 py-1.5 rounded-xl shadow-sm hover:-translate-y-0.5 transition-transform">
                         {{ $post->category->name }}
@@ -155,13 +194,13 @@
                 </div>
             </div>
 
-            {{-- Tiêu đề --}}
-            <h1 class="text-[clamp(1.75rem,5vw,3rem)] font-black text-slate-900 dark:text-white tracking-tight leading-snug mb-8">
+            {{-- Tiêu đề (Foreground Parallax) --}}
+            <h1 class="text-[clamp(1.75rem,5vw,3rem)] font-black text-slate-900 dark:text-white tracking-tight leading-snug mb-8 transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 1.2}px, ${mouseY * 1.2}px)`">
                 {{ $post->title }}
             </h1>
 
-            {{-- Tác giả & Lượt xem --}}
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 border-y border-slate-100 dark:border-slate-700/80 mb-10 bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl px-4 sm:px-6">
+            {{-- Tác giả & Lượt xem (Slight Parallax) --}}
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 border-y border-slate-100 dark:border-slate-700/80 mb-10 bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl px-4 sm:px-6 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 0.5}px, ${mouseY * 0.5}px)`">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-brand-light dark:bg-brand/20 flex items-center justify-center text-brand font-black text-lg shadow-sm border border-brand/10">
                         {{ mb_substr($post->author->name ?? ($isEnglish ? 'G' : 'K'), 0, 1) }}
@@ -205,7 +244,7 @@
             </div>
             @endif
 
-            {{-- Nội dung bài viết --}}
+            {{-- Nội dung bài viết (NO Parallax, fully static for comfortable reading) --}}
             <div class="mb-12 text-left prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:font-black prose-a:text-brand hover:prose-a:text-brand-hover prose-img:rounded-2xl prose-img:shadow-md">
                 {!! $htmlContent !!}
             </div>

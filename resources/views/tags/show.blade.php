@@ -32,21 +32,42 @@
         .animate-gradient-x { animation: gradient-x 4s ease infinite; background-size: 200% 200%; }
     </style>
 
-    <div x-data="{ mounted: false }" x-init="setTimeout(() => mounted = true, 100)"
+    <div x-data="{
+            mounted: false,
+            mouseX: 0,
+            mouseY: 0,
+            calcParallax(e) {
+                const rect = this.$refs.tagBanner.getBoundingClientRect();
+                this.mouseX = (e.clientX - rect.left - rect.width / 2) / 25;
+                this.mouseY = (e.clientY - rect.top - rect.height / 2) / 25;
+            },
+            resetParallax() {
+                this.mouseX = 0;
+                this.mouseY = 0;
+            }
+         }"
+         x-init="setTimeout(() => mounted = true, 100)"
+         x-ref="tagBanner"
+         @mousemove="calcParallax($event)"
+         @mouseleave="resetParallax()"
+         style="perspective: 1000px;"
          class="transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
 
         <header class="relative bg-white/60 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-700/60 overflow-hidden p-8 sm:p-10 lg:p-12 transition-all duration-700 hover:shadow-[0_25px_50px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_25px_50px_rgba(0,0,0,0.5)] group">
 
-            {{-- Animated Background Orbs --}}
+            {{-- Animated Background Orbs (Moves Opposite) --}}
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
-                <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
+                <div class="absolute inset-0 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`">
+                    <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
+                    <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
+                </div>
                 <div class="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-white/60 dark:via-slate-800/50 dark:to-slate-900/80 z-0"></div>
             </div>
 
             <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
 
-                <div class="shrink-0 group/img relative">
+                {{-- Featured Image/Icon (Foreground - Moves heavily) --}}
+                <div class="shrink-0 group/img relative transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 1.8}px, ${mouseY * 1.8}px)`">
                     <div class="absolute -inset-1 bg-gradient-to-r from-brand to-amber-400 rounded-[1.5rem] blur opacity-25 group-hover/img:opacity-50 transition duration-500"></div>
                     @if($tag->featured_image)
                         <figure class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] overflow-hidden shadow-xl border-2 border-white dark:border-slate-700/80 relative z-10 bg-white dark:bg-slate-800">
@@ -62,21 +83,27 @@
 
                 <div class="flex flex-col text-center sm:text-left flex-grow justify-center min-h-[7rem]">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-3 sm:mb-4">
-                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm flex items-center justify-center sm:justify-start gap-2">
+
+                        {{-- Tag Title (Midground) --}}
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm flex items-center justify-center sm:justify-start gap-2 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 0.8}px, ${mouseY * 0.8}px)`">
                             <span class="text-slate-400 dark:text-slate-500">#</span>
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-500 to-rose-500 animate-gradient-x pb-1 inline-block">
                                 {{ $tag->name }}
                             </span>
                         </h1>
 
-                        <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap self-center shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
-                            <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                            {{ $posts->total() }} bài viết
-                        </span>
+                        {{-- Post Count Badge (Foreground) --}}
+                        <div class="transition-transform duration-300 ease-out inline-block self-center" :style="`transform: translate(${mouseX * 1.2}px, ${mouseY * 1.2}px)`">
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
+                                <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                                {{ $posts->total() }} bài viết
+                            </span>
+                        </div>
                     </div>
 
+                    {{-- Description (Background/Midground) --}}
                     @if($tag->description)
-                        <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm">
+                        <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.5}px, ${mouseY * 0.5}px)`">
                             {{ $tag->description }}
                         </p>
                     @endif
