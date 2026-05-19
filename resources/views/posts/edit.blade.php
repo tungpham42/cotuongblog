@@ -203,8 +203,9 @@
             @if(auth()->user()->is_admin)
                 <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
                     <input type="hidden" name="is_published" value="0">
+
                     <input type="checkbox" name="is_published" id="is_published" value="1"
-                        {{ old('is_published', $post->is_published) ? 'checked' : '' }}
+                        {{ old('is_published', $post->is_published) == 1 ? 'checked' : '' }}
                         class="h-5 w-5 text-brand focus:ring-brand/50 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded cursor-pointer transition-colors">
                     <label for="is_published" class="ml-3 block text-sm font-medium text-slate-900 dark:text-white cursor-pointer">
                         Trạng thái xuất bản
