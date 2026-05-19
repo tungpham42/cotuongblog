@@ -204,8 +204,8 @@
                 <div class="flex items-center p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700"
                     x-data="{ isPublished: {{ old('is_published', $post->is_published ?? 0) ? 'true' : 'false' }} }">
 
-                    <input type="hidden" name="is_published" value="0">
-                    <input type="checkbox" name="is_published" id="is_published" value="1" class="hidden" x-model="isPublished">
+                    {{-- Replaced the dual inputs with a single dynamic hidden input --}}
+                    <input type="hidden" name="is_published" :value="isPublished ? 1 : 0">
 
                     <button type="button"
                         @click="isPublished = !isPublished"
