@@ -37,25 +37,7 @@
         .animate-gradient-x { animation: gradient-x 4s ease infinite; background-size: 200% 200%; }
     </style>
 
-    <div x-data="{
-            mounted: false,
-            mouseX: 0,
-            mouseY: 0,
-            calcParallax(e) {
-                const rect = this.$refs.catBanner.getBoundingClientRect();
-                this.mouseX = (e.clientX - rect.left - rect.width / 2) / 25;
-                this.mouseY = (e.clientY - rect.top - rect.height / 2) / 25;
-            },
-            resetParallax() {
-                this.mouseX = 0;
-                this.mouseY = 0;
-            }
-         }"
-         x-init="setTimeout(() => mounted = true, 100)"
-         x-ref="catBanner"
-         @mousemove="calcParallax($event)"
-         @mouseleave="resetParallax()"
-         style="perspective: 1000px;"
+    <div x-data="{ mounted: false }" x-init="setTimeout(() => mounted = true, 100)"
          class="transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
 
         @if($isEn)
@@ -65,34 +47,30 @@
             <header class="relative bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] shadow-xl dark:shadow-2xl overflow-hidden p-8 sm:p-12 lg:p-16 border border-slate-200 dark:border-slate-700/60 group transition-colors duration-500">
                 {{-- Global Abstract Background --}}
                 <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div class="absolute inset-0 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`">
-                        {{-- The SVG pattern inverts to dark dots in light mode and white dots in dark mode --}}
-                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-60 invert dark:invert-0 transition-all duration-500"></div>
-                        <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand/10 dark:bg-brand/30 rounded-full blur-[6rem] animate-float opacity-70"></div>
-                        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-500/10 dark:bg-brand-500/20 rounded-full blur-[6rem] animate-float-delayed opacity-70"></div>
-                    </div>
+                    {{-- The SVG pattern inverts to dark dots in light mode and white dots in dark mode --}}
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-60 invert dark:invert-0 transition-all duration-500"></div>
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand/10 dark:bg-brand/30 rounded-full blur-[6rem] animate-float opacity-70"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-500/10 dark:bg-brand-500/20 rounded-full blur-[6rem] animate-float-delayed opacity-70"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 dark:from-slate-900 dark:via-slate-900/90 to-transparent transition-colors duration-500"></div>
                 </div>
 
                 <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
                     <div class="flex flex-col text-center lg:text-left max-w-3xl">
-                        <div class="transition-transform duration-300 ease-out inline-block lg:mx-0 mx-auto mb-6" :style="`transform: translate(${mouseX * 1.2}px, ${mouseY * 1.2}px)`">
-                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-white/10 border border-brand-100 dark:border-white/20 text-brand-600 dark:text-brand-200 text-xs font-bold uppercase tracking-widest w-max backdrop-blur-md transition-colors duration-300">
-                                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                International Edition
-                            </div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-white/10 border border-brand-100 dark:border-white/20 text-brand-600 dark:text-brand-200 text-xs font-bold uppercase tracking-widest w-max mx-auto lg:mx-0 mb-6 backdrop-blur-md transition-colors duration-300">
+                            <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            International Edition
                         </div>
 
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6 transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.8}px, ${mouseY * 0.8}px)`">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6 transition-colors duration-300">
                             Global <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-400 to-yellow-500 animate-gradient-x">Xiangqi</span> Hub
                         </h1>
 
-                        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.5}px, ${mouseY * 0.5}px)`">
+                        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 transition-colors duration-300">
                             {{ $category->description ?? 'Discover the ancient art of Chinese Chess. Explore grandmaster strategies, cultural histories, and connect with players from around the world in our english portal.' }}
                         </p>
 
                         {{-- Portal Quick Links --}}
-                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 1.5}px, ${mouseY * 1.5}px)`">
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                             <a href="#articles" class="px-6 py-3 rounded-full bg-brand hover:bg-orange-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:scale-105">
                                 Browse Articles ({{ $posts->total() }})
                             </a>
@@ -104,12 +82,12 @@
                     </div>
 
                     @if($category->featured_image)
-                        <div class="shrink-0 lg:block hidden relative group/img transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 2}px, ${mouseY * 2}px)`">
+                        <div class="shrink-0 lg:block hidden relative group/img">
                             <div class="absolute -inset-4 bg-gradient-to-r from-brand to-brand-500 rounded-full blur opacity-20 dark:opacity-30 group-hover/img:opacity-40 dark:group-hover/img:opacity-60 transition duration-700"></div>
                             <img src="{{ asset('storage/' . $category->featured_image) }}" alt="Global Xiangqi" class="w-64 h-64 object-cover rounded-full border-4 border-white dark:border-slate-800 relative z-10 shadow-xl dark:shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
                         </div>
                     @else
-                        <div class="shrink-0 lg:flex hidden relative group/img items-center justify-center w-64 h-64 rounded-full bg-gradient-to-br from-brand/5 to-brand-500/5 dark:from-brand/20 dark:to-brand-500/20 border-4 border-white dark:border-slate-700 backdrop-blur-md shadow-xl dark:shadow-2xl transform group-hover/img:scale-105 transition-all duration-700 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 2}px, ${mouseY * 2}px)`">
+                        <div class="shrink-0 lg:flex hidden relative group/img items-center justify-center w-64 h-64 rounded-full bg-gradient-to-br from-brand/5 to-brand-500/5 dark:from-brand/20 dark:to-brand-500/20 border-4 border-white dark:border-slate-700 backdrop-blur-md shadow-xl dark:shadow-2xl transform group-hover/img:scale-105 transition-all duration-700">
                             <svg class="w-32 h-32 text-brand drop-shadow-[0_0_15px_rgba(249,115,22,0.2)] dark:drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                     @endif
@@ -121,15 +99,13 @@
             {{-- ========================================== --}}
             <header class="relative bg-white/60 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_15px_40px_rgba(249,115,22,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-700/60 overflow-hidden p-8 sm:p-10 lg:p-12 transition-all duration-700 hover:shadow-[0_25px_50px_rgba(249,115,22,0.12)] dark:hover:shadow-[0_25px_50px_rgba(0,0,0,0.5)] group">
                 <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div class="absolute inset-0 transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * -1.5}px, ${mouseY * -1.5}px)`">
-                        <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
-                        <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
-                    </div>
+                    <div class="absolute -top-32 -left-32 w-72 h-72 bg-brand/20 dark:bg-brand/20 rounded-full blur-[5rem] animate-float opacity-70 group-hover:bg-brand/30 transition-colors duration-1000"></div>
+                    <div class="absolute -bottom-32 -right-32 w-72 h-72 bg-amber-400/20 dark:bg-yellow-500/10 rounded-full blur-[5rem] animate-float-delayed opacity-70 group-hover:bg-amber-400/30 transition-colors duration-1000"></div>
                     <div class="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-white/60 dark:via-slate-800/50 dark:to-slate-900/80 z-0"></div>
                 </div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
-                    <div class="shrink-0 group/img relative transition-transform duration-300 ease-out" :style="`transform: translate(${mouseX * 1.8}px, ${mouseY * 1.8}px)`">
+                    <div class="shrink-0 group/img relative">
                         <div class="absolute -inset-1 bg-gradient-to-r from-brand to-amber-400 rounded-[1.5rem] blur opacity-25 group-hover/img:opacity-50 transition duration-500"></div>
                         @if($category->featured_image)
                             <figure class="w-28 h-28 sm:w-32 sm:h-32 rounded-[1.25rem] overflow-hidden shadow-xl border-2 border-white dark:border-slate-700/80 relative z-10 bg-white dark:bg-slate-800">
@@ -145,22 +121,20 @@
 
                     <div class="flex flex-col text-center sm:text-left flex-grow justify-center min-h-[7rem]">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-3 sm:mb-4">
-                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.8}px, ${mouseY * 0.8}px)`">
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight drop-shadow-sm">
                                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand via-orange-500 to-rose-500 animate-gradient-x pb-1 inline-block">
                                     {{ $category->name }}
                                 </span>
                             </h1>
 
-                            <div class="transition-transform duration-300 ease-out inline-block self-center" :style="`transform: translate(${mouseX * 1.2}px, ${mouseY * 1.2}px)`">
-                                <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
-                                    <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                                    {{ $posts->total() }} bài viết
-                                </span>
-                            </div>
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-brand dark:text-brand-light text-sm font-bold whitespace-nowrap self-center shadow-sm border border-brand/20 dark:border-brand/30 backdrop-blur-md transform hover:scale-105 transition-transform duration-300 cursor-default">
+                                <span class="flex w-2 h-2 rounded-full bg-brand animate-pulse mr-2 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                                {{ $posts->total() }} bài viết
+                            </span>
                         </div>
 
                         @if($category->description)
-                            <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm transition-transform duration-300 ease-out block" :style="`transform: translate(${mouseX * 0.5}px, ${mouseY * 0.5}px)`">
+                            <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-4xl mb-0 line-clamp-3 relative z-10 drop-shadow-sm">
                                 {{ $category->description }}
                             </p>
                         @endif
