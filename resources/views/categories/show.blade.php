@@ -8,7 +8,7 @@
 @section('title', $category->name)
 
 @if ($isEnglish)
-    @section('site_name', 'Xiangqi International Portal')
+    @section('site_name', 'Global Xiangqi Hub')
 @endif
 
 @if($category->featured_image)
