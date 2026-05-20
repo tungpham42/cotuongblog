@@ -1,17 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $post->title)
-
-@section('og_type', 'article')
-
-@if($post->featured_image)
-    @section('og_image', asset('storage/' . $post->featured_image))
-@endif
-
-@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit(strip_tags(\Illuminate\Support\Str::markdown($post->excerpt ?? $post->content)), 160))
-
-@section('content')
-
 @php
     // KIỂM TRA BÀI VIẾT TIẾNG ANH
     $isEnglish = $post->category && $post->category->slug === 'english-articles';
@@ -102,6 +90,22 @@
     $htmlContent = implode('</p>', $paragraphs);
 
 @endphp
+
+@section('title', $post->title)
+
+@if ($isEnglish)
+    @section('site_name', 'Xiangqi International Portal')
+@endif
+
+@section('og_type', 'article')
+
+@if($post->featured_image)
+    @section('og_image', asset('storage/' . $post->featured_image))
+@endif
+
+@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit(strip_tags(\Illuminate\Support\Str::markdown($post->excerpt ?? $post->content)), 160))
+
+@section('content')
 
 <div class="max-w-4xl mx-auto relative">
     <div class="absolute -top-20 -left-20 w-72 h-72 bg-brand/10 dark:bg-brand/20 rounded-full blur-[4rem] pointer-events-none"></div>

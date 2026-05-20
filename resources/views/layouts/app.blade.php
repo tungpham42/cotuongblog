@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif</title>
+    <title>@yield('title') | @yield('site_name', 'Cộng Đồng Cờ Tướng Việt Nam')</title>
 
     <script>
         if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -47,7 +47,7 @@
     <meta property="og:locale" content="{{ str_replace('_', '-', app()->getLocale()) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
+    <meta property="og:title" content="@yield('title') | @yield('site_name', 'Cộng Đồng Cờ Tướng Việt Nam')">
     <meta property="og:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
     <meta property="og:image:width" content="1200">
@@ -55,7 +55,7 @@
     <meta property="og:image:alt" content="@yield('title', 'Cờ tướng 2 người')">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@hasSection('title') @yield('title') | Cộng Đồng Cờ Tướng @else Cộng Đồng Cờ Tướng Việt Nam @endif">
+    <meta name="twitter:title" content="@yield('title') | @yield('site_name', 'Cộng Đồng Cờ Tướng Việt Nam')">
     <meta name="twitter:description" content="@yield('meta_description', 'Blog về cờ tướng, chia sẻ kiến thức, chiến thuật và tin tức mới nhất về cờ tướng.')">
     <meta name="twitter:image" content="@yield('og_image', asset('img/og_image.jpg'))">
 

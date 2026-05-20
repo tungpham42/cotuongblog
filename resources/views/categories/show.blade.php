@@ -2,22 +2,27 @@
 
 @php
     // Kiểm tra xem đây có phải là chuyên mục Tiếng Anh không
-    $isEn = $category->slug === 'english-articles';
+    $isEnglish = $category->slug === 'english-articles';
 @endphp
 
-@section('title', $category->name . ($isEn ? ' - Global Xiangqi Portal' : ' - Cờ tướng'))
+@section('title', $category->name)
+
+@if ($isEnglish)
+    @section('site_name', 'Xiangqi International Portal')
+@endif
+
 @if($category->featured_image)
     @section('og_image', asset('storage/' . $category->featured_image))
 @endif
-@section('meta_description', $category->description ? Str::limit($category->description, 150) : ($isEn ? 'Join our global community and explore fascinating Xiangqi articles in ' . $category->name : 'Khám phá các bài viết hấp dẫn trong chuyên mục ' . $category->name))
+@section('meta_description', $category->description ? Str::limit($category->description, 150) : ($isEnglish ? 'Join our global community and explore fascinating Xiangqi articles in ' . $category->name : 'Khám phá các bài viết hấp dẫn trong chuyên mục ' . $category->name))
 
 @section('content')
 <div class="space-y-8">
     <nav aria-label="Breadcrumb" class="mb-2">
         <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
-            <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors font-semibold">{{ $isEn ? 'Home' : 'Trang chủ' }}</a></li>
+            <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors font-semibold">{{ $isEnglish ? 'Home' : 'Trang chủ' }}</a></li>
             <li><span class="mx-1 opacity-50">/</span></li>
-            <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $isEn ? 'Global Portal' : $category->name }}</li>
+            <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $isEnglish ? 'Global Portal' : $category->name }}</li>
         </ol>
     </nav>
 
@@ -40,7 +45,7 @@
     <div x-data="{ mounted: false }" x-init="setTimeout(() => mounted = true, 100)"
          class="transition-all duration-1000 transform" :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'">
 
-        @if($isEn)
+        @if($isEnglish)
             {{-- ========================================== --}}
             {{-- ENGLISH PORTAL HERO (GLOBAL AUDIENCE)      --}}
             {{-- ========================================== --}}
@@ -146,7 +151,7 @@
 
     {{-- Search & Sorting Bar --}}
     <div id="articles" class="flex flex-col gap-5 border-b border-slate-200 dark:border-slate-700 pb-5 mb-6 pt-4">
-        <form action="{{ route($isEn ? 'categories.show.en' : 'categories.show', $category->slug) }}" method="GET" class="relative z-30 w-full">
+        <form action="{{ route($isEnglish ? 'categories.show.en' : 'categories.show', $category->slug) }}" method="GET" class="relative z-30 w-full">
             <div class="flex flex-col sm:flex-row items-center w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-[2rem] sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-slate-200/80 dark:border-slate-700/80 p-1.5 gap-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.15)] dark:hover:shadow-[0_15px_40px_rgba(249,115,22,0.1)] hover:border-brand/40 focus-within:ring-4 focus-within:ring-brand/10 focus-within:border-brand dark:focus-within:border-brand">
 
                 <div class="relative flex items-center w-full flex-grow group/search">
@@ -157,7 +162,7 @@
                     <input type="text"
                         name="search"
                         value="{{ request('search') }}"
-                        placeholder="{{ $isEn ? 'Search global resources, strategies, authors...' : 'Tìm trong chuyên mục...' }}"
+                        placeholder="{{ $isEnglish ? 'Search global resources, strategies, authors...' : 'Tìm trong chuyên mục...' }}"
                         class="w-full bg-transparent border-none outline-none focus:ring-0 text-slate-800 dark:text-slate-100 placeholder-slate-400 pl-11 pr-14 py-2.5 text-[15px] font-medium transition-all duration-300 placeholder:font-normal [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s] [&:-webkit-autofill]:[-webkit-text-fill-color:#1e293b] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f8fafc]">
 
                     <button type="submit" aria-label="Tìm kiếm" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-brand/10 hover:bg-brand text-brand hover:text-white dark:bg-brand/20 dark:hover:bg-brand transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand/50 group-focus-within/search:scale-105">
@@ -171,12 +176,12 @@
                         open: false,
                         selected: '{{ request('sort', 'latest') }}',
                         options: {
-                            'latest': '{{ $isEn ? "Latest Updates" : "Mới nhất" }}',
-                            'oldest': '{{ $isEn ? "Archived" : "Cũ nhất" }}',
-                            'views_desc': '{{ $isEn ? "Trending Worldwide" : "Lượt xem (Cao - Thấp)" }}',
-                            'views_asc': '{{ $isEn ? "Hidden Gems" : "Lượt xem (Thấp - Cao)" }}',
-                            'alpha_asc': '{{ $isEn ? "A - Z" : "Tên (A - Z)" }}',
-                            'alpha_desc': '{{ $isEn ? "Z - A" : "Tên (Z - A)" }}'
+                            'latest': '{{ $isEnglish ? "Latest Updates" : "Mới nhất" }}',
+                            'oldest': '{{ $isEnglish ? "Archived" : "Cũ nhất" }}',
+                            'views_desc': '{{ $isEnglish ? "Trending Worldwide" : "Lượt xem (Cao - Thấp)" }}',
+                            'views_asc': '{{ $isEnglish ? "Hidden Gems" : "Lượt xem (Thấp - Cao)" }}',
+                            'alpha_asc': '{{ $isEnglish ? "A - Z" : "Tên (A - Z)" }}',
+                            'alpha_desc': '{{ $isEnglish ? "Z - A" : "Tên (Z - A)" }}'
                         },
                         selectOption(value) {
                             this.selected = value;
@@ -231,7 +236,7 @@
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mt-2">
             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11h3m-3 4h3m-6-4h.01M6 15h.01M8 20h8"></path></svg>
             @php
-                if ($isEn) {
+                if ($isEnglish) {
                     $headerText = request('search') ? 'Global Search Results' : match(request('sort')) {
                         'oldest' => 'Archived Resources',
                         'views_desc' => 'Trending Worldwide',
@@ -282,7 +287,7 @@
                         <div class="absolute -top-5 left-6 sm:left-8">
                             <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-brand to-orange-400 text-white text-[11px] uppercase tracking-wider font-black px-4 py-2.5 rounded-xl shadow-lg shadow-brand/40 transform group-hover:-translate-y-1 transition-transform duration-500">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                {{ $post->created_at->locale($isEn ? 'en' : 'vi')->diffForHumans() }}
+                                {{ $post->created_at->locale($isEnglish ? 'en' : 'vi')->diffForHumans() }}
                             </span>
                         </div>
 
@@ -304,13 +309,13 @@
                                     {{ mb_substr($post->author->name ?? 'A', 0, 1) }}
                                 </div>
                                 <div class="flex flex-col">
-                                    <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">{{ $isEn ? 'Author' : 'Tác giả' }}</span>
-                                    <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ $post->author->name ?? ($isEn ? 'Community' : 'Ẩn danh') }}</span>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">{{ $isEnglish ? 'Author' : 'Tác giả' }}</span>
+                                    <span class="text-sm font-black text-slate-800 dark:text-slate-200">{{ $post->author->name ?? ($isEnglish ? 'Community' : 'Ẩn danh') }}</span>
                                 </div>
                             </div>
 
                             <a href="{{ route('posts.show', $post->slug) }}" class="flex items-center gap-1.5 text-sm font-black text-brand opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 focus:outline-none">
-                                {{ $isEn ? 'Read Article' : 'Đọc ngay' }}
+                                {{ $isEnglish ? 'Read Article' : 'Đọc ngay' }}
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
                         </div>
@@ -321,10 +326,10 @@
                     <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-900 mb-4">
                         <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $isEn ? 'No Content Available Yet' : 'Chưa có bài viết nào' }}</h3>
-                    <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">{{ $isEn ? 'We are currently translating and preparing new global resources. Please check back soon!' : 'Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!' }}</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $isEnglish ? 'No Content Available Yet' : 'Chưa có bài viết nào' }}</h3>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">{{ $isEnglish ? 'We are currently translating and preparing new global resources. Please check back soon!' : 'Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!' }}</p>
                     <a href="{{ route('home') }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-brand text-white font-medium rounded-xl hover:bg-brand-hover transition-colors shadow-sm shadow-brand/30">
-                        ← {{ $isEn ? 'Return to Home' : 'Quay về trang chủ' }}
+                        ← {{ $isEnglish ? 'Return to Home' : 'Quay về trang chủ' }}
                     </a>
                 </div>
             @endforelse
@@ -333,7 +338,7 @@
 
     @if ($posts->hasPages())
         <div class="mt-12 flex justify-center">
-            {{ $posts->onEachSide(1)->links($isEn ? 'components.pagination-en' : 'components.pagination') }}
+            {{ $posts->onEachSide(1)->links($isEnglish ? 'components.pagination-en' : 'components.pagination') }}
         </div>
     @endif
 </div>
