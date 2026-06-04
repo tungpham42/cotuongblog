@@ -2,7 +2,7 @@
 
 @section('title', 'Cửa hàng Kỳ Đạo')
 
-@section('og:image', asset('img/cua-hang.jpg'))
+@section('og_image', asset('img/cua-hang.jpg'))
 
 @section('content')
 <div class="mb-12 text-center">
