@@ -28,6 +28,20 @@
         </div>
 
         <div class="w-full lg:w-1/2 flex flex-col">
+
+            <!-- THÊM NÚT SỬA SẢN PHẨM CHO ADMIN -->
+            @auth
+                @if(auth()->user()->is_admin) {{-- Bạn hãy đổi is_admin thành logic check quyền admin thực tế của hệ thống bạn --}}
+                    <div class="mb-4">
+                        <a href="{{ route('admin.products.edit', $product->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-amber-500/30 transform hover:-translate-y-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            Sửa sản phẩm
+                        </a>
+                    </div>
+                @endif
+            @endauth
+            <!-- END NÚT SỬA -->
+
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">{{ $product->name }}</h1>
 
             <div class="text-3xl font-black text-brand mb-6 py-4 border-y border-slate-100 dark:border-slate-700">
