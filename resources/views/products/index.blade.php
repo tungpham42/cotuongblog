@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Cửa hàng Sản phẩm')
+@section('title', 'Cửa hàng Kỳ Đạo')
 
 @section('content')
 <div class="mb-12 text-center">
