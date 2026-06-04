@@ -106,7 +106,7 @@ Route::get('/api/v1/posts', [PostController::class, 'apiIndex'])->name('api.post
 Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 // 1. Dành cho Public (Ai cũng xem được)
-Route::get('/san-pham', [ProductController::class, 'index'])->name('products.index');
+Route::get('/cua-hang', [ProductController::class, 'index'])->name('products.index');
 Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 // 2. Dành cho Admin (Khu vực quản lý bên trong Group middleware auth + IsAdmin)
