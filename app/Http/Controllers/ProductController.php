@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
+use Spatie\SchemaOrg\Schema;
 
 class ProductController extends Controller
 {
@@ -39,9 +40,38 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        // Tăng view nếu có trường views (tùy chọn)
-        // $product->increment('views');
-        return view('products.show', compact('product'));
+        $product->increment('views');
+        // Lấy đoạn mô tả ngắn cho SEO
+        $description = Str::limit(strip_tags(Str::markdown($product->description ?? '')), 160);
+
+        // 1. Tạo Product Schema
+        $productSchema = Schema::product()
+            ->name($product->name)
+            ->description($description)
+            ->url(route('products.show', $product->slug))
+            ->sku((string) $product->id) // Thêm SKU (có thể dùng ID làm SKU tạm)
+            ->brand(Schema::brand()->name('Cộng Đồng Cờ Tướng Việt Nam'))
+            ->offers(
+                Schema::offer()
+                    ->price($product->price)
+                    ->priceCurrency('VND')
+                    ->availability(Schema::itemAvailability()->InStock)
+                    ->url(route('products.show', $product->slug))
+            );
+
+        // Thêm hình ảnh nếu sản phẩm có ảnh
+        if (!empty($product->gallery) && count($product->gallery) > 0) {
+            $productSchema->image(asset('storage/' . $product->gallery[0]));
+        }
+
+        // 2. Tạo Breadcrumb Schema
+        $breadcrumbSchema = Schema::breadcrumbList()->itemListElement([
+            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+            Schema::listItem()->position(2)->name('Cửa hàng')->item(route('products.index')),
+            Schema::listItem()->position(3)->name($product->name)->item(route('products.show', $product->slug)),
+        ]);
+
+        return view('products.show', compact('product', 'productSchema', 'breadcrumbSchema'));
     }
 
     // ==========================================

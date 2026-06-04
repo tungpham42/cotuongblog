@@ -54,6 +54,11 @@
                 {{ number_format($product->price, 0, ',', '.') }} <span class="text-xl">VNĐ</span>
             </div>
 
+            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                {{ number_format($product->views) }} lượt xem
+            </div>
+
             @if($product->video_url)
                 <div class="mb-8">
                     <h3 class="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
@@ -132,4 +137,14 @@
         </div>
     </div>
 </div>
+{{-- Render Schema.org JSON-LD --}}
+@push('scripts')
+    @isset($productSchema)
+        {!! $productSchema->toScript() !!}
+    @endisset
+
+    @isset($breadcrumbSchema)
+        {!! $breadcrumbSchema->toScript() !!}
+    @endisset
+@endpush
 @endsection
