@@ -53,10 +53,13 @@
                     </div>
                 </div>
             @endif
-
+            @php
+                // Use product's Zalo number, fallback to default if null or empty
+                $zaloLink = $product->zalo_number ? $product->zalo_number : '0368571310';
+            @endphp
             <div class="mt-auto bg-brand/5 dark:bg-brand/10 p-6 rounded-2xl border border-brand/20">
-                <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-4">Để mua sản phẩm này, vui lòng liên hệ trực tiếp với admin hoặc đặt hàng qua thông tin bên dưới:</p>
-                <a href="https://zalo.me/0368571310" target="_blank" class="w-full block text-center bg-brand text-white font-bold py-4 rounded-xl hover:bg-brand-hover hover:shadow-lg hover:shadow-brand/30 transition-all transform hover:-translate-y-1">
+                <p class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-4">Để mua sản phẩm này, vui lòng liên hệ trực tiếp với người bán hoặc đặt hàng qua thông tin bên dưới:</p>
+                <a href="https://zalo.me/{{ $zaloLink }}" target="_blank" class="w-full block text-center bg-brand text-white font-bold py-4 rounded-xl hover:bg-brand-hover hover:shadow-lg hover:shadow-brand/30 transition-all transform hover:-translate-y-1">
                     Liên hệ Zalo / Mua ngay
                 </a>
             </div>

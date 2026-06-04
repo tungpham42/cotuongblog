@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Product extends Model
 {
     protected $fillable = [
-        'user_id', // Thêm user_id vào đây
-        'name', 'slug', 'price', 'description',
+        'user_id',
+        'name', 'slug', 'price', 'zalo_number', 'description', // Added zalo_number here
         'video_url', 'gallery', 'is_published'
     ];
 
