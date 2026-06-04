@@ -84,9 +84,6 @@
                     },
                     colors: {
                         brand: {
-                            // DEFAULT: '#f97316',
-                            // hover: '#ea580c',
-                            // light: '#ffedd5',
                             DEFAULT: '#B85D19',
                             hover: '#8C400B',
                             light: '#FDF3EC',
@@ -143,6 +140,14 @@
                             </div>
                             <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand to-amber-500 group-hover:from-orange-500 group-hover:to-rose-500 transition-all duration-300">Cờ tướng</span>
                         </a>
+
+                        {{-- Link Sản Phẩm Desktop --}}
+                        <div class="hidden sm:flex sm:items-center sm:ml-8 gap-6">
+                            <a href="{{ route('products.index') }}" class="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand dark:hover:text-brand transition-colors flex items-center gap-1.5">
+                                <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                Cửa hàng
+                            </a>
+                        </div>
                     </div>
 
                     <div class="hidden sm:flex sm:items-center sm:space-x-2">
@@ -186,6 +191,11 @@
                                             <a href="{{ route('posts.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                 Bài viết
+                                            </a>
+                                            {{-- Link Quản lý Sản Phẩm Desktop --}}
+                                            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                                Sản phẩm
                                             </a>
                                             <a href="{{ route('categories.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -254,6 +264,14 @@
                 class="sm:hidden border-t border-brand/10 dark:border-slate-700/50 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-b-2xl overflow-hidden"
                 style="display: none;">
                 <div class="px-4 pt-3 pb-5 space-y-2">
+                    {{-- Link Sản Phẩm Mobile --}}
+                    <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-slate-800 dark:text-slate-200 font-bold hover:text-brand dark:hover:text-brand transition-colors mb-4">
+                        <div class="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center text-brand">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        </div>
+                        Cửa hàng
+                    </a>
+
                     @auth
                         <div class="flex items-center gap-3 px-3 py-3 mb-2 bg-orange-50/50 dark:bg-slate-700/30 rounded-xl">
                             <div class="w-10 h-10 rounded-full bg-brand flex items-center justify-center text-white font-bold text-lg shadow-sm">
@@ -270,6 +288,8 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Tổng quan</a>
                                 <a href="{{ route('posts.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Bài viết</a>
+                                {{-- Link Quản lý Sản Phẩm Mobile --}}
+                                <a href="{{ route('admin.products.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Sản phẩm</a>
                                 <a href="{{ route('categories.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Chuyên mục</a>
                                 <a href="{{ route('tags.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Thẻ (Tags)</a>
                                 <a href="{{ route('users.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Người dùng</a>
@@ -362,10 +382,10 @@
                     title: 'Bạn đang dùng Trình chặn quảng cáo?',
                     text: 'Các quảng cáo giúp chúng tôi có chi phí duy trì và phát triển Cộng Đồng Cờ Tướng. Xin vui lòng thêm trang web vào danh sách ngoại lệ (whitelist) hoặc tắt AdBlock để ủng hộ tác giả nhé!',
                     confirmButtonText: 'Tôi đã tắt AdBlock',
-                    confirmButtonColor: '#f97316', // Matches brand.DEFAULT color
+                    confirmButtonColor: '#B85D19',
                     background: isDark ? '#1e293b' : '#ffffff',
                     color: isDark ? '#f8fafc' : '#0f172a',
-                    allowOutsideClick: false, // Forces user to acknowledge
+                    allowOutsideClick: false,
                     allowEscapeKey: false
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -374,11 +394,10 @@
                 });
             };
 
-            // 2. DOM "Bait" Check (Catches cosmetic/element hiders)
+            // 2. DOM "Bait" Check
             const checkDOMBlock = () => {
                 const bait = document.createElement('div');
                 bait.innerHTML = '&nbsp;';
-                // Common classes targeted by adblockers
                 bait.className = 'adsbox ad-placement adsbygoogle';
                 bait.style.height = '1px';
                 bait.style.width = '1px';
@@ -394,7 +413,7 @@
                 return isBlocked;
             };
 
-            // 3. Network Check (Catches request blockers like uBlock Origin)
+            // 3. Network Check
             const checkNetworkBlock = async () => {
                 try {
                     await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
@@ -402,27 +421,23 @@
                         mode: 'no-cors',
                         cache: 'no-store'
                     });
-                    return false; // Request succeeded
+                    return false;
                 } catch (error) {
-                    return true; // Request intercepted/blocked
+                    return true;
                 }
             };
 
             // 4. Execute Detection
             const runDetection = async () => {
-                // Quick synchronous DOM check first
                 if (checkDOMBlock()) {
                     triggerAdBlockAlert();
                     return;
                 }
-
-                // Fallback to asynchronous network check
                 if (await checkNetworkBlock()) {
                     triggerAdBlockAlert();
                 }
             };
 
-            // Run detection after a brief moment to ensure browser extensions have initialized
             setTimeout(runDetection, 300);
         });
     </script>
@@ -431,10 +446,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             tippy('[data-tippy-content]', {
-                animation: 'scale', // Smooth scaling animation
-                arrow: true,        // Shows the little pointer arrow
-                delay: [200, 0],    // 200ms delay before showing, 0ms delay before hiding
-                theme: 'translucent', // Optional: you can omit this or customize via CSS
+                animation: 'scale',
+                arrow: true,
+                delay: [200, 0],
+                theme: 'translucent',
             });
         });
     </script>

@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SitemapController;
@@ -104,6 +105,20 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 Route::get('/api/v1/posts', [PostController::class, 'apiIndex'])->name('api.posts.index');
 Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
 
+// 1. Dành cho Public (Ai cũng xem được)
+Route::get('/san-pham', [ProductController::class, 'index'])->name('products.index');
+Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+
+// 2. Dành cho Admin (Khu vực quản lý bên trong Group middleware auth + IsAdmin)
+Route::middleware(['auth', IsAdmin::class])->group(function () {
+    // Đặt tên route admin tránh trùng lặp với route public
+    Route::get('/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+});
 
 // ==========================================
 // New Public Route for Post
