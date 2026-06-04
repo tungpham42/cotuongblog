@@ -29,7 +29,6 @@
 
         <div class="w-full lg:w-1/2 flex flex-col">
 
-            <!-- THÊM NÚT SỬA SẢN PHẨM CHO ADMIN -->
             @auth
                 @if(auth()->user()->is_admin) {{-- Bạn hãy đổi is_admin thành logic check quyền admin thực tế của hệ thống bạn --}}
                     <div class="mb-4">
@@ -40,8 +39,6 @@
                     </div>
                 @endif
             @endauth
-            <!-- END NÚT SỬA -->
-
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">{{ $product->name }}</h1>
 
             <div class="text-3xl font-black text-brand mb-6 py-4 border-y border-slate-100 dark:border-slate-700">
@@ -54,19 +51,27 @@
                         <svg class="w-5 h-5 text-brand" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Video Demo
                     </h3>
                     @php
-                        // Chuyển link youtube thường sang link embed
                         $embedUrl = $product->video_url;
+                        $aspectClass = 'aspect-video'; // Tỷ lệ mặc định 16/9
+
+                        // Xử lý link watch?v= (Video YouTube thường)
                         if(str_contains($embedUrl, 'watch?v=')) {
                             $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
-                            // Xóa các query string dư thừa nếu có (vd &t=)
-                            $embedUrl = explode('&', $embedUrl)[0];
+                            $embedUrl = explode('&', $embedUrl)[0]; // Xóa query param dư thừa
+                        }
+                        // Xử lý link Youtube Shorts
+                        elseif (str_contains($embedUrl, '/shorts/')) {
+                            $embedUrl = str_replace('/shorts/', '/embed/', $embedUrl);
+                            $embedUrl = explode('?', $embedUrl)[0]; // Xóa query param nếu có
+                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Chuyển tỷ lệ thành 9:16 và giới hạn độ rộng tối đa
                         }
                     @endphp
-                    <div class="aspect-video rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md">
+                    <div class="{{ $aspectClass }} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md">
                         <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
             @endif
+
             @php
                 // Use product's Zalo number, fallback to default if null or empty
                 $zaloLink = $product->zalo_number ? $product->zalo_number : '0368571310';
