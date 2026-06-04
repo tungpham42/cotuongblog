@@ -55,7 +55,6 @@ class ProductController extends Controller
                 Schema::offer()
                     ->price($product->price)
                     ->priceCurrency('VND')
-                    ->availability(Schema::itemAvailability()->InStock)
                     ->url(route('products.show', $product->slug))
             );
 
