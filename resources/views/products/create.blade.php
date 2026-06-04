@@ -32,7 +32,7 @@
             </div>
 
             <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-700" x-data="{ images: [] }">
-                <label class="block text-sm font-semibold mb-4">Gallery Ảnh (Tối đa 5 ảnh)</label>
+                <label class="block text-sm font-semibold mb-4">Gallery Ảnh (Tối đa 12 ảnh)</label>
                 <input type="file" name="gallery[]" multiple accept="image/*"
                     @change="images = []; for(let file of $event.target.files) images.push(URL.createObjectURL(file))"
                     class="block w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:bg-brand-light file:text-brand cursor-pointer mb-4">
