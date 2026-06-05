@@ -197,27 +197,26 @@
                 'yearly': 'Theo năm (5 năm qua)'
             },
 
-            // FIX 2: Sử dụng @json an toàn và cấp mảng dự phòng (|| []) để tránh Array Null Error
+            // Đã đổi @json() thành {!! json_encode() !!} để tránh lỗi dấu phẩy của Blade
             timeSeriesData: {
                 daily: {
-                    labels: @json($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) || [],
-                    posts: @json($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) || [],
-                    products: @json($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) || []
+                    labels: {!! json_encode($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) !!} || [],
+                    posts: {!! json_encode($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) !!} || [],
+                    products: {!! json_encode($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) !!} || []
                 },
                 monthly: {
-                    labels: @json($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) || [],
-                    posts: @json($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) || [],
-                    products: @json($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) || []
+                    labels: {!! json_encode($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) !!} || [],
+                    posts: {!! json_encode($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) !!} || [],
+                    products: {!! json_encode($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) !!} || []
                 },
                 yearly: {
-                    labels: @json($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) || [],
-                    posts: @json($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) || [],
-                    products: @json($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) || []
+                    labels: {!! json_encode($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) !!} || [],
+                    posts: {!! json_encode($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) !!} || [],
+                    products: {!! json_encode($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) !!} || []
                 }
             },
 
             init() {
-                // FIX 3: Cho DOM thời gian 100ms để hiển thị trước khi vẽ biểu đồ, tránh lỗi mất layout Height/Width
                 setTimeout(() => {
                     this.renderChart();
                 }, 100);
@@ -234,7 +233,6 @@
                 const ctx = this.$refs.timeSeriesCanvas.getContext('2d');
                 const initialData = this.timeSeriesData[this.selectedTimeRange];
 
-                // Hủy instance cũ nếu có, chống lỗi rò rỉ bộ nhớ hoặc đè Canvas gây fullSize error
                 if (this.chartInstance) {
                     this.chartInstance.destroy();
                 }
@@ -312,17 +310,18 @@
     }
 
     // ----------------------------------------------------
-    // VANILLA JS: XỬ LÝ LẠI DỮ LIỆU ĐẢM BẢO KHÔNG BỊ UNDEFINED
+    // VANILLA JS CHO CÁC BIỂU ĐỒ TĨNH (BAR & DOUGHNUT)
     // ----------------------------------------------------
     document.addEventListener('DOMContentLoaded', function() {
-        // Sử dụng Number() bọc mảng @json để ngừa lỗi khi PHP parse ra biến Null hoặc rỗng
+
+        // Trở về sử dụng echo blade thông thường cho các số nguyên
         const statsData = {
-            posts: Number(@json($stats['posts'] ?? 0)) || 0,
-            products: Number(@json($stats['products'] ?? 0)) || 0,
-            categories: Number(@json($stats['categories'] ?? 0)) || 0,
-            tags: Number(@json($stats['tags'] ?? 0)) || 0,
-            users: Number(@json($stats['users'] ?? 0)) || 0,
-            comments: Number(@json($stats['comments'] ?? 0)) || 0
+            posts: {{ $stats['posts'] ?? 0 }},
+            products: {{ $stats['products'] ?? 0 }},
+            categories: {{ $stats['categories'] ?? 0 }},
+            tags: {{ $stats['tags'] ?? 0 }},
+            users: {{ $stats['users'] ?? 0 }},
+            comments: {{ $stats['comments'] ?? 0 }}
         };
 
         const chartColors = [
