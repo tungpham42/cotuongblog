@@ -129,7 +129,11 @@
             <div class="p-6 flex flex-col flex-grow">
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand transition-colors line-clamp-2 mb-2">{{ $product->name }}</h3>
                 <div class="mt-auto pt-4 flex items-center justify-between border-t border-slate-100 dark:border-slate-700">
-                    <span class="text-xl font-black text-brand">{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                    @if ($product->price > 0)
+                        <span class="text-xl font-black text-brand">{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                    @else
+                        <span class="text-xl font-black text-slate-500 dark:text-slate-400">Liên hệ để biết giá</span>
+                    @endif
                     <span class="text-sm font-bold bg-brand/10 text-brand px-3 py-1.5 rounded-lg group-hover:bg-brand group-hover:text-white transition-colors">Xem chi tiết</span>
                 </div>
             </div>
