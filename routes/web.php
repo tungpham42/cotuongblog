@@ -18,6 +18,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 
 Route::get('/test-redis', function () {
@@ -41,6 +42,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
             'tags' => Tag::count(),
             'users' => User::count(),
             'comments' => Comment::count(),
+            'products' => Product::count(),
         ];
         return view('dashboard', compact('stats'));
     })->name('dashboard');
