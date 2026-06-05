@@ -40,7 +40,7 @@ class TagController extends Controller
         $validated = $request->validate([
             'name'           => 'required|string|max:255|unique:tags,name',
             'description'    => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:20480',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -64,7 +64,7 @@ class TagController extends Controller
         $validated = $request->validate([
             'name'           => 'required|string|max:255|unique:tags,name,' . $tag->id,
             'description'    => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,heic|max:20480',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
