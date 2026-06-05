@@ -62,28 +62,39 @@
             @if($product->video_url)
                 <div class="mb-8">
                     @php
+                        $originalUrl = $product->video_url;
                         $embedUrl = $product->video_url;
                         $aspectClass = 'aspect-video'; // Tỷ lệ mặc định 16/9
 
                         // Xử lý link watch?v= (Video YouTube thường)
                         if(str_contains($embedUrl, 'watch?v=')) {
                             $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
-                            $embedUrl = explode('&', $embedUrl)[0]; // Xóa query param dư thừa
+                            $embedUrl = explode('&', $embedUrl)[0];
                         }
                         // Xử lý link Youtube Shorts
                         elseif (str_contains($embedUrl, '/shorts/')) {
                             $embedUrl = str_replace('/shorts/', '/embed/', $embedUrl);
-                            $embedUrl = explode('?', $embedUrl)[0]; // Xóa query param nếu có
-                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Chuyển tỷ lệ thành 9:16
+                            $embedUrl = explode('?', $embedUrl)[0];
+                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto';
                         }
                         // Xử lý link Facebook Reels
                         elseif (str_contains($embedUrl, 'facebook.com/reel') || str_contains($embedUrl, '/reels/')) {
                             $embedUrl = 'https://www.facebook.com/plugins/video.php?href=' . urlencode($embedUrl) . '&show_text=false';
-                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Giữ tỷ lệ dọc 9:16 cho Reel
+                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto';
                         }
                     @endphp
+
                     <div class="{{ $aspectClass }} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md">
                         <iframe src="{{ $embedUrl }}" class="w-full h-full" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+
+                    {{-- Nút xem trực tiếp (Fallback khi lỗi Embed) --}}
+                    <div class="mt-3 text-center">
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Video không hiển thị?</p>
+                        <a href="{{ $originalUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-hover hover:underline transition-colors">
+                            Xem trực tiếp trên nền tảng
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
                     </div>
                 </div>
             @endif
