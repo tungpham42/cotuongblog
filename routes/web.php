@@ -12,6 +12,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Post;
 use App\Models\Category;
@@ -35,17 +36,7 @@ Route::get('/', [PostController::class, 'home'])->name('home');
 
 // Admin Routes (Chỉ Admin mới được vào)
 Route::middleware(['auth', IsAdmin::class])->group(function () {
-    Route::get('/dashboard', function () {
-        $stats = [
-            'posts' => Post::count(),
-            'categories' => Category::count(),
-            'tags' => Tag::count(),
-            'users' => User::count(),
-            'comments' => Comment::count(),
-            'products' => Product::count(),
-        ];
-        return view('dashboard', compact('stats'));
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('categories/update-order', [CategoryController::class, 'updateOrder'])->name('categories.update-order');
     Route::post('tags/update-order', [TagController::class, 'updateOrder'])->name('tags.update-order');
