@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Tổng quan hệ thống')
 
 @section('content')
 <div class="mb-8">
