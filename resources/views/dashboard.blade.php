@@ -8,7 +8,6 @@
     <p class="text-slate-600 dark:text-slate-400 mt-2">Chào mừng bạn quay trở lại. Dưới đây là thống kê các dữ liệu hiện có.</p>
 </div>
 
-<!-- Statistics Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     {{-- Khối: Bài Viết --}}
@@ -108,7 +107,6 @@
     </div>
 </div>
 
-<!-- Data Visualization Charts -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
     {{-- Biểu đồ cột: Tổng quan số lượng --}}
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
@@ -127,24 +125,22 @@
     </div>
 </div>
 
-<!-- MỚI: Biểu đồ thống kê theo Thời gian (Ngày / Tháng / Năm) -->
-<div class="mt-8 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+<div x-data="dashboardChart()" class="mt-8 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
             <h3 class="text-lg font-bold text-slate-800 dark:text-white">Thống kê tăng trưởng</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400">Số lượng nội dung được tạo mới theo thời gian</p>
         </div>
 
-        <!-- Dropdown chọn mốc thời gian -->
-        <select id="timeRangeSelector" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand focus:border-brand block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white outline-none cursor-pointer">
+        <select x-model="selectedTimeRange" @change="updateChart()" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand focus:border-brand block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white outline-none cursor-pointer">
             <option value="daily">Theo ngày (7 ngày qua)</option>
-            <option value="monthly" selected>Theo tháng (Năm nay)</option>
+            <option value="monthly">Theo tháng (Năm nay)</option>
             <option value="yearly">Theo năm (5 năm qua)</option>
         </select>
     </div>
 
     <div class="relative h-80 w-full">
-        <canvas id="timeSeriesChart"></canvas>
+        <canvas x-ref="timeSeriesCanvas"></canvas>
     </div>
 </div>
 
@@ -152,9 +148,124 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+    // ----------------------------------------------------
+    // 1. ALPINE.JS COMPONENT CHO BIỂU ĐỒ THỜI GIAN VÀ SWAL
+    // ----------------------------------------------------
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('dashboardChart', () => ({
+            selectedTimeRange: 'monthly', // Mặc định hiển thị theo tháng
+            chartInstance: null,
+
+            // Nhận dữ liệu từ Blade Server-side
+            timeSeriesData: {
+                daily: {
+                    labels: {!! json_encode($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) !!},
+                    posts: {!! json_encode($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) !!},
+                    products: {!! json_encode($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) !!}
+                },
+                monthly: {
+                    labels: {!! json_encode($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) !!},
+                    posts: {!! json_encode($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) !!},
+                    products: {!! json_encode($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) !!}
+                },
+                yearly: {
+                    labels: {!! json_encode($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) !!},
+                    posts: {!! json_encode($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) !!},
+                    products: {!! json_encode($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) !!}
+                }
+            },
+
+            // Khởi tạo component
+            init() {
+                this.renderChart();
+            },
+
+            renderChart() {
+                const ctx = this.$refs.timeSeriesCanvas.getContext('2d');
+                const initialData = this.timeSeriesData[this.selectedTimeRange];
+
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: initialData.labels,
+                        datasets: [
+                            {
+                                label: 'Bài viết mới',
+                                data: initialData.posts,
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderWidth: 2,
+                                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Sản phẩm mới',
+                                data: initialData.products,
+                                borderColor: 'rgba(16, 185, 129, 1)',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                borderWidth: 2,
+                                pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } },
+                            tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.9)', titleColor: '#fff', bodyColor: '#fff', padding: 12, cornerRadius: 8 }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, 0.1)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            },
+
+            // Sự kiện kích hoạt khi thay đổi Dropdown
+            updateChart() {
+                const newData = this.timeSeriesData[this.selectedTimeRange];
+
+                // Cập nhật dữ liệu cho Chart.js
+                this.chartInstance.data.labels = newData.labels;
+                this.chartInstance.data.datasets[0].data = newData.posts;
+                this.chartInstance.data.datasets[1].data = newData.products;
+                this.chartInstance.update();
+
+                // Xác định tên chu kỳ để thông báo
+                let rangeName = '';
+                if (this.selectedTimeRange === 'daily') rangeName = '7 ngày qua';
+                else if (this.selectedTimeRange === 'monthly') rangeName = 'năm nay';
+                else rangeName = '5 năm qua';
+
+                // Bắn thông báo SweetAlert2 Toast
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `Đã cập nhật dữ liệu: ${rangeName}`,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    background: '#f8fafc',
+                    color: '#1e293b'
+                });
+            }
+        }));
+    });
+
+    // ----------------------------------------------------
+    // 2. VANILLA JS CHO CÁC BIỂU ĐỒ TĨNH (BAR & DOUGHNUT)
+    // ----------------------------------------------------
     document.addEventListener('DOMContentLoaded', function() {
-        // --- 1. DỮ LIỆU TỔNG QUAN ---
         const statsData = {
             posts: {{ $stats['posts'] ?? 0 }},
             products: {{ $stats['products'] ?? 0 }},
@@ -165,150 +276,53 @@
         };
 
         const chartColors = [
-            'rgba(59, 130, 246, 0.8)', // Blue
-            'rgba(16, 185, 129, 0.8)', // Green
-            'rgba(245, 158, 11, 0.8)', // Yellow
-            'rgba(99, 102, 241, 0.8)', // Indigo
-            'rgba(236, 72, 153, 0.8)', // Pink
-            'rgba(139, 92, 246, 0.8)'  // Purple
+            'rgba(59, 130, 246, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.8)',
+            'rgba(99, 102, 241, 0.8)', 'rgba(236, 72, 153, 0.8)', 'rgba(139, 92, 246, 0.8)'
         ];
 
         // Biểu đồ Cột (Bar Chart)
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['Bài viết', 'Sản phẩm', 'Chuyên mục', 'Thẻ', 'Người dùng', 'Bình luận'],
-                datasets: [{
-                    label: 'Số lượng',
-                    data: [statsData.posts, statsData.products, statsData.categories, statsData.tags, statsData.users, statsData.comments],
-                    backgroundColor: chartColors,
-                    borderRadius: 6,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { grid: { display: false } } }
-            }
-        });
+        if(document.getElementById('barChart')) {
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Bài viết', 'Sản phẩm', 'Chuyên mục', 'Thẻ', 'Người dùng', 'Bình luận'],
+                    datasets: [{
+                        label: 'Số lượng',
+                        data: [statsData.posts, statsData.products, statsData.categories, statsData.tags, statsData.users, statsData.comments],
+                        backgroundColor: chartColors,
+                        borderRadius: 6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { grid: { display: false } } }
+                }
+            });
+        }
 
         // Biểu đồ Tròn (Doughnut Chart)
-        const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-        new Chart(ctxDoughnut, {
-            type: 'doughnut',
-            data: {
-                labels: ['Bài viết', 'Sản phẩm', 'Bình luận'],
-                datasets: [{
-                    data: [statsData.posts, statsData.products, statsData.comments],
-                    backgroundColor: [chartColors[0], chartColors[1], chartColors[5]],
-                    borderWidth: 2, hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } } },
-                cutout: '65%'
-            }
-        });
-
-        // --- 2. BIỂU ĐỒ THEO THỜI GIAN (MỚI) ---
-        // Lưu ý: Bạn cần truyền dữ liệu này từ Controller sang Blade dạng JSON.
-        // Đây là dữ liệu mẫu giả lập để biểu đồ có thể hiển thị hoạt động ngay.
-        const timeSeriesData = {
-            daily: {
-                labels: {!! json_encode($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) !!},
-                posts: {!! json_encode($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) !!},
-                products: {!! json_encode($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) !!}
-            },
-            monthly: {
-                labels: {!! json_encode($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) !!},
-                posts: {!! json_encode($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) !!},
-                products: {!! json_encode($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) !!}
-            },
-            yearly: {
-                labels: {!! json_encode($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) !!},
-                posts: {!! json_encode($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) !!},
-                products: {!! json_encode($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) !!}
-            }
-        };
-
-        const ctxTime = document.getElementById('timeSeriesChart').getContext('2d');
-
-        // Khởi tạo biểu đồ mặc định (Theo tháng)
-        let timeChart = new Chart(ctxTime, {
-            type: 'line',
-            data: {
-                labels: timeSeriesData.monthly.labels,
-                datasets: [
-                    {
-                        label: 'Bài viết mới',
-                        data: timeSeriesData.monthly.posts,
-                        borderColor: 'rgba(59, 130, 246, 1)', // Blue
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-                        fill: true,
-                        tension: 0.4 // Đường cong mềm mại
-                    },
-                    {
-                        label: 'Sản phẩm mới',
-                        data: timeSeriesData.monthly.products,
-                        borderColor: 'rgba(16, 185, 129, 1)', // Green
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
+        if(document.getElementById('doughnutChart')) {
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bài viết', 'Sản phẩm', 'Bình luận'],
+                    datasets: [{
+                        data: [statsData.posts, statsData.products, statsData.comments],
+                        backgroundColor: [chartColors[0], chartColors[1], chartColors[5]],
+                        borderWidth: 2, hoverOffset: 4
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { usePointStyle: true, padding: 20 }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        padding: 12,
-                        cornerRadius: 8
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(148, 163, 184, 0.1)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } } },
+                    cutout: '65%'
                 }
-            }
-        });
-
-        // Xử lý sự kiện khi thay đổi Dropdown (Ngày / Tháng / Năm)
-        document.getElementById('timeRangeSelector').addEventListener('change', function(e) {
-            const selectedRange = e.target.value;
-            const newData = timeSeriesData[selectedRange];
-
-            // Cập nhật nhãn trục X và dữ liệu trục Y
-            timeChart.data.labels = newData.labels;
-            timeChart.data.datasets[0].data = newData.posts;
-            timeChart.data.datasets[1].data = newData.products;
-
-            // Render lại biểu đồ với hiệu ứng transition
-            timeChart.update();
-        });
+            });
+        }
     });
 </script>
 @endpush
