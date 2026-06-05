@@ -51,7 +51,11 @@
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">{{ $product->name }}</h1>
 
             <div class="text-3xl font-black text-brand mb-6 py-4 border-y border-slate-100 dark:border-slate-700">
-                {{ number_format($product->price, 0, ',', '.') }} <span class="text-xl">VNĐ</span>
+                @if ($product->price > 0)
+                    {{ number_format($product->price, 0, ',', '.') }} <span class="text-xl">VNĐ</span>
+                @else
+                    <span class="text-xl text-slate-500 dark:text-slate-400">Liên hệ để biết giá</span>
+                @endif
             </div>
 
             <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4">
