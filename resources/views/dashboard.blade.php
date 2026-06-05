@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Tổng quan hệ thống')
 
 @section('content')
 <div class="mb-8">
@@ -132,11 +132,45 @@
             <p class="text-sm text-slate-500 dark:text-slate-400">Số lượng nội dung được tạo mới theo thời gian</p>
         </div>
 
-        <select x-model="selectedTimeRange" @change="updateChart()" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand focus:border-brand block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white outline-none cursor-pointer">
-            <option value="daily">Theo ngày (7 ngày qua)</option>
-            <option value="monthly">Theo tháng (Năm nay)</option>
-            <option value="yearly">Theo năm (5 năm qua)</option>
-        </select>
+        <div class="relative w-full sm:w-auto shrink-0" @click.away="dropdownOpen = false">
+            <button type="button" @click="dropdownOpen = !dropdownOpen"
+                class="flex items-center justify-between w-full sm:w-[260px] bg-orange-50/80 dark:bg-slate-900/50 hover:bg-brand dark:hover:bg-brand text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white rounded-[1.5rem] sm:rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 group/btn shadow-sm border border-transparent hover:border-brand/20">
+
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1 rounded-md bg-brand/10 group-hover/btn:bg-white/20 text-brand group-hover/btn:text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <span x-text="timeRangeOptions[selectedTimeRange]" class="truncate tracking-wide"></span>
+                </div>
+
+                <svg class="w-4 h-4 ml-2 transition-transform duration-300 group-hover/btn:scale-110" :class="{'rotate-180': dropdownOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <div x-show="dropdownOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                class="absolute right-0 z-50 w-full sm:w-[260px] mt-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl border border-brand/10 dark:border-slate-700/80 rounded-[1.5rem] shadow-[0_20px_50px_rgba(249,115,22,0.15)] overflow-hidden p-2 origin-top-right"
+                style="display: none;">
+
+                <div class="space-y-1">
+                    <template x-for="(label, value) in timeRangeOptions" :key="value">
+                        <button type="button" @click="selectOption(value)"
+                            class="w-full text-left px-4 py-3 text-[14px] rounded-xl flex items-center justify-between transition-all duration-200"
+                            :class="{
+                                'bg-brand text-white font-bold shadow-md shadow-brand/20 transform scale-[1.02]': selectedTimeRange === value,
+                                'text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-700/50 hover:text-brand dark:hover:text-brand font-medium': selectedTimeRange !== value
+                            }">
+                            <span x-text="label"></span>
+                            <svg x-show="selectedTimeRange === value" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="relative h-80 w-full">
@@ -157,7 +191,15 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('dashboardChart', () => ({
             selectedTimeRange: 'monthly', // Mặc định hiển thị theo tháng
+            dropdownOpen: false,
             chartInstance: null,
+
+            // Dữ liệu label cho Dropdown
+            timeRangeOptions: {
+                'daily': 'Theo ngày (7 ngày qua)',
+                'monthly': 'Theo tháng (Năm nay)',
+                'yearly': 'Theo năm (5 năm qua)'
+            },
 
             // Nhận dữ liệu từ Blade Server-side
             timeSeriesData: {
@@ -181,6 +223,13 @@
             // Khởi tạo component
             init() {
                 this.renderChart();
+            },
+
+            // Xử lý sự kiện click chọn mốc thời gian
+            selectOption(value) {
+                this.selectedTimeRange = value;
+                this.dropdownOpen = false;
+                this.updateChart();
             },
 
             renderChart() {
