@@ -61,9 +61,6 @@
 
             @if($product->video_url)
                 <div class="mb-8">
-                    <h3 class="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Video Giới thiệu
-                    </h3>
                     @php
                         $embedUrl = $product->video_url;
                         $aspectClass = 'aspect-video'; // Tỷ lệ mặc định 16/9
