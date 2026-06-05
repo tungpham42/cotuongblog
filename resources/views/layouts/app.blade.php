@@ -227,7 +227,7 @@
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:text-brand font-bold rounded-xl hover:bg-orange-50 dark:hover:bg-slate-700 transition-all duration-300">Đăng nhập</a>
+                            <a href="{{ route('login') }}" class="hidden md:flex px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:text-brand font-bold rounded-xl hover:bg-orange-50 dark:hover:bg-slate-700 transition-all duration-300">Đăng nhập</a>
                             <a href="{{ route('register') }}" class="px-6 py-2.5 bg-gradient-to-r from-brand to-orange-500 hover:from-orange-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg shadow-brand/30 hover:shadow-brand/50 hover:-translate-y-0.5 transition-all duration-300">Đăng ký ngay</a>
                         @endauth
 
