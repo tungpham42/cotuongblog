@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Spatie\SchemaOrg\Schema;
+use Maestroerror\HeicToJpg;
 
 class ProductController extends Controller
 {
@@ -41,15 +42,13 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->increment('views');
-        // Lấy đoạn mô tả ngắn cho SEO
         $description = Str::limit(strip_tags(Str::markdown($product->description ?? '')), 160);
 
-        // 1. Tạo Product Schema
         $productSchema = Schema::product()
             ->name($product->name)
             ->description($description)
             ->url(route('products.show', $product->slug))
-            ->sku((string) $product->id) // Thêm SKU (có thể dùng ID làm SKU tạm)
+            ->sku((string) $product->id)
             ->brand(Schema::brand()->name('Cộng Đồng Cờ Tướng Việt Nam'))
             ->offers(
                 Schema::offer()
@@ -58,12 +57,10 @@ class ProductController extends Controller
                     ->url(route('products.show', $product->slug))
             );
 
-        // Thêm hình ảnh nếu sản phẩm có ảnh
         if (!empty($product->gallery) && count($product->gallery) > 0) {
             $productSchema->image(asset('storage/' . $product->gallery[0]));
         }
 
-        // 2. Tạo Breadcrumb Schema
         $breadcrumbSchema = Schema::breadcrumbList()->itemListElement([
             Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
             Schema::listItem()->position(2)->name('Cửa hàng')->item(route('products.index')),
@@ -80,7 +77,6 @@ class ProductController extends Controller
     {
         $query = Product::with('user');
 
-        // Nếu không phải admin, chỉ thấy sản phẩm của mình
         if (!auth()->user()->is_admin) {
             $query->where('user_id', auth()->id());
         }
@@ -110,23 +106,31 @@ class ProductController extends Controller
             'description' => 'required',
             'video_url' => 'nullable|url',
             'gallery' => 'nullable|array|max:12',
-            'gallery.*' => 'image|max:512000',
+            'gallery.*' => 'file|mimes:jpeg,png,jpg,gif,webp,heic,heif|max:512000',
         ]);
 
         $validated['user_id'] = auth()->id();
 
-        // Chỉ admin mới có quyền xuất bản ngay lập tức
         if (auth()->user()->is_admin) {
             $validated['is_published'] = $request->boolean('is_published');
         } else {
-            $validated['is_published'] = false; // Chờ duyệt
+            $validated['is_published'] = false;
         }
 
-        // Xử lý Gallery ảnh
         $galleryPaths = [];
         if ($request->hasFile('gallery')) {
+            // Duyệt theo thứ tự mảng đã được AlpineJS reorder trên Frontend
             foreach ($request->file('gallery') as $image) {
-                $galleryPaths[] = $image->store('products', 'public');
+                $ext = strtolower($image->getClientOriginalExtension());
+
+                if (in_array($ext, ['heic', 'heif'])) {
+                    $jpgContent = HeicToJpg::convert($image->getRealPath())->get();
+                    $filename = 'products/' . Str::random(40) . '.jpg';
+                    Storage::disk('public')->put($filename, $jpgContent);
+                    $galleryPaths[] = $filename;
+                } else {
+                    $galleryPaths[] = $image->store('products', 'public');
+                }
             }
         }
         $validated['gallery'] = $galleryPaths;
@@ -156,8 +160,10 @@ class ProductController extends Controller
             'zalo_number' => 'nullable|string|max:20',
             'description' => 'required',
             'video_url' => 'nullable|url',
+            'gallery_sort_order' => 'nullable|array', // Mảng định dạng order (old:path / new:index)
+            'gallery_sort_order.*' => 'string',
             'gallery' => 'nullable|array|max:12',
-            'gallery.*' => 'image|max:512000',
+            'gallery.*' => 'file|mimes:jpeg,png,jpg,gif,webp,heic,heif|max:512000',
         ]);
 
         if (auth()->user()->is_admin) {
@@ -166,22 +172,48 @@ class ProductController extends Controller
             $validated['is_published'] = false;
         }
 
-        $galleryPaths = $product->gallery ?? [];
+        $currentGallery = $product->gallery ?? [];
+        $uploadedFiles = $request->file('gallery') ?? [];
+        $sortedOrders = $request->input('gallery_sort_order', []);
 
-        // Nếu có upload file mới, thay thế gallery cũ (hoặc bạn có thể code thêm logic giữ ảnh cũ)
-        if ($request->hasFile('gallery')) {
-            if (!empty($product->gallery)) {
-                foreach ($product->gallery as $oldImg) {
-                    Storage::disk('public')->delete($oldImg);
+        $galleryPaths = [];
+        $retainedPaths = [];
+
+        // Xử lý thứ tự ảnh dựa trên list kéo thả từ Frontend
+        foreach ($sortedOrders as $sortItem) {
+            if (str_starts_with($sortItem, 'old:')) {
+                // Nếu là ảnh cũ, giữ lại path
+                $path = substr($sortItem, 4);
+                if (in_array($path, $currentGallery)) {
+                    $galleryPaths[] = $path;
+                    $retainedPaths[] = $path;
+                }
+            } elseif (str_starts_with($sortItem, 'new:')) {
+                // Nếu là ảnh mới, lấy từ file upload bằng index
+                $index = (int) substr($sortItem, 4);
+                if (isset($uploadedFiles[$index])) {
+                    $image = $uploadedFiles[$index];
+                    $ext = strtolower($image->getClientOriginalExtension());
+
+                    if (in_array($ext, ['heic', 'heif'])) {
+                        $jpgContent = HeicToJpg::convert($image->getRealPath())->get();
+                        $filename = 'products/' . Str::random(40) . '.jpg';
+                        Storage::disk('public')->put($filename, $jpgContent);
+                        $galleryPaths[] = $filename;
+                    } else {
+                        $galleryPaths[] = $image->store('products', 'public');
+                    }
                 }
             }
-            $galleryPaths = [];
-            foreach ($request->file('gallery') as $image) {
-                $galleryPaths[] = $image->store('products', 'public');
-            }
         }
-        $validated['gallery'] = $galleryPaths;
 
+        // Xóa những ảnh cũ KHÔNG CÒN nằm trong danh sách giữ lại
+        $deletedImages = array_diff($currentGallery, $retainedPaths);
+        foreach ($deletedImages as $img) {
+            Storage::disk('public')->delete($img);
+        }
+
+        $validated['gallery'] = array_slice($galleryPaths, 0, 12);
         $product->update($validated);
 
         $message = auth()->user()->is_admin ? 'Cập nhật sản phẩm thành công!' : 'Đã cập nhật. Chờ admin duyệt lại.';
