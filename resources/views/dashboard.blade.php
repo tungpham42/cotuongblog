@@ -181,51 +181,48 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // ----------------------------------------------------
-    // 1. ALPINE.JS COMPONENT CHO BIỂU ĐỒ THỜI GIAN VÀ SWAL
-    // ----------------------------------------------------
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('dashboardChart', () => ({
-            selectedTimeRange: 'monthly', // Mặc định hiển thị theo tháng
+    function dashboardChart() {
+        return {
+            selectedTimeRange: 'monthly',
             dropdownOpen: false,
             chartInstance: null,
 
-            // Dữ liệu label cho Dropdown
             timeRangeOptions: {
                 'daily': 'Theo ngày (7 ngày qua)',
                 'monthly': 'Theo tháng (Năm nay)',
                 'yearly': 'Theo năm (5 năm qua)'
             },
 
-            // Nhận dữ liệu từ Blade Server-side
+            // FIX 2: Sử dụng @json an toàn và cấp mảng dự phòng (|| []) để tránh Array Null Error
             timeSeriesData: {
                 daily: {
-                    labels: {!! json_encode($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) !!},
-                    posts: {!! json_encode($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) !!},
-                    products: {!! json_encode($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) !!}
+                    labels: @json($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) || [],
+                    posts: @json($chartData['daily']['posts'] ?? [5, 8, 12, 4, 9, 15, 10]) || [],
+                    products: @json($chartData['daily']['products'] ?? [2, 5, 3, 7, 4, 8, 6]) || []
                 },
                 monthly: {
-                    labels: {!! json_encode($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) !!},
-                    posts: {!! json_encode($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) !!},
-                    products: {!! json_encode($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) !!}
+                    labels: @json($chartData['monthly']['labels'] ?? ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12']) || [],
+                    posts: @json($chartData['monthly']['posts'] ?? [45, 52, 38, 65, 48, 55, 70, 85, 60, 75, 90, 110]) || [],
+                    products: @json($chartData['monthly']['products'] ?? [15, 20, 18, 25, 30, 28, 40, 45, 35, 50, 60, 75]) || []
                 },
                 yearly: {
-                    labels: {!! json_encode($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) !!},
-                    posts: {!! json_encode($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) !!},
-                    products: {!! json_encode($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) !!}
+                    labels: @json($chartData['yearly']['labels'] ?? ['2022', '2023', '2024', '2025', '2026']) || [],
+                    posts: @json($chartData['yearly']['posts'] ?? [300, 450, 600, 850, 1200]) || [],
+                    products: @json($chartData['yearly']['products'] ?? [80, 150, 250, 400, 550]) || []
                 }
             },
 
-            // Khởi tạo component
             init() {
-                this.renderChart();
+                // FIX 3: Cho DOM thời gian 100ms để hiển thị trước khi vẽ biểu đồ, tránh lỗi mất layout Height/Width
+                setTimeout(() => {
+                    this.renderChart();
+                }, 100);
             },
 
-            // Xử lý sự kiện click chọn mốc thời gian
             selectOption(value) {
                 this.selectedTimeRange = value;
                 this.dropdownOpen = false;
@@ -233,17 +230,23 @@
             },
 
             renderChart() {
+                if (!this.$refs.timeSeriesCanvas) return;
                 const ctx = this.$refs.timeSeriesCanvas.getContext('2d');
                 const initialData = this.timeSeriesData[this.selectedTimeRange];
+
+                // Hủy instance cũ nếu có, chống lỗi rò rỉ bộ nhớ hoặc đè Canvas gây fullSize error
+                if (this.chartInstance) {
+                    this.chartInstance.destroy();
+                }
 
                 this.chartInstance = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: initialData.labels,
+                        labels: initialData.labels || [],
                         datasets: [
                             {
                                 label: 'Bài viết mới',
-                                data: initialData.posts,
+                                data: initialData.posts || [],
                                 borderColor: 'rgba(59, 130, 246, 1)',
                                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                                 borderWidth: 2,
@@ -253,7 +256,7 @@
                             },
                             {
                                 label: 'Sản phẩm mới',
-                                data: initialData.products,
+                                data: initialData.products || [],
                                 borderColor: 'rgba(16, 185, 129, 1)',
                                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
                                 borderWidth: 2,
@@ -279,23 +282,20 @@
                 });
             },
 
-            // Sự kiện kích hoạt khi thay đổi Dropdown
             updateChart() {
-                const newData = this.timeSeriesData[this.selectedTimeRange];
+                if (!this.chartInstance) return;
 
-                // Cập nhật dữ liệu cho Chart.js
-                this.chartInstance.data.labels = newData.labels;
-                this.chartInstance.data.datasets[0].data = newData.posts;
-                this.chartInstance.data.datasets[1].data = newData.products;
+                const newData = this.timeSeriesData[this.selectedTimeRange];
+                this.chartInstance.data.labels = newData.labels || [];
+                this.chartInstance.data.datasets[0].data = newData.posts || [];
+                this.chartInstance.data.datasets[1].data = newData.products || [];
                 this.chartInstance.update();
 
-                // Xác định tên chu kỳ để thông báo
                 let rangeName = '';
                 if (this.selectedTimeRange === 'daily') rangeName = '7 ngày qua';
                 else if (this.selectedTimeRange === 'monthly') rangeName = 'năm nay';
                 else rangeName = '5 năm qua';
 
-                // Bắn thông báo SweetAlert2 Toast
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
@@ -308,20 +308,21 @@
                     color: '#1e293b'
                 });
             }
-        }));
-    });
+        };
+    }
 
     // ----------------------------------------------------
-    // 2. VANILLA JS CHO CÁC BIỂU ĐỒ TĨNH (BAR & DOUGHNUT)
+    // VANILLA JS: XỬ LÝ LẠI DỮ LIỆU ĐẢM BẢO KHÔNG BỊ UNDEFINED
     // ----------------------------------------------------
     document.addEventListener('DOMContentLoaded', function() {
+        // Sử dụng Number() bọc mảng @json để ngừa lỗi khi PHP parse ra biến Null hoặc rỗng
         const statsData = {
-            posts: {{ $stats['posts'] ?? 0 }},
-            products: {{ $stats['products'] ?? 0 }},
-            categories: {{ $stats['categories'] ?? 0 }},
-            tags: {{ $stats['tags'] ?? 0 }},
-            users: {{ $stats['users'] ?? 0 }},
-            comments: {{ $stats['comments'] ?? 0 }}
+            posts: Number(@json($stats['posts'] ?? 0)) || 0,
+            products: Number(@json($stats['products'] ?? 0)) || 0,
+            categories: Number(@json($stats['categories'] ?? 0)) || 0,
+            tags: Number(@json($stats['tags'] ?? 0)) || 0,
+            users: Number(@json($stats['users'] ?? 0)) || 0,
+            comments: Number(@json($stats['comments'] ?? 0)) || 0
         };
 
         const chartColors = [
@@ -329,7 +330,6 @@
             'rgba(99, 102, 241, 0.8)', 'rgba(236, 72, 153, 0.8)', 'rgba(139, 92, 246, 0.8)'
         ];
 
-        // Biểu đồ Cột (Bar Chart)
         if(document.getElementById('barChart')) {
             const ctxBar = document.getElementById('barChart').getContext('2d');
             new Chart(ctxBar, {
@@ -352,7 +352,6 @@
             });
         }
 
-        // Biểu đồ Tròn (Doughnut Chart)
         if(document.getElementById('doughnutChart')) {
             const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
             new Chart(ctxDoughnut, {
