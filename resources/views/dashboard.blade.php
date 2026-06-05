@@ -197,7 +197,6 @@
                 'yearly': 'Theo năm (5 năm qua)'
             },
 
-            // Đã đổi @json() thành {!! json_encode() !!} để tránh lỗi dấu phẩy của Blade
             timeSeriesData: {
                 daily: {
                     labels: {!! json_encode($chartData['daily']['labels'] ?? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']) !!} || [],
