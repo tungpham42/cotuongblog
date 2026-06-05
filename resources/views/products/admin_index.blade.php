@@ -3,6 +3,16 @@
 @section('title', 'Quản lý Sản phẩm')
 
 @section('content')
+{{-- Khu vực Header chứa nút Tạo sản phẩm --}}
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+    <h1 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white">Quản lý Sản phẩm</h1>
+
+    <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-brand/30 transform hover:-translate-y-0.5">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Tạo sản phẩm mới
+    </a>
+</div>
+
 <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
