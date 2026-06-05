@@ -8,6 +8,7 @@
     <p class="text-slate-600 dark:text-slate-400 mt-2">Chào mừng bạn quay trở lại. Dưới đây là thống kê các dữ liệu hiện có.</p>
 </div>
 
+<!-- Statistics Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     {{-- Khối: Bài Viết --}}
@@ -106,4 +107,126 @@
         </div>
     </div>
 </div>
+
+<!-- MỚI: Data Visualization Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+    {{-- Biểu đồ cột: Tổng quan số lượng --}}
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Biểu đồ tổng quan</h3>
+        <div class="relative h-72 w-full">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    {{-- Biểu đồ tròn: Tỷ lệ tương tác/nội dung --}}
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Tỷ lệ nội dung & tương tác</h3>
+        <div class="relative h-72 w-full flex justify-center">
+            <canvas id="doughnutChart"></canvas>
+        </div>
+    </div>
+</div>
+
 @endsection
+
+@push('scripts')
+<!-- Nhúng Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy dữ liệu từ Laravel biến $stats
+        const statsData = {
+            posts: {{ $stats['posts'] ?? 0 }},
+            products: {{ $stats['products'] ?? 0 }},
+            categories: {{ $stats['categories'] ?? 0 }},
+            tags: {{ $stats['tags'] ?? 0 }},
+            users: {{ $stats['users'] ?? 0 }},
+            comments: {{ $stats['comments'] ?? 0 }}
+        };
+
+        // Cấu hình màu sắc phù hợp với giao diện sáng/tối
+        const chartColors = [
+            'rgba(59, 130, 246, 0.8)', // Blue (Bài viết)
+            'rgba(16, 185, 129, 0.8)', // Green (Sản phẩm)
+            'rgba(245, 158, 11, 0.8)', // Yellow (Chuyên mục)
+            'rgba(99, 102, 241, 0.8)', // Indigo (Thẻ)
+            'rgba(236, 72, 153, 0.8)', // Pink (Người dùng)
+            'rgba(139, 92, 246, 0.8)'  // Purple (Bình luận)
+        ];
+
+        // 1. Khởi tạo Biểu đồ Cột (Bar Chart)
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Bài viết', 'Sản phẩm', 'Chuyên mục', 'Thẻ', 'Người dùng', 'Bình luận'],
+                datasets: [{
+                    label: 'Số lượng',
+                    data: [
+                        statsData.posts,
+                        statsData.products,
+                        statsData.categories,
+                        statsData.tags,
+                        statsData.users,
+                        statsData.comments
+                    ],
+                    backgroundColor: chartColors,
+                    borderRadius: 6, // Bo góc các cột cho đẹp mắt
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false } // Ẩn legend vì mỗi cột đã có label trục X
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)' // Màu lưới nhạt
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 2. Khởi tạo Biểu đồ Tròn (Doughnut Chart)
+        const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+        new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bài viết', 'Sản phẩm', 'Bình luận'],
+                datasets: [{
+                    data: [statsData.posts, statsData.products, statsData.comments],
+                    backgroundColor: [
+                        chartColors[0], // Blue
+                        chartColors[1], // Green
+                        chartColors[5]  // Purple
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                },
+                cutout: '65%' // Làm vòng tròn mỏng hơn để hiện đại hơn
+            }
+        });
+    });
+</script>
+@endpush
