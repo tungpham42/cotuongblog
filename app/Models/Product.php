@@ -10,7 +10,7 @@ class Product extends Model
     protected $fillable = [
         'user_id',
         'name', 'slug', 'price', 'zalo_number', 'description', // Added zalo_number here
-        'video_url', 'gallery', 'is_published'
+        'video_url', 'gallery', 'is_published', 'order'
     ];
 
     protected $casts = [

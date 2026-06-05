@@ -32,7 +32,11 @@ class ProductController extends Controller
             case 'price_asc': $query->orderBy('price', 'asc'); break;
             case 'price_desc': $query->orderBy('price', 'desc'); break;
             case 'oldest': $query->oldest(); break;
-            case 'latest': default: $query->latest(); break;
+            case 'latest':
+            default:
+                // Modify default sort to prioritize the custom order first
+                $query->orderBy('order', 'asc')->latest();
+                break;
         }
 
         $products = $query->paginate(12)->withQueryString();
@@ -85,8 +89,25 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query->latest()->paginate(12)->withQueryString();
+        // Xóa phân trang để hiển thị toàn bộ danh sách khi kéo thả (giống CategoryController)
+        $products = $query->orderBy('order', 'asc')->latest()->get();
+
         return view('products.admin_index', compact('products'));
+    }
+
+    // Add this new method to handle the drag-and-drop AJAX request
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'exists:products,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Product::where('id', $id)->update(['order' => $index]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     public function create()

@@ -114,6 +114,9 @@ Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name
 // 2. Dành cho Admin (Khu vực quản lý bên trong Group middleware auth + IsAdmin)
 Route::middleware(['auth', IsAdmin::class])->group(function () {
     // Đặt tên route admin tránh trùng lặp với route public
+    // Thêm route xử lý update-order
+    Route::post('/products/update-order', [ProductController::class, 'updateOrder'])->name('admin.products.update-order');
+
     Route::get('/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
