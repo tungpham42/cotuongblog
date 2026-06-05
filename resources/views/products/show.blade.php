@@ -88,7 +88,7 @@
 
             @php
                 // Use product's Zalo number, fallback to default if null or empty
-                $zaloLink = $product->zalo_number ? $product->zalo_number : '0368571310';
+                $zaloLink = $product->zalo_number ? $product->zalo_number : '0869456592';
             @endphp
 
             <div class="mt-auto space-y-4">

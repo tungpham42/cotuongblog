@@ -26,7 +26,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-2">Số Zalo liên hệ (Tùy chọn)</label>
-                    <input type="text" name="zalo_number" value="{{ old('zalo_number') }}" placeholder="VD: 0368571310" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand">
+                    <input type="text" name="zalo_number" value="{{ old('zalo_number') }}" placeholder="VD: 0869456592" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand">
                     @error('zalo_number')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
             </div>

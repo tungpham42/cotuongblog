@@ -110,7 +110,7 @@ class ProductController extends Controller
             'description' => 'required',
             'video_url' => 'nullable|url',
             'gallery' => 'nullable|array|max:12',
-            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp,heic|max:51200',
+            'gallery.*' => 'image|max:512000',
         ]);
 
         $validated['user_id'] = auth()->id();
@@ -157,7 +157,7 @@ class ProductController extends Controller
             'description' => 'required',
             'video_url' => 'nullable|url',
             'gallery' => 'nullable|array|max:12',
-            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp,heic|max:51200',
+            'gallery.*' => 'image|max:512000',
         ]);
 
         if (auth()->user()->is_admin) {
