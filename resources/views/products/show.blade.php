@@ -62,38 +62,40 @@
             @if($product->video_url)
                 <div class="mb-8">
                     @php
+                        // Save the original link to use as a fallback button
                         $originalUrl = $product->video_url;
                         $embedUrl = $product->video_url;
-                        $aspectClass = 'aspect-video'; // Tỷ lệ mặc định 16/9
+                        $aspectClass = 'aspect-video'; // Default 16:9
 
-                        // Xử lý link watch?v= (Video YouTube thường)
+                        // Handle standard YouTube links
                         if(str_contains($embedUrl, 'watch?v=')) {
                             $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
                             $embedUrl = explode('&', $embedUrl)[0];
                         }
-                        // Xử lý link Youtube Shorts
+                        // Handle YouTube Shorts
                         elseif (str_contains($embedUrl, '/shorts/')) {
                             $embedUrl = str_replace('/shorts/', '/embed/', $embedUrl);
                             $embedUrl = explode('?', $embedUrl)[0];
                             $aspectClass = 'aspect-[9/16] max-w-sm mx-auto';
                         }
-                        // Xử lý link Facebook Reels
-                        elseif (str_contains($embedUrl, 'facebook.com/reel') || str_contains($embedUrl, '/reels/')) {
+                        // Handle Facebook Reels / Videos
+                        elseif (str_contains($embedUrl, 'facebook.com/reel') || str_contains($embedUrl, '/reels/') || str_contains($embedUrl, 'facebook.com/watch')) {
                             $embedUrl = 'https://www.facebook.com/plugins/video.php?href=' . urlencode($embedUrl) . '&show_text=false';
                             $aspectClass = 'aspect-[9/16] max-w-sm mx-auto';
                         }
                     @endphp
 
-                    <div class="{{ $aspectClass }} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md">
+                    {{-- The Video Iframe Container --}}
+                    <div class="{{ $aspectClass }} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md bg-slate-900">
                         <iframe src="{{ $embedUrl }}" class="w-full h-full" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
                     </div>
 
-                    {{-- Nút xem trực tiếp (Fallback khi lỗi Embed) --}}
+                    {{-- Fallback Button for Blocked/Copyrighted Videos --}}
                     <div class="mt-3 text-center">
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Video không hiển thị?</p>
-                        <a href="{{ $originalUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-hover hover:underline transition-colors">
-                            Xem trực tiếp trên nền tảng
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Video bị chặn hiển thị do bản quyền âm nhạc?</p>
+                        <a href="{{ $originalUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#1877F2] dark:text-blue-400 hover:underline transition-colors">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path></svg>
+                            Xem trực tiếp trên Facebook
                         </a>
                     </div>
                 </div>
