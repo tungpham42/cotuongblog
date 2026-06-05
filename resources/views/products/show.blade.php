@@ -74,11 +74,16 @@
                         elseif (str_contains($embedUrl, '/shorts/')) {
                             $embedUrl = str_replace('/shorts/', '/embed/', $embedUrl);
                             $embedUrl = explode('?', $embedUrl)[0]; // Xóa query param nếu có
-                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Chuyển tỷ lệ thành 9:16 và giới hạn độ rộng tối đa
+                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Chuyển tỷ lệ thành 9:16
+                        }
+                        // Xử lý link Facebook Reels
+                        elseif (str_contains($embedUrl, 'facebook.com/reel') || str_contains($embedUrl, '/reels/')) {
+                            $embedUrl = 'https://www.facebook.com/plugins/video.php?href=' . urlencode($embedUrl) . '&show_text=false';
+                            $aspectClass = 'aspect-[9/16] max-w-sm mx-auto'; // Giữ tỷ lệ dọc 9:16 cho Reel
                         }
                     @endphp
                     <div class="{{ $aspectClass }} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-md">
-                        <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe src="{{ $embedUrl }}" class="w-full h-full" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
                     </div>
                 </div>
             @endif
