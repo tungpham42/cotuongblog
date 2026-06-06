@@ -234,7 +234,7 @@ class ProductController extends Controller
             Storage::disk('public')->delete($img);
         }
 
-        $validated['gallery'] = array_slice($galleryPaths, 0, 12);
+        $validated['gallery'] = array_slice($galleryPaths, 0, 48);
         $product->update($validated);
 
         $message = auth()->user()->is_admin ? 'Cập nhật sản phẩm thành công!' : 'Đã cập nhật. Chờ admin duyệt lại.';
