@@ -54,8 +54,8 @@
                     },
                     addFiles(files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (this.items.length >= 12) {
-                                alert('Tối đa 12 ảnh tổng cộng!');
+                            if (this.items.length >= 48) {
+                                alert('Tối đa 48 ảnh tổng cộng!');
                                 break;
                             }
                             let file = files[i];
@@ -86,7 +86,7 @@
                         this.$refs.fileInput.files = dt.files;
                     }
                  }">
-                <label class="block text-sm font-semibold mb-4">Gallery Ảnh <span class="font-normal text-slate-400">(Tối đa 12 ảnh - Kéo thả ảnh để thay đổi thứ tự giữa ảnh cũ và mới)</span></label>
+                <label class="block text-sm font-semibold mb-4">Gallery Ảnh <span class="font-normal text-slate-400">(Tối đa 48 ảnh - Kéo thả ảnh để thay đổi thứ tự giữa ảnh cũ và mới)</span></label>
 
                 <div @dragover.prevent="isDraggingZone = true"
                      @dragleave.prevent="isDraggingZone = false"

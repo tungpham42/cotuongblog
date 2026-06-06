@@ -126,7 +126,7 @@ class ProductController extends Controller
             'zalo_number' => 'nullable|string|max:20',
             'description' => 'required',
             'video_url' => 'nullable|url',
-            'gallery' => 'nullable|array|max:12',
+            'gallery' => 'nullable|array|max:48',
             'gallery.*' => 'file|mimes:jpeg,png,jpg,gif,webp,heic,heif|max:512000',
         ]);
 
@@ -183,7 +183,7 @@ class ProductController extends Controller
             'video_url' => 'nullable|url',
             'gallery_sort_order' => 'nullable|array', // Mảng định dạng order (old:path / new:index)
             'gallery_sort_order.*' => 'string',
-            'gallery' => 'nullable|array|max:12',
+            'gallery' => 'nullable|array|max:48',
             'gallery.*' => 'file|mimes:jpeg,png,jpg,gif,webp,heic,heif|max:512000',
         ]);
 
