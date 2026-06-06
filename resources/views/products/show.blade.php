@@ -22,7 +22,8 @@
                 </div>
                 @if(count($product->gallery) > 1)
                 <div class="grid grid-cols-4 gap-4">
-                    @foreach($product->gallery as $img)
+                    {{-- Giới hạn hiển thị tối đa 48 ảnh --}}
+                    @foreach(collect($product->gallery)->take(48) as $img)
                         <div @click="mainImage = '{{ asset('storage/' . $img) }}'" class="aspect-square rounded-xl overflow-hidden cursor-pointer border-2 hover:border-brand transition-colors" :class="mainImage === '{{ asset('storage/' . $img) }}' ? 'border-brand opacity-100' : 'border-transparent opacity-70'">
                             <img src="{{ asset('storage/' . $img) }}" class="w-full h-full object-cover" alt="">
                         </div>
