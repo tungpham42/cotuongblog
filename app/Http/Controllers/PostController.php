@@ -125,6 +125,7 @@ class PostController extends Controller
             'slug' => 'required|unique:posts,slug',
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
+            'video_url' => 'nullable|url|max:255',
             'featured_image' => 'nullable|image|max:20480',
             'tags' => 'array|exists:tags,id',
         ], [
@@ -177,6 +178,7 @@ class PostController extends Controller
             'slug' => 'required|unique:posts,slug,' . $post->id,
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
+            'video_url' => 'nullable|url|max:255',
             'featured_image' => 'nullable|image|max:20480',
             'tags' => 'array|exists:tags,id',
         ], [

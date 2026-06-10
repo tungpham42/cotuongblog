@@ -209,6 +209,39 @@
             </div>
             @endif
 
+            {{-- Khung Video 16:9 hoặc 9:16 --}}
+            @if($post->video_url)
+                <div class="mb-10 w-full">
+                    @php
+                        // Logic cơ bản để chuyển đổi URL Youtube thông thường sang dạng embed để iframe có thể đọc được
+                        $embedUrl = $post->video_url;
+                        if (str_contains($embedUrl, 'youtube.com/watch?v=')) {
+                            $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
+                        } elseif (str_contains($embedUrl, 'youtu.be/')) {
+                            $embedUrl = str_replace('youtu.be/', 'youtube.com/embed/', $embedUrl);
+                        }
+
+                        // Nếu bạn đăng URL dạng Shorts (Video dọc), hệ thống tự động đổi tỷ lệ thành 9:16
+                        $isVertical = str_contains($embedUrl, 'youtube.com/shorts/') || str_contains($embedUrl, 'tiktok.com');
+                        if (str_contains($embedUrl, 'youtube.com/shorts/')) {
+                            $embedUrl = str_replace('youtube.com/shorts/', 'youtube.com/embed/', $embedUrl);
+                        }
+                    @endphp
+
+                    {{-- Container chứa Video. Dùng aspect-video (16:9) mặc định, aspect-[9/16] nếu là video dọc --}}
+                    <div class="relative w-full {{ $isVertical ? 'max-w-sm mx-auto aspect-[9/16]' : 'aspect-video' }} bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-100 dark:border-slate-700">
+                        <iframe
+                            src="{{ $embedUrl }}"
+                            class="absolute top-0 left-0 w-full h-full"
+                            title="{{ $post->title }}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            @endif
+
             {{-- Nội dung bài viết --}}
             <div class="mb-12 text-left prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:font-black prose-a:text-brand hover:prose-a:text-brand-hover prose-img:rounded-2xl prose-img:shadow-md">
                 {!! $htmlContent !!}

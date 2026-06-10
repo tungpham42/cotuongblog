@@ -11,7 +11,7 @@ class Post extends Model
 {
     protected $fillable = [
         'user_id', 'category_id', 'title', 'slug', 'excerpt',
-        'content', 'featured_image', 'is_published', 'published_at'
+        'content', 'video_url', 'featured_image', 'is_published', 'published_at'
     ];
 
     public function author(): BelongsTo {
