@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 use League\CommonMark\CommonMarkConverter;
 use Spatie\SchemaOrg\Schema;
 
@@ -145,7 +146,15 @@ class PostController extends Controller
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('posts', 'public');
             $validated['featured_image'] = $path;
+        } elseif ($request->filled('video_url')) {
+            // Tự động lấy thumbnail nếu không upload ảnh nhưng có link video
+            $thumbnailPath = $this->fetchVideoThumbnail($request->video_url);
+            if ($thumbnailPath) {
+                $validated['featured_image'] = $thumbnailPath;
+            }
         }
+
+        $post = Post::create($validated);
 
         $post = Post::create($validated);
 
@@ -198,7 +207,21 @@ class PostController extends Controller
                 Storage::disk('public')->delete($post->featured_image);
             }
             $validated['featured_image'] = $request->file('featured_image')->store('posts', 'public');
+        } elseif ($request->filled('video_url')) {
+            // Kiểm tra xem link video có bị thay đổi so với cũ không
+            if ($request->video_url !== $post->video_url) {
+                $thumbnailPath = $this->fetchVideoThumbnail($request->video_url);
+                if ($thumbnailPath) {
+                    // Xóa ảnh thumbnail cũ nếu nó là ảnh tự động lấy từ YouTube trước đó
+                    if ($post->featured_image && Str::startsWith($post->featured_image, 'posts/yt_')) {
+                        Storage::disk('public')->delete($post->featured_image);
+                    }
+                    $validated['featured_image'] = $thumbnailPath;
+                }
+            }
         }
+
+        $post->update($validated);
 
         $post->update($validated);
 
@@ -331,5 +354,88 @@ class PostController extends Controller
         });
 
         return response()->json($formattedPosts, 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Tự động lấy ảnh Thumbnail từ Video URL (YouTube, Vimeo, TikTok)
+     */
+    private function fetchVideoThumbnail($videoUrl)
+    {
+        $thumbnailUrl = null;
+        $prefix = 'vid_'; // Tiền tố mặc định cho tên file
+
+        // 1. Kiểm tra Youtube
+        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $videoUrl, $match)) {
+            $youtubeId = $match[1];
+            $prefix = 'yt_';
+
+            // Ưu tiên ảnh chất lượng cao (maxres), nếu không có thì lùi về chất lượng cao tiêu chuẩn (hq)
+            $urlsToTry = [
+                "https://img.youtube.com/vi/{$youtubeId}/maxresdefault.jpg",
+                "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg"
+            ];
+
+            foreach ($urlsToTry as $url) {
+                try {
+                    $response = Http::get($url);
+                    if ($response->successful()) {
+                        $thumbnailUrl = $url;
+                        break;
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+        }
+        // 2. Kiểm tra Vimeo (Sử dụng oEmbed API)
+        elseif (preg_match('/vimeo\.com/i', $videoUrl)) {
+            $prefix = 'vm_';
+            try {
+                $response = Http::get('https://vimeo.com/api/oembed.json?url=' . urlencode($videoUrl));
+                if ($response->successful()) {
+                    $thumbnailUrl = $response->json('thumbnail_url');
+                }
+            } catch (\Exception $e) {
+                // Bỏ qua nếu có lỗi mạng hoặc link video không tồn tại
+            }
+        }
+        // 3. Kiểm tra TikTok (Sử dụng oEmbed API)
+        elseif (preg_match('/tiktok\.com/i', $videoUrl)) {
+            $prefix = 'tt_';
+            try {
+                $response = Http::get('https://www.tiktok.com/oembed?url=' . urlencode($videoUrl));
+                if ($response->successful()) {
+                    $thumbnailUrl = $response->json('thumbnail_url');
+                }
+            } catch (\Exception $e) {
+                // Bỏ qua nếu có lỗi
+            }
+        }
+
+        // Nếu tìm thấy link ảnh hợp lệ, tiến hành tải về và lưu trữ
+        if ($thumbnailUrl) {
+            try {
+                $response = Http::get($thumbnailUrl);
+                if ($response->successful()) {
+                    // Xác định đuôi mở rộng cơ bản (Mặc định là jpg)
+                    $extension = 'jpg';
+                    if (\Illuminate\Support\Str::contains($thumbnailUrl, '.png')) {
+                        $extension = 'png';
+                    } elseif (\Illuminate\Support\Str::contains($thumbnailUrl, '.webp')) {
+                        $extension = 'webp';
+                    }
+
+                    // Tạo tên file độc nhất: posts/yt_1714567890_abcde.jpg
+                    $filename = 'posts/' . $prefix . time() . '_' . \Illuminate\Support\Str::random(5) . '.' . $extension;
+                    Storage::disk('public')->put($filename, $response->body());
+
+                    return $filename;
+                }
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
+        return null; // Trả về null nếu không khớp nền tảng nào hoặc quá trình lấy ảnh thất bại
     }
 }
