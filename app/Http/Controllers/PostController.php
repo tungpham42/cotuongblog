@@ -361,7 +361,7 @@ class PostController extends Controller
         $prefix = 'vid_'; // Tiền tố mặc định cho tên file
 
         // 1. Kiểm tra Youtube
-        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $videoUrl, $match)) {
+        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?|shorts)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $videoUrl, $match)) {
             $youtubeId = $match[1];
             $prefix = 'yt_';
 
