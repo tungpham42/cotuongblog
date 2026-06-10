@@ -156,8 +156,6 @@ class PostController extends Controller
 
         $post = Post::create($validated);
 
-        $post = Post::create($validated);
-
         if ($request->has('tags')) {
             $post->tags()->sync($request->tags);
         }
@@ -220,8 +218,6 @@ class PostController extends Controller
                 }
             }
         }
-
-        $post->update($validated);
 
         $post->update($validated);
 
