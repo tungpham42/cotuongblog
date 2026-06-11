@@ -4,7 +4,7 @@
 @section('title', $product->name)
 
 {{-- Khai báo Meta Description lấy từ một phần description của sản phẩm --}}
-@section('meta_description', Str::limit(strip_tags(Str::markdown($product->description)), 160))
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags(\Illuminate\Support\Str::markdown($product->description)), 160))
 
 {{-- Khai báo og:image tương thích với @yield('og_image') trong app.blade.php --}}
 @if(!empty($product->gallery) && count($product->gallery) > 0)
