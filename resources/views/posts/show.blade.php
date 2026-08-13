@@ -103,7 +103,7 @@
     @section('og_image', asset('storage/' . $post->featured_image))
 @endif
 
-@section('meta_description', $post->excerpt ?? \Illuminate\Support\Str::limit(strip_tags(\Illuminate\Support\Str::markdown($post->excerpt ?? $post->content)), 160))
+@section('meta_description', e(\Illuminate\Support\Str::limit(strip_tags(\Illuminate\Support\Str::markdown($post->excerpt ?? $post->content)), 160)))
 
 @section('content')
 
