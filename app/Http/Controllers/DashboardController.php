@@ -62,7 +62,30 @@ class DashboardController extends Controller
                 ->toArray();
         };
 
-        // --- THỰC THI TRUY VẤN (Chỉ tốn tổng cộng 6 câu Query) ---
+        // Tính % tăng trưởng: so sánh 7 ngày gần nhất với 7 ngày liền trước đó
+        $getGrowth = function ($model) use ($now) {
+            $currentStart  = $now->copy()->subDays(6)->startOfDay();
+            $previousStart = $now->copy()->subDays(13)->startOfDay();
+            $previousEnd   = $now->copy()->subDays(7)->endOfDay();
+
+            $current  = $model::where('created_at', '>=', $currentStart)->count();
+            $previous = $model::whereBetween('created_at', [$previousStart, $previousEnd])->count();
+
+            if ($previous === 0) {
+                $percent = $current > 0 ? 100 : 0;
+            } else {
+                $percent = (int) round((($current - $previous) / $previous) * 100);
+            }
+
+            return [
+                'current'  => $current,
+                'previous' => $previous,
+                'percent'  => $percent,
+                'trend'    => $percent > 0 ? 'up' : ($percent < 0 ? 'down' : 'flat'),
+            ];
+        };
+
+        // --- THỰC THI TRUY VẤN (Chỉ tốn tổng cộng ~10 câu Query) ---
         $dailyPostsData    = $getDailyData(Post::class);
         $dailyProductsData = $getDailyData(Product::class);
 
@@ -71,6 +94,13 @@ class DashboardController extends Controller
 
         $yearlyPostsData    = $getYearlyData(Post::class);
         $yearlyProductsData = $getYearlyData(Product::class);
+
+        $growth = [
+            'posts'    => $getGrowth(Post::class),
+            'products' => $getGrowth(Product::class),
+            'users'    => $getGrowth(User::class),
+            'comments' => $getGrowth(Comment::class),
+        ];
 
         // --- MAPPING DỮ LIỆU ĐỂ TRẢ VỀ VIEW ---
 
@@ -130,7 +160,22 @@ class DashboardController extends Controller
             ]
         ];
 
+        // 6. Hoạt động gần đây (Activity Feed) — gộp 4 nguồn, sắp xếp theo thời gian
+        $recentPosts    = Post::latest()->take(5)->get();
+        $recentComments = Comment::latest()->take(5)->get();
+        $recentUsers    = User::latest()->take(5)->get();
+        $recentProducts = Product::latest()->take(5)->get();
+
+        $activityFeed = collect()
+            ->concat($recentPosts->map(fn ($item) => ['type' => 'post', 'model' => $item, 'created_at' => $item->created_at]))
+            ->concat($recentComments->map(fn ($item) => ['type' => 'comment', 'model' => $item, 'created_at' => $item->created_at]))
+            ->concat($recentUsers->map(fn ($item) => ['type' => 'user', 'model' => $item, 'created_at' => $item->created_at]))
+            ->concat($recentProducts->map(fn ($item) => ['type' => 'product', 'model' => $item, 'created_at' => $item->created_at]))
+            ->sortByDesc('created_at')
+            ->take(8)
+            ->values();
+
         // Trả về view kèm dữ liệu
-        return view('dashboard', compact('stats', 'chartData'));
+        return view('dashboard', compact('stats', 'chartData', 'growth', 'activityFeed'));
     }
 }
