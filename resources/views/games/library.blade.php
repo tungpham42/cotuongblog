@@ -180,10 +180,7 @@
                     @if(isset($game->featured_image) && $game->featured_image)
                         <img src="{{ asset('storage/' . $game->featured_image) }}" alt="Ảnh thu nhỏ: {{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                     @else
-                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-white dark:from-slate-800 dark:to-slate-900 text-brand/30 dark:text-slate-600 transition-colors duration-500 group-hover:text-brand/50">
-                            {{-- Icon bàn cờ làm Placeholder --}}
-                            <svg class="w-16 h-16 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
+                        <img src="https://placehold.co/1200x630/BB5F1A/FFFFFF?text={{ urlencode($game->title) }}" alt="{{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                     @endif
 
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
