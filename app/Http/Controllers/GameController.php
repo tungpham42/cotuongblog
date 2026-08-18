@@ -89,11 +89,28 @@ class GameController extends Controller
     }
 
     /**
-     * Thư viện ván cờ công khai
+     * Thư viện ván cờ công khai (có tính năng tìm kiếm)
      */
-    public function library()
+    public function library(Request $request)
     {
-        $games = Game::with('user')->latest()->paginate(15);
+        $query = Game::with('user')->latest();
+
+        // Kiểm tra xem người dùng có nhập từ khóa tìm kiếm không
+        if ($search = $request->input('search')) {
+            $query->where(function($q) use ($search) {
+                // Tìm kiếm theo tiêu đề hoặc mô tả
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  // Tìm kiếm theo tên người dùng (kỳ thủ)
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // withQueryString() giúp giữ lại tham số 'search' khi người dùng chuyển trang
+        $games = $query->paginate(12)->withQueryString();
+
         return view('games.library', compact('games'));
     }
 }
