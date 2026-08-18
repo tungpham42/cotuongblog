@@ -370,7 +370,6 @@
             if (currentStep > 0) {
                 const activeBtn = $(`.move-btn[data-step="${currentStep}"]`);
                 activeBtn.addClass('bg-brand/20 text-brand font-bold');
-                activeBtn[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }
             board.position(getBoardFen(fenHistory[currentStep]));
         }
