@@ -10,6 +10,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Product;
+use App\Models\Game;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -27,6 +28,7 @@ class DashboardController extends Controller
             'users'      => User::count(),
             'comments'   => Comment::count(),
             'products'   => Product::count(),
+            'games'      => Game::count(),
         ];
 
         $now = Carbon::now();
@@ -100,6 +102,7 @@ class DashboardController extends Controller
             'products' => $getGrowth(Product::class),
             'users'    => $getGrowth(User::class),
             'comments' => $getGrowth(Comment::class),
+            'games'    => $getGrowth(Game::class),
         ];
 
         // --- MAPPING DỮ LIỆU ĐỂ TRẢ VỀ VIEW ---
@@ -165,12 +168,14 @@ class DashboardController extends Controller
         $recentComments = Comment::latest()->take(5)->get();
         $recentUsers    = User::latest()->take(5)->get();
         $recentProducts = Product::latest()->take(5)->get();
+        $recentGames    = Game::latest()->take(5)->get();
 
         $activityFeed = collect()
             ->concat($recentPosts->map(fn ($item) => ['type' => 'post', 'model' => $item, 'created_at' => $item->created_at]))
             ->concat($recentComments->map(fn ($item) => ['type' => 'comment', 'model' => $item, 'created_at' => $item->created_at]))
             ->concat($recentUsers->map(fn ($item) => ['type' => 'user', 'model' => $item, 'created_at' => $item->created_at]))
             ->concat($recentProducts->map(fn ($item) => ['type' => 'product', 'model' => $item, 'created_at' => $item->created_at]))
+            ->concat($recentGames->map(fn ($item) => ['type' => 'game', 'model' => $item, 'created_at' => $item->created_at]))
             ->sortByDesc('created_at')
             ->take(8)
             ->values();

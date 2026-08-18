@@ -129,7 +129,7 @@
     </div>
 
     <div class="sticky top-4 z-[999] px-4 sm:px-6 lg:px-8 pointer-events-none mt-4">
-        {{-- Navbar now uses a softer white and warm border/shadows in light mode --}}
+        {{-- Navbar --}}
         <nav class="pointer-events-auto max-w-7xl mx-auto bg-white/75 dark:bg-slate-800/85 backdrop-blur-2xl shadow-[0_10px_30px_rgba(249,115,22,0.08)] dark:shadow-brand/5 border border-brand/20 dark:border-slate-700/50 rounded-2xl transition-all duration-300" x-data="{ open: false }">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-20">
@@ -141,11 +141,15 @@
                             <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand to-amber-500 group-hover:from-orange-500 group-hover:to-rose-500 transition-all duration-300">Cờ tướng</span>
                         </a>
 
-                        {{-- Link Sản Phẩm Desktop --}}
+                        {{-- Link Desktop Top Nav --}}
                         <div class="hidden sm:flex sm:items-center sm:ml-8 gap-6">
                             <a href="{{ route('products.index') }}" class="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand dark:hover:text-brand transition-colors flex items-center gap-1.5">
                                 <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                                 Cửa hàng
+                            </a>
+                            <a href="{{ route('games.index') }}" class="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-brand dark:hover:text-brand transition-colors flex items-center gap-1.5">
+                                <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14.752 11.168l-3.197-2.132A4 4 0 002 12v6h20v-6a4 4 0 00-7.248-2.832z"></path></svg>
+                                Ván cờ
                             </a>
                         </div>
                     </div>
@@ -168,10 +172,10 @@
                                     x-transition:leave="transition ease-in duration-150"
                                     x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
                                     x-transition:leave-end="transform opacity-0 scale-95 translate-y-2"
-                                    class="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-2xl shadow-[0_15px_40px_rgba(249,115,22,0.12)] dark:shadow-slate-900/50 border border-brand/10 dark:border-slate-700/50 z-50 overflow-hidden"
+                                    class="absolute right-0 mt-3 w-64 max-h-[calc(100vh-7rem)] overflow-y-auto bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-2xl shadow-[0_15px_40px_rgba(249,115,22,0.12)] dark:shadow-slate-900/50 border border-brand/10 dark:border-slate-700/50 z-50"
                                     style="display: none;">
 
-                                    <div class="px-4 py-4 flex items-center gap-3 border-b border-brand/10 dark:border-slate-700/50 bg-gradient-to-br from-orange-50/50 to-white dark:from-slate-800 dark:to-slate-800">
+                                    <div class="sticky top-0 z-10 px-4 py-4 flex items-center gap-3 border-b border-brand/10 dark:border-slate-700/50 bg-gradient-to-br from-orange-50/90 to-white/90 dark:from-slate-800/90 dark:to-slate-800/90 backdrop-blur-md">
                                         <div class="w-10 h-10 rounded-full bg-brand/10 dark:bg-brand/20 flex items-center justify-center text-brand font-black text-lg">
                                             {{ substr(auth()->user()->name, 0, 1) }}
                                         </div>
@@ -192,7 +196,10 @@
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                 Bài viết
                                             </a>
-                                            {{-- Link Quản lý Sản Phẩm Desktop --}}
+                                            <a href="{{ route('games.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A4 4 0 002 12v6h20v-6a4 4 0 00-7.248-2.832z"></path></svg>
+                                                Ván cờ
+                                            </a>
                                             <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                                                 Sản phẩm
@@ -215,6 +222,17 @@
                                             </a>
                                             <div class="border-t border-brand/5 dark:border-slate-700/50 my-1"></div>
                                         @endif
+
+                                        <div class="px-3 py-2 text-[10px] font-black text-brand uppercase tracking-wider">Cá nhân</div>
+                                        <a href="{{ route('games.index') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                            Cộng đồng ván cờ
+                                        </a>
+                                        <a href="{{ route('games.my_games') }}" class="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold rounded-xl transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A4 4 0 002 12v6h20v-6a4 4 0 00-7.248-2.832z"></path></svg>
+                                            Ván cờ của tôi
+                                        </a>
+                                        <div class="border-t border-brand/5 dark:border-slate-700/50 my-1"></div>
 
                                         <form method="POST" action="{{ route('logout') }}" class="m-0">
                                             @csrf
@@ -254,6 +272,7 @@
                 </div>
             </div>
 
+            {{-- Mobile Nav Menu --}}
             <div x-show="open"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 -translate-y-2"
@@ -264,13 +283,21 @@
                 class="sm:hidden border-t border-brand/10 dark:border-slate-700/50 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-b-2xl overflow-hidden"
                 style="display: none;">
                 <div class="px-4 pt-3 pb-5 space-y-2">
-                    {{-- Link Sản Phẩm Mobile --}}
-                    <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-slate-800 dark:text-slate-200 font-bold hover:text-brand dark:hover:text-brand transition-colors mb-4">
-                        <div class="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center text-brand">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        </div>
-                        Cửa hàng
-                    </a>
+                    {{-- Links Mobile --}}
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-slate-800 dark:text-slate-200 font-bold hover:text-brand dark:hover:text-brand transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center text-brand">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            </div>
+                            Cửa hàng
+                        </a>
+                        <a href="{{ route('games.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-slate-800 dark:text-slate-200 font-bold hover:text-brand dark:hover:text-brand transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center text-brand">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A4 4 0 002 12v6h20v-6a4 4 0 00-7.248-2.832z"></path></svg>
+                            </div>
+                            Ván cờ
+                        </a>
+                    </div>
 
                     @auth
                         <div class="flex items-center gap-3 px-3 py-3 mb-2 bg-orange-50/50 dark:bg-slate-700/30 rounded-xl">
@@ -288,7 +315,7 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Tổng quan</a>
                                 <a href="{{ route('posts.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Bài viết</a>
-                                {{-- Link Quản lý Sản Phẩm Mobile --}}
+                                <a href="{{ route('games.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Ván cờ</a>
                                 <a href="{{ route('admin.products.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Sản phẩm</a>
                                 <a href="{{ route('categories.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Chuyên mục</a>
                                 <a href="{{ route('tags.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Thẻ (Tags)</a>
@@ -296,6 +323,12 @@
                                 <a href="{{ route('comments.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Bình luận</a>
                             </div>
                         @endif
+
+                        <div class="px-4 pt-4 pb-1 text-xs font-black text-brand uppercase tracking-wider">Cá nhân</div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="{{ route('games.index') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Cộng đồng ván cờ</a>
+                            <a href="{{ route('games.my_games') }}" class="block px-4 py-2.5 rounded-xl bg-orange-50/50 dark:bg-slate-700/30 text-sm text-slate-700 dark:text-slate-300 hover:bg-brand/10 dark:hover:bg-slate-700 hover:text-brand dark:hover:text-brand font-bold">Ván cờ của tôi</a>
+                        </div>
 
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
                             @csrf
@@ -370,6 +403,7 @@
         });
     </script>
     @endif
+
     {{-- AdBlocker Detection --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

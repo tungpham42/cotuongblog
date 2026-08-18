@@ -76,6 +76,17 @@
             'ring'  => 'ring-1 ring-inset ring-cyan-100 dark:ring-cyan-500/20',
             'growth' => $growth['comments'] ?? null,
         ],
+        [
+            'key'   => 'games',
+            'label' => 'Ván cờ',
+            'route' => 'games.index',
+            'cta'   => 'Cộng đồng ván cờ',
+            'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A4 4 0 002 12v6h20v-6a4 4 0 00-7.248-2.832z"></path>',
+            'bg'    => 'bg-indigo-50 dark:bg-indigo-500/10',
+            'text'  => 'text-indigo-600 dark:text-indigo-400',
+            'ring'  => 'ring-1 ring-inset ring-indigo-100 dark:ring-indigo-500/20',
+            'growth' => $growth['games'] ?? null,
+        ],
     ];
 
     $maxStat = max(1, max($stats));
@@ -106,6 +117,12 @@
             <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 hover:bg-white/20 transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Sản phẩm mới
+            </a>
+            @endif
+            @if(\Illuminate\Support\Facades\Route::has('games.create'))
+            <a href="{{ route('games.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 hover:bg-white/20 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Ván cờ mới
             </a>
             @endif
         </div>
@@ -180,7 +197,7 @@
             <canvas id="doughnutChart"></canvas>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span class="text-2xl font-bold text-slate-800 dark:text-white tabular-nums">
-                    {{ number_format(($stats['posts'] ?? 0) + ($stats['products'] ?? 0) + ($stats['comments'] ?? 0)) }}
+                    {{ number_format(($stats['posts'] ?? 0) + ($stats['products'] ?? 0) + ($stats['comments'] ?? 0) + ($stats['games'] ?? 0)) }}
                 </span>
                 <span class="text-xs text-slate-500 dark:text-slate-400">Tổng cộng</span>
             </div>
@@ -212,6 +229,7 @@
                             'comment' => ['dot' => 'bg-cyan-500', 'label' => 'Bình luận'],
                             'user'    => ['dot' => 'bg-rose-500', 'label' => 'Người dùng'],
                             'product' => ['dot' => 'bg-violet-500', 'label' => 'Sản phẩm'],
+                            'game'    => ['dot' => 'bg-indigo-500', 'label' => 'Ván cờ'],
                             default   => ['dot' => 'bg-slate-400', 'label' => 'Hoạt động'],
                         };
 
@@ -220,6 +238,7 @@
                             'comment' => \Illuminate\Support\Str::limit($activity['model']->content ?? $activity['model']->body ?? 'Bình luận mới', 70),
                             'user'    => $activity['model']->name ?? $activity['model']->email ?? 'Người dùng mới',
                             'product' => $activity['model']->name ?? $activity['model']->title ?? 'Sản phẩm mới',
+                            'game'    => $activity['model']->title ?? 'Ván cờ mới',
                             default   => 'Hoạt động mới',
                         };
                     @endphp
@@ -294,13 +313,15 @@
             categories: {{ $stats['categories'] ?? 0 }},
             tags: {{ $stats['tags'] ?? 0 }},
             users: {{ $stats['users'] ?? 0 }},
-            comments: {{ $stats['comments'] ?? 0 }}
+            comments: {{ $stats['comments'] ?? 0 }},
+            games: {{ $stats['games'] ?? 0 }}
         };
 
         const chartColors = {
             posts: 'rgba(59, 130, 246, 0.85)',    // Blue
             products: 'rgba(139, 92, 246, 0.85)', // Violet
-            comments: 'rgba(6, 182, 212, 0.85)'    // Cyan
+            comments: 'rgba(6, 182, 212, 0.85)',  // Cyan
+            games: 'rgba(99, 102, 241, 0.85)'
         };
 
         // Biểu đồ Tròn (Doughnut Chart)
@@ -308,10 +329,10 @@
         new Chart(ctxDoughnut, {
             type: 'doughnut',
             data: {
-                labels: ['Bài viết', 'Sản phẩm', 'Bình luận'],
+                labels: ['Bài viết', 'Sản phẩm', 'Bình luận', 'Ván cờ'],
                 datasets: [{
-                    data: [statsData.posts, statsData.products, statsData.comments],
-                    backgroundColor: [chartColors.posts, chartColors.products, chartColors.comments],
+                    data: [statsData.posts, statsData.products, statsData.comments, statsData.games],
+                    backgroundColor: [chartColors.posts, chartColors.products, chartColors.comments, chartColors.games],
                     borderWidth: 2,
                     borderColor: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff',
                     hoverOffset: 6

@@ -13,6 +13,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GameController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Post;
 use App\Models\Category;
@@ -58,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/my-games', [GameController::class, 'myGames'])->name('games.my_games');
+    Route::resource('games', GameController::class)->except(['show']);
 });
 
 // ==========================================
@@ -85,6 +89,8 @@ Route::get('/chuyen-muc/{category:slug}', [CategoryController::class, 'show'])->
 Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('categories.show.en');
 
 Route::get('/the/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
+
+Route::get('/van-co/{game:slug}', [GameController::class, 'show'])->name('games.show');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
