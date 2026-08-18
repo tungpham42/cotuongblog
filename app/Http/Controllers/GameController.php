@@ -87,4 +87,13 @@ class GameController extends Controller
         return redirect()->route('games.my_games')
             ->with('success', 'Đã xóa ván cờ!');
     }
+
+    /**
+     * Thư viện ván cờ công khai
+     */
+    public function library()
+    {
+        $games = Game::with('user')->latest()->paginate(15);
+        return view('games.library', compact('games'));
+    }
 }

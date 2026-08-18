@@ -108,6 +108,9 @@ Route::post('/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
 Route::get('/cua-hang', [ProductController::class, 'index'])->name('products.index');
 Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
+// Public route cho Thư viện ván cờ
+Route::get('/thu-vien', [GameController::class, 'library'])->name('games.library');
+
 // 2. Dành cho Admin (Khu vực quản lý bên trong Group middleware auth + IsAdmin)
 Route::middleware(['auth', IsAdmin::class])->group(function () {
     // Đặt tên route admin tránh trùng lặp với route public
