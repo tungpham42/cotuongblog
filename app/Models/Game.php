@@ -33,29 +33,6 @@ class Game extends Model
         return 'slug';
     }
 
-    // Tự động tạo slug khi lưu vào database
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($game) {
-            if (empty($game->slug)) {
-                // Nếu title rỗng, mặc định là 'van-co'
-                $baseTitle = !empty($game->title) ? $game->title : 'van-co';
-
-                // Nối thêm chuỗi ngẫu nhiên (uniqid) để đảm bảo không bao giờ bị trùng slug
-                $game->slug = Str::slug($baseTitle) . '-' . uniqid();
-            }
-        });
-
-        // (Tùy chọn) Nếu bạn muốn slug cập nhật lại khi user đổi title:
-        static::updating(function ($game) {
-            if ($game->isDirty('title') && !empty($game->title)) {
-                $game->slug = Str::slug($game->title) . '-' . uniqid();
-            }
-        });
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
