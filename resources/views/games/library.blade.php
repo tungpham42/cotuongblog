@@ -99,7 +99,7 @@
     </div>
 
     <div class="mt-12 flex justify-center">
-        {{ $games->links() }}
+        {{ $games->onEachSide(1)->links('components.pagination') }}
     </div>
 
 </div>
