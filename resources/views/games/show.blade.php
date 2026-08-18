@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $game->title)
+@section('og_image', 'https://placehold.co/1200x630/BB5F1A/FFFFFF?text=' . urlencode($game->title))
 @section('meta_description', Str::limit($game->description, 150))
 
 @section('content')
