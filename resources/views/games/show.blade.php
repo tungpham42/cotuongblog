@@ -195,7 +195,7 @@
 
             const pieceMap = {
                 'k': 'Tướng', 'a': 'Sĩ', 'b': 'Tượng', 'e': 'Tượng', 'v': 'Tượng',
-                'n': 'Mã', 'h': 'Mã', 'r': 'Xe', 'c': 'Pháo', 'p': 'Binh'
+                'n': 'Mã', 'h': 'Mã', 'r': 'Xe', 'c': 'Pháo', 'p': 'Chốt'
             };
             let pieceName = pieceMap[move.piece.toLowerCase()] || move.piece.toUpperCase();
 
