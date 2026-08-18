@@ -176,7 +176,7 @@
         @forelse ($games as $game)
             <article class="group flex flex-col bg-white dark:bg-slate-800 rounded-[2rem] shadow-[0_8px_30px_rgba(249,115,22,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-brand/5 dark:border-slate-700/80 overflow-hidden hover:shadow-[0_20px_40px_rgba(249,115,22,0.15)] transition-all duration-500 transform hover:-translate-y-2 relative">
 
-                <a href="{{ route('games.show', $game->id) }}" class="block aspect-[1200/630] w-full bg-orange-50 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
+                <a href="{{ route('games.show', $game->slug) }}" class="block aspect-[1200/630] w-full bg-orange-50 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
                     @if(isset($game->featured_image) && $game->featured_image)
                         <img src="{{ asset('storage/' . $game->featured_image) }}" alt="Ảnh thu nhỏ: {{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                     @else
@@ -202,7 +202,7 @@
 
                     <header class="mb-4 mt-3">
                         <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-brand transition-colors duration-300 line-clamp-2 leading-tight">
-                            <a href="{{ route('games.show', $game->id) }}" class="focus:outline-none focus:text-brand" data-tippy-content="{{ $game->title }}">
+                            <a href="{{ route('games.show', $game->slug) }}" class="focus:outline-none focus:text-brand" data-tippy-content="{{ $game->title }}">
                                 {{ $game->title }}
                             </a>
                         </h3>
@@ -223,7 +223,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('games.show', $game->id) }}" class="flex items-center gap-1.5 text-sm font-black text-brand opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 focus:outline-none">
+                        <a href="{{ route('games.show', $game->slug) }}" class="flex items-center gap-1.5 text-sm font-black text-brand opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 focus:outline-none">
                             Xem ngay
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
