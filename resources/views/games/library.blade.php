@@ -48,8 +48,8 @@
         <div class="group relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-brand/10 dark:border-slate-700/60 rounded-[2rem] overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(249,115,22,0.15)] dark:hover:shadow-brand/10 transition-all duration-500 hover:-translate-y-2 flex flex-col">
 
             <!-- Graphic / Cover -->
-            <div class="relative h-48 bg-gradient-to-br from-amber-100 to-orange-50 dark:from-slate-700 dark:to-slate-900 overflow-hidden flex items-center justify-center p-4">
-                <div class="absolute inset-0 opacity-10 dark:opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDM5LjVoNDBWNDBINHoiIGZpbGw9IiMwMDAiLz48cGF0aCBkPSJNMzkuNSAwVjQwaC41VjB6IiBmaWxsPSIjMDAwIi8+PC9zdmc+')]"></div>
+            <div class="block aspect-[1200/630] w-full bg-orange-50 dark:bg-slate-900 relative overflow-hidden focus:outline-none">
+                <img src="https://placehold.co/1200x630/BB5F1A/FFFFFF?text={{ urlencode($game->title) }}" alt="{{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
             </div>
 
             <!-- Content Info -->
