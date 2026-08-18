@@ -89,13 +89,14 @@ class GameController extends Controller
     }
 
     /**
-     * Thư viện ván cờ công khai (có tính năng tìm kiếm)
+     * Thư viện ván cờ công khai (có tính năng tìm kiếm và sắp xếp)
      */
     public function library(Request $request)
     {
-        $query = Game::with('user')->latest();
+        // Bỏ 'latest()' ở đây để có thể tùy chỉnh sắp xếp bên dưới
+        $query = Game::with('user');
 
-        // Kiểm tra xem người dùng có nhập từ khóa tìm kiếm không
+        // Xử lý Tìm kiếm
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
                 // Tìm kiếm theo tiêu đề hoặc mô tả
@@ -108,7 +109,19 @@ class GameController extends Controller
             });
         }
 
-        // withQueryString() giúp giữ lại tham số 'search' khi người dùng chuyển trang
+        // Xử lý Sắp xếp
+        $sort = $request->input('sort', 'latest');
+
+        match ($sort) {
+            'oldest'     => $query->oldest(),
+            'views_desc' => $query->orderBy('views', 'desc'),
+            'views_asc'  => $query->orderBy('views', 'asc'),
+            'alpha_asc'  => $query->orderBy('title', 'asc'),
+            'alpha_desc' => $query->orderBy('title', 'desc'),
+            default      => $query->latest(), // 'latest' là mặc định
+        };
+
+        // withQueryString() giúp giữ lại các tham số 'search' và 'sort' khi chuyển trang
         $games = $query->paginate(12)->withQueryString();
 
         return view('games.library', compact('games'));
