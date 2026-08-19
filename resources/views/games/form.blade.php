@@ -42,18 +42,18 @@
                 @error('initial_fen') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
-            {{-- Nước đi (Moves) - Cho phép paste chuỗi văn bản --}}
+            {{-- Nước đi (Moves) --}}
             <div>
                 <label for="raw_moves" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Biên bản nước đi <span class="text-red-500">*</span></label>
 
-                {{-- Textarea để nhập text thuần. Dữ liệu cũ sẽ được JS tự điền --}}
+                {{-- Textarea để nhập text thuần. --}}
                 <textarea id="raw_moves" rows="5" name="raw_moves"
                     class="w-full font-mono text-sm px-4 py-3 rounded-xl border {{ $errors->has('moves') ? 'border-red-500' : 'border-slate-200 dark:border-slate-700' }} bg-slate-50 dark:bg-slate-900/50 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand/50 transition-colors"
                     placeholder="VD: C2=5 n8+7... hoặc 1. Cbe3 Nhg8...">{{ is_string(old('raw_moves')) ? old('raw_moves') : '' }}</textarea>
 
                 <p class="text-xs text-slate-500 mt-1">Dán kỳ phổ dạng chuỗi WXF (C2=5 n8+7) hoặc Standard Algebraic (1. Cbe3 Nhg8). Hệ thống sẽ tự động format JSON khi lưu.</p>
 
-                {{-- Input ẨN lưu JSON mảng [{from, to}] gửi xuống backend --}}
+                {{-- Input ẨN lưu JSON mảng [{from, to, raw}] gửi xuống backend --}}
                 <input type="hidden" name="moves" id="hidden_moves" value="">
 
                 @error('moves') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
@@ -172,10 +172,8 @@
         // HÀM 3: Dịch SAN (Cbe3, Nhg8, Cxe7+) sang Tọa độ ({from, to})
         // ========================================================
         function parseSANToMove(userStr, game) {
-            // Loại bỏ các ký tự dấu +, # thường đi kèm với các nước chiếu, chiếu bí
             let str = userStr.replace(/[+#]/g, '').trim();
 
-            // Regex để phân tách (Ví dụ: Cbe3, Cdxb8, Pxc4...)
             const regex = /^([a-zA-Z]?)([a-i]?)([1-9]|10)?([xX]?)([a-i])([1-9]|10)$/i;
             const match = str.match(regex);
 
@@ -184,12 +182,11 @@
             let uPiece = match[1].toLowerCase();
             if (uPiece === 'e' || uPiece === 'v' || uPiece === 't') uPiece = 'b';
             if (uPiece === 'h') uPiece = 'n';
-            if (uPiece === '') uPiece = 'p'; // Nếu chỉ có tọa độ như e4, mặc định là Tốt (Pawn)
+            if (uPiece === '') uPiece = 'p';
 
             const fromFile = match[2].toLowerCase();
             const fromRank = match[3];
             const toFile = match[5].toLowerCase();
-            // Hệ tọa độ truyền vào dùng index 1-10, xiangqi.js dùng index 0-9
             const toRank = parseInt(match[6]) - 1;
             const targetSquare = toFile + toRank;
 
@@ -201,10 +198,8 @@
                 if (mPiece === 'h') mPiece = 'n';
                 if (mPiece !== uPiece) continue;
 
-                // Kiểm tra đích đến
                 if (move.to !== targetSquare) continue;
 
-                // Kiểm tra xuất phát (Disambiguation) nếu có
                 if (fromFile && move.from.charAt(0) !== fromFile) continue;
                 if (fromRank && parseInt(move.from.charAt(1)) !== parseInt(fromRank) - 1) continue;
 
@@ -213,25 +208,38 @@
             return null;
         }
 
-        // 1. KHI LOAD FORM
+        // ========================================================
+        // 1. KHI LOAD FORM: Khôi phục biên bản từ Database
+        // ========================================================
         if (dbMoves.length > 0 && typeof dbMoves[0] === 'object') {
             try {
-                const initialFen = initialFenInput.value || 'start';
-                const tempGame = new Xiangqi(initialFen === 'start' ? undefined : initialFen);
-                let wxfArray = [];
+                // Chỉ khôi phục nếu textarea đang trống (tránh ghi đè input lỗi từ old() khi validation failed)
+                if (!rawMovesTextarea.value.trim()) {
+                    const initialFen = initialFenInput.value || 'start';
+                    const tempGame = new Xiangqi(initialFen === 'start' ? undefined : initialFen);
+                    let displayMoves = [];
 
-                dbMoves.forEach(move => {
-                    const color = tempGame.turn();
-                    const res = tempGame.move({ from: move.from, to: move.to });
-                    if (res) wxfArray.push(convertMoveToWXF(res, color));
-                });
-                rawMovesTextarea.value = wxfArray.join(' ');
+                    dbMoves.forEach(move => {
+                        const color = tempGame.turn();
+                        const res = tempGame.move({ from: move.from, to: move.to });
+
+                        if (res) {
+                            // Ưu tiên trả về chính xác định dạng đã nhập (SAN hoặc WXF) nếu có tồn tại.
+                            // Nếu không có (ví dụ: data cũ), tự động sinh mã WXF.
+                            displayMoves.push(move.raw ? move.raw : convertMoveToWXF(res, color));
+                        }
+                    });
+
+                    rawMovesTextarea.value = displayMoves.join(' ');
+                }
             } catch (e) {
                 console.error("Lỗi khôi phục biên bản:", e);
             }
         }
 
-        // 2. KHI SUBMIT
+        // ========================================================
+        // 2. KHI SUBMIT: Dịch và đóng gói dữ liệu
+        // ========================================================
         document.getElementById('gameForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const rawInput = rawMovesTextarea.value.trim();
@@ -257,7 +265,7 @@
                             moveObj = game.move({ from: wxfMove.from, to: wxfMove.to });
                         }
 
-                        // Thử nghiệm 2: Parse với SAN (Standard Algebraic Notation)
+                        // Thử nghiệm 2: Parse với SAN
                         if (!moveObj) {
                             const sanMove = parseSANToMove(token, game);
                             if (sanMove) {
@@ -265,13 +273,15 @@
                             }
                         }
 
-                        // Thử nghiệm 3: Để xiangqi.js tự động parse như một biện pháp dự phòng
+                        // Thử nghiệm 3: Fallback tự parse của xiangqi.js
                         if (!moveObj) {
                             try { moveObj = game.move(token); } catch(err) {}
                         }
 
                         if (moveObj) {
-                            movesArray.push({ from: moveObj.from, to: moveObj.to });
+                            // Quan trọng: Lưu trực tiếp `raw: token` vào JSON gửi xuống backend
+                            // để ghi nhớ định dạng người dùng (WXF hay SAN)
+                            movesArray.push({ from: moveObj.from, to: moveObj.to, raw: token });
                         } else {
                             alert(`Nước đi không hợp lệ tại: ${token} \nVui lòng kiểm tra lại tính hợp lệ của kỳ phổ.`);
                             return false;
