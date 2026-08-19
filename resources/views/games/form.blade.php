@@ -46,12 +46,12 @@
             <div>
                 <label for="raw_moves" class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Biên bản nước đi <span class="text-red-500">*</span></label>
 
-                {{-- Textarea để nhập text thuần. Dữ liệu cũ sẽ được JS tự điền --}}
+                {{-- Textarea để nhập text thuần (C2=5 hoặc 1. Cbe3 Nhg8 ...). Dữ liệu cũ sẽ được JS tự điền --}}
                 <textarea id="raw_moves" rows="5" name="raw_moves"
                     class="w-full font-mono text-sm px-4 py-3 rounded-xl border {{ $errors->has('moves') ? 'border-red-500' : 'border-slate-200 dark:border-slate-700' }} bg-slate-50 dark:bg-slate-900/50 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand/50 transition-colors"
-                    placeholder="VD: C2=5 n8+7... hoặc 1. Cbe3 Nhg8...">{{ is_string(old('raw_moves')) ? old('raw_moves') : '' }}</textarea>
+                    placeholder="VD: C2=5 n8+7 N2+3 r9=8... hoặc 1. Cbe3 Nhg8 2. Pg5 Ra9...">{{ is_string(old('raw_moves')) ? old('raw_moves') : '' }}</textarea>
 
-                <p class="text-xs text-slate-500 mt-1">Dán kỳ phổ dạng chuỗi WXF (C2=5 n8+7) hoặc Standard Algebraic (1. Cbe3 Nhg8). Hệ thống sẽ tự động format JSON khi lưu.</p>
+                <p class="text-xs text-slate-500 mt-1">Dán kỳ phổ dạng WXF (C2=5 n8+7...) hoặc dạng ký hiệu đại số có số thứ tự (1. Cbe3 Nhg8 2. Pg5 Ra9...). Hệ thống sẽ tự động format JSON khi lưu và dịch sang Tiếng Việt khi hiển thị.</p>
 
                 {{-- Input ẨN lưu JSON mảng [{from, to}] gửi xuống backend --}}
                 <input type="hidden" name="moves" id="hidden_moves" value="">
@@ -86,6 +86,7 @@
             if (piece === 'E' || piece === 'V') piece = 'B';
             if (piece === 'H') piece = 'N';
 
+            // SỬA LỖI: Nhận diện chính xác phe Đỏ (w hoặc r)
             const isRed = (color === 'w' || color === 'r');
 
             const fCode = move.from.charCodeAt(0);
@@ -131,7 +132,9 @@
             if (uPiece === 'h') uPiece = 'n';
 
             const color = game.turn();
+            // SỬA LỖI: Nhận diện chính xác phe Đỏ
             const isRed = (color === 'w' || color === 'r');
+
             const legalMoves = game.moves({ verbose: true });
 
             for (let move of legalMoves) {
@@ -169,48 +172,56 @@
         }
 
         // ========================================================
-        // HÀM 3: Dịch SAN (Cbe3, Nhg8, Cxe7+) sang Tọa độ ({from, to})
+        // HÀM PHỤ: Chuẩn hoá mã quân cờ (giữa các cách viết khác nhau
+        // của cùng 1 loại quân: Tượng có thể là E/V/T/B, Mã có thể là H/N...)
         // ========================================================
-        function parseSANToMove(userStr, game) {
-            // Loại bỏ các ký tự dấu +, # thường đi kèm với các nước chiếu, chiếu bí
-            let str = userStr.replace(/[+#]/g, '').trim();
+        function normalizePieceCode(p) {
+            const c = String(p).toLowerCase();
+            if (c === 'e' || c === 'v' || c === 't' || c === 'b') return 'b';
+            if (c === 'h' || c === 'n') return 'n';
+            return c;
+        }
 
-            // Regex để phân tách (Ví dụ: Cbe3, Cdxb8, Pxc4...)
-            const regex = /^([a-zA-Z]?)([a-i]?)([1-9]|10)?([xX]?)([a-i])([1-9]|10)$/i;
-            const match = str.match(regex);
+        // ========================================================
+        // HÀM 3: Dịch ký hiệu đại số có số thứ tự (VD: "1. Cbe3 Nhg8 2. Pg5 Ra9 ...")
+        // sang Tọa độ ({from, to})
+        // Mỗi nước: [Quân cờ][cột xuất phát để phân biệt (tuỳ chọn)][x nếu ăn quân][cột đích][hàng đích][+/# nếu chiếu tướng]
+        // VD: Cbe3 = Pháo từ cột b đi tới e3 | Cxg7 = Pháo ăn quân tại g7 | Kf10 = Tướng đi tới f10
+        // ========================================================
+        function parseAlgebraicToMove(userStr, game) {
+            if (!userStr) return null;
+            // Chuẩn hoá: chữ cái quân cờ viết hoa, phần còn lại viết thường
+            const token = userStr.trim();
+            const normalized = token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
 
+            const regex = /^([CNPRBAK])([a-i])?(x)?([a-i])(10|[1-9])([+#])?$/;
+            const match = normalized.match(regex);
             if (!match) return null;
 
-            let uPiece = match[1].toLowerCase();
-            if (uPiece === 'e' || uPiece === 'v' || uPiece === 't') uPiece = 'b';
-            if (uPiece === 'h') uPiece = 'n';
-            if (uPiece === '') uPiece = 'p'; // Nếu chỉ có tọa độ như e4, mặc định là Tốt (Pawn)
-
-            const fromFile = match[2].toLowerCase();
-            const fromRank = match[3];
-            const toFile = match[5].toLowerCase();
-            // Hệ tọa độ truyền vào dùng index 1-10, xiangqi.js dùng index 0-9
-            const toRank = parseInt(match[6]) - 1;
-            const targetSquare = toFile + toRank;
+            const uPiece = normalizePieceCode(match[1]);
+            const disambigFile = match[2] || null; // cột xuất phát (nếu có ghi rõ)
+            const wantsCapture = !!match[3];
+            const destSquare = match[4] + match[5]; // vd: "e3", "g10"
 
             const legalMoves = game.moves({ verbose: true });
 
-            for (let move of legalMoves) {
-                let mPiece = move.piece.toLowerCase();
-                if (mPiece === 'e' || mPiece === 'v') mPiece = 'b';
-                if (mPiece === 'h') mPiece = 'n';
-                if (mPiece !== uPiece) continue;
+            let candidates = legalMoves.filter(move => {
+                if (normalizePieceCode(move.piece) !== uPiece) return false;
+                if (move.to.toLowerCase() !== destSquare) return false;
+                if (disambigFile && move.from.charAt(0).toLowerCase() !== disambigFile) return false;
+                return true;
+            });
 
-                // Kiểm tra đích đến
-                if (move.to !== targetSquare) continue;
-
-                // Kiểm tra xuất phát (Disambiguation) nếu có
-                if (fromFile && move.from.charAt(0) !== fromFile) continue;
-                if (fromRank && parseInt(move.from.charAt(1)) !== parseInt(fromRank) - 1) continue;
-
-                return move;
+            if (candidates.length > 1) {
+                // Nếu vẫn còn nhiều nước khớp, thử lọc thêm theo cờ ăn quân (nếu engine hỗ trợ)
+                const byCapture = candidates.filter(m => {
+                    const isCapture = !!(m.captured || (m.flags && m.flags.indexOf('c') !== -1));
+                    return wantsCapture ? isCapture : true;
+                });
+                if (byCapture.length > 0) candidates = byCapture;
             }
-            return null;
+
+            return candidates.length > 0 ? candidates[0] : null;
         }
 
         // 1. KHI LOAD FORM
@@ -239,41 +250,25 @@
             let movesArray = [];
 
             if (rawInput) {
-                const rawMoves = rawInput.split(/[\s,\n]+/).filter(m => m.length > 0);
+                // Tách theo khoảng trắng/dấu phẩy, đồng thời loại bỏ số thứ tự nước đi
+                // kiểu biên bản PGN ("1." "2." ...), kể cả khi dính liền quân cờ ("1.Cbe3")
+                const rawMoves = rawInput
+                    .split(/[\s,\n]+/)
+                    .map(m => m.replace(/^\d+\.+/, ''))
+                    .filter(m => m.length > 0);
                 try {
                     const game = new Xiangqi(initialFen === 'start' ? undefined : initialFen);
 
                     for (let i = 0; i < rawMoves.length; i++) {
-                        const token = rawMoves[i];
-
-                        // Bỏ qua các số thứ tự đánh dấu lượt đi (Ví dụ: "1.", "25.")
-                        if (/^\d+\.$/.test(token)) continue;
-
-                        let moveObj = null;
-
-                        // Thử nghiệm 1: Parse với WXF
-                        const wxfMove = parseWXFToMove(token, game);
-                        if (wxfMove) {
-                            moveObj = game.move({ from: wxfMove.from, to: wxfMove.to });
-                        }
-
-                        // Thử nghiệm 2: Parse với SAN (Standard Algebraic Notation)
-                        if (!moveObj) {
-                            const sanMove = parseSANToMove(token, game);
-                            if (sanMove) {
-                                moveObj = game.move({ from: sanMove.from, to: sanMove.to });
-                            }
-                        }
-
-                        // Thử nghiệm 3: Để xiangqi.js tự động parse như một biện pháp dự phòng
-                        if (!moveObj) {
-                            try { moveObj = game.move(token); } catch(err) {}
-                        }
+                        // Thử định dạng WXF (C2=5) trước, nếu không khớp thì thử định dạng
+                        // đại số có cột xuất phát (Cbe3, Nhg8, Cxg7, Kf10...)
+                        const moveObj = parseWXFToMove(rawMoves[i], game) || parseAlgebraicToMove(rawMoves[i], game);
 
                         if (moveObj) {
                             movesArray.push({ from: moveObj.from, to: moveObj.to });
+                            game.move({ from: moveObj.from, to: moveObj.to });
                         } else {
-                            alert(`Nước đi không hợp lệ tại: ${token} \nVui lòng kiểm tra lại tính hợp lệ của kỳ phổ.`);
+                            alert(`Nước đi không hợp lệ tại: ${rawMoves[i]} (Bước số ${i + 1}) \nVui lòng kiểm tra lại tính hợp lệ của kỳ phổ.`);
                             return false;
                         }
                     }
