@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Thư viện ván cờ - Cờ tướng')
+@section('title', 'Thư viện ván cờ')
 @section('meta_description', 'Khám phá hàng ngàn ván cờ hay, chiến thuật độc đáo từ cộng đồng kỳ thủ.')
 
 @section('og_image', asset('img/thu-vien.jpg'))
