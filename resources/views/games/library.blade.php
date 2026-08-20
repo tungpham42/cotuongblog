@@ -182,7 +182,7 @@
                     @if(isset($game->featured_image) && $game->featured_image)
                         <img src="{{ asset('storage/' . $game->featured_image) }}" alt="Ảnh thu nhỏ: {{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                     @else
-                        <img src="https://placehold.co/1200x630/BB5F1A/FFFFFF?text={{ urlencode($game->description) }}" alt="{{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
+                        <img src="https://placehold.co/1200x630/BB5F1A/FFFFFF/jpeg?font=roboto&text={{ urlencode($game->description) }}" alt="{{ $game->title }}" loading="lazy" class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out">
                     @endif
 
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
