@@ -3,6 +3,8 @@
 @section('title', 'Thư viện ván cờ - Cờ tướng')
 @section('meta_description', 'Khám phá hàng ngàn ván cờ hay, chiến thuật độc đáo từ cộng đồng kỳ thủ.')
 
+@section('og_image', asset('img/thu-vien.jpg'))
+
 @section('content')
 <div class="space-y-8">
     <nav aria-label="Breadcrumb" class="mb-2">
