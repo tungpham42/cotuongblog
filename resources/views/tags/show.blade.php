@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Thẻ: ' . $tag->name . ' - Cờ tướng')
+@section('title', 'Thẻ: ' . $tag->name)
 @if($tag->featured_image)
     @section('og_image', asset('storage/' . $tag->featured_image))
 @endif

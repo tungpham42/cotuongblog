@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Trang chủ - Cờ tướng')
+@section('title', 'Trang chủ')
 
 @section('content')
 <div class="space-y-12">
