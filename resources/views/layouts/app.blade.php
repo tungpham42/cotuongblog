@@ -110,6 +110,24 @@
     @isset($globalSchema)
         {!! $globalSchema->toScript() !!}
     @endisset
+    <style type="text/tailwindcss">
+        /* Ép kiểu màu nền và chữ của popup Swal khi bật Dark Mode */
+        .dark .swal2-popup,
+        .dark .swal2-toast {
+            @apply bg-slate-800 text-slate-200 border border-slate-700 !important;
+        }
+        .dark .swal2-title,
+        .dark .swal2-html-container {
+            @apply text-slate-200 !important;
+        }
+
+        /* Swal mặc định có viền trắng quanh icon 'success' để che nền, cần chỉnh lại màu để tệp với nền tối */
+        .dark .swal2-success-circular-line-left,
+        .dark .swal2-success-circular-line-right,
+        .dark .swal2-success-fix {
+            @apply bg-slate-800 !important;
+        }
+    </style>
 </head>
 <body class="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-50 via-orange-50/30 to-orange-100/20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-500 min-h-screen">
 
@@ -397,8 +415,6 @@
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
-                background: isDark ? '#1e293b' : '#ffffff',
-                color: isDark ? '#f8fafc' : '#0f172a',
             });
         });
     </script>
@@ -417,8 +433,6 @@
                     text: 'Các quảng cáo giúp chúng tôi có chi phí duy trì và phát triển Cộng Đồng Cờ Tướng. Xin vui lòng thêm trang web vào danh sách ngoại lệ (whitelist) hoặc tắt AdBlock để ủng hộ tác giả nhé!',
                     confirmButtonText: 'Tôi đã tắt AdBlock',
                     confirmButtonColor: '#B85D19',
-                    background: isDark ? '#1e293b' : '#ffffff',
-                    color: isDark ? '#f8fafc' : '#0f172a',
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 }).then((result) => {
