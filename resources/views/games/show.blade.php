@@ -24,12 +24,12 @@
                 <div class="absolute -top-20 -right-20 w-56 h-56 bg-brand/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-20 -left-20 w-56 h-56 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div class="relative flex justify-center w-full max-w-[500px] mx-auto bg-gradient-to-br from-[#f0d3a8] to-[#d9a565] border-2 sm:border-4 border-[#8b4513] rounded-lg p-1 sm:p-2 shadow-[inset_0_2px_10px_rgba(0,0,0,0.25),0_15px_35px_-10px_rgba(184,93,25,0.35)] box-border">
+                <div class="relative flex justify-center w-full max-w-[400px] mx-auto bg-gradient-to-br from-[#f0d3a8] to-[#d9a565] border-2 sm:border-4 border-[#8b4513] rounded-lg p-1 sm:p-2 shadow-[inset_0_2px_10px_rgba(0,0,0,0.25),0_15px_35px_-10px_rgba(184,93,25,0.35)] box-border">
                     <div id="xiangqi-board" style="width: 100%"></div>
                 </div>
 
                 {{-- Progress bar --}}
-                <div class="relative mt-5 max-w-[500px] mx-auto">
+                <div class="relative mt-5 max-w-[400px] mx-auto">
                     <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700/60 rounded-full overflow-hidden">
                         <div id="progress-bar" class="h-full bg-gradient-to-r from-brand via-orange-500 to-amber-400 rounded-full transition-all duration-300 ease-out" style="width:0%"></div>
                     </div>
@@ -220,8 +220,8 @@
 
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="{{ asset('css/xiangqiboard-0.3.3.css') }}" />
-<script src="{{ asset('js/xiangqiboard-0.3.3.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/xiangqiboard.css?v=1') }}" />
+<script src="{{ asset('js/xiangqiboard.js?v=2') }}"></script>
 <script src="{{ asset('js/xiangqi.js') }}"></script>
 
 <script>
@@ -313,7 +313,7 @@
 
         board = Xiangqiboard('xiangqi-board', {
             position: getBoardFen(fenHistory[0]),
-            showNotation: false,
+            showNotation: true,
             draggable: false,
             pieceTheme: '{{ asset('img/xiangqipieces/wikipedia/{piece}.svg') }}'
         });
