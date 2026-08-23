@@ -3,14 +3,13 @@
 // --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
 $uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
 
-// Nếu đường dẫn chính xác là /blog hoặc bắt đầu bằng /blog/ (vd: /blog/cua-hang, /blog/thu-vien)
 if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
-    // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
+    // 1. Khai báo Base URL cho Laravel
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
     $_SERVER['PHP_SELF'] = '/blog/index.php';
 
-    // === PHẦN SỬA LỖI CHO TRANG CHỦ /blog ===
-    // Nếu URL thiếu dấu / ở cuối, ta tự động nối thêm vào để Laravel hiểu chính xác đây là Route trang chủ (/)
+    // 2. Chặn lỗi MethodNotAllowed (HEAD) bằng cách ngầm thêm dấu "/"
+    // để biến chuỗi rỗng "" thành Route trang chủ "/"
     if ($uri_path === '/blog') {
         $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== '' ? '?' . $_SERVER['QUERY_STRING'] : '';
         $_SERVER['REQUEST_URI'] = '/blog/' . $query;
