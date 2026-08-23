@@ -8,6 +8,13 @@ if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
     // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
     $_SERVER['PHP_SELF'] = '/blog/index.php';
+
+    // === PHẦN SỬA LỖI CHO TRANG CHỦ /blog ===
+    // Nếu URL thiếu dấu / ở cuối, ta tự động nối thêm vào để Laravel hiểu chính xác đây là Route trang chủ (/)
+    if ($uri_path === '/blog') {
+        $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== '' ? '?' . $_SERVER['QUERY_STRING'] : '';
+        $_SERVER['REQUEST_URI'] = '/blog/' . $query;
+    }
 }
 // --- KẾT THÚC FIX SYMLINK ---
 
