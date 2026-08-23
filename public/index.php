@@ -1,16 +1,22 @@
 <?php
 
 // --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
-$uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+$parsedUrl  = parse_url($requestUri);
+$uriPath    = $parsedUrl['path'] ?? '';
+$queryStr   = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
 
-// Nếu đường dẫn chính xác là /blog hoặc bắt đầu bằng /blog/ (vd: /blog/cua-hang, /blog/thu-vien)
-if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
-    // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
+// 1. Nếu truy cập đúng /blog (thiếu dấu / ở cuối), tự động chuẩn hóa thành /blog/
+// để Laravel hiểu đây là trang chủ "/"
+if ($uriPath === '/blog') {
+    $_SERVER['REQUEST_URI'] = '/blog/' . $queryStr;
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
-    $_SERVER['PHP_SELF'] = '/blog/index.php';
-
-    // Ta GIỮ NGUYÊN REQUEST_URI.
-    // Laravel sẽ tự động lấy chuỗi "/blog/cua-hang" trừ đi Base URL "/blog" để nhận diện đúng Route "/cua-hang"
+    $_SERVER['PHP_SELF']    = '/blog/index.php';
+}
+// 2. Nếu truy cập các trang con (vd: /blog/cua-hang, /blog/thu-vien)
+elseif (strpos($uriPath, '/blog/') === 0) {
+    $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
+    $_SERVER['PHP_SELF']    = '/blog/index.php';
 }
 // --- KẾT THÚC FIX SYMLINK ---
 
