@@ -1,21 +1,22 @@
 <?php
 
-// --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
-$uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+// --- BẮT ĐẦU ĐIỀU HƯỚNG SYMLINK & INDEX.PHP ---
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
 
-if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
-    // 1. Khai báo Base URL cho Laravel
+// Nếu đường dẫn truy cập bắt đầu bằng /blog
+if (strpos($requestUri, '/blog') === 0) {
+    // Ép SCRIPT_NAME và PHP_SELF để Laravel luôn hiểu Base URL là /blog/index.php
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
-    $_SERVER['PHP_SELF'] = '/blog/index.php';
+    $_SERVER['PHP_SELF']    = '/blog/index.php';
 
-    // 2. Chặn lỗi MethodNotAllowed (HEAD) bằng cách ngầm thêm dấu "/"
-    // để biến chuỗi rỗng "" thành Route trang chủ "/"
-    if ($uri_path === '/blog') {
-        $query = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== '' ? '?' . $_SERVER['QUERY_STRING'] : '';
+    // Nếu người dùng vào chính xác /blog (thiếu dấu /), tự động chuẩn hóa để tránh lỗi 404
+    if ($requestUri === '/blog' || $requestUri === '/blog/') {
+        $parsed = parse_url($requestUri);
+        $query  = isset($parsed['query']) ? '?' . $parsed['query'] : '';
         $_SERVER['REQUEST_URI'] = '/blog/' . $query;
     }
 }
-// --- KẾT THÚC FIX SYMLINK ---
+// --- KẾT THÚC ĐIỀU HƯỚNG ---
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
