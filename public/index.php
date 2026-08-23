@@ -9,8 +9,15 @@ if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
     $_SERVER['PHP_SELF'] = '/blog/index.php';
 
-    // Ta GIỮ NGUYÊN REQUEST_URI.
-    // Laravel sẽ tự động lấy chuỗi "/blog/cua-hang" trừ đi Base URL "/blog" để nhận diện đúng Route "/cua-hang"
+    // FIX PHẦN CHƯA WORK: Xử lý riêng khi URL chính xác là "/blog" (thiếu dấu / ở cuối)
+    if ($uri_path === '/blog') {
+        // Lấy lại các tham số phía sau (nếu có, vd: ?page=2)
+        $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+        $query = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+
+        // Thêm dấu '/' vào cuối để Laravel hiểu đây là request vào trang chủ (/)
+        $_SERVER['REQUEST_URI'] = '/blog/' . $query;
+    }
 }
 // --- KẾT THÚC FIX SYMLINK ---
 
