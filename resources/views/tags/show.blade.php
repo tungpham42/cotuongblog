@@ -10,7 +10,7 @@
 <div class="space-y-8">
     <nav aria-label="Breadcrumb" class="mb-2">
         <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
-            <li><a href="{{ route('home.blog') }}" class="hover:text-brand transition-colors font-semibold">Trang chủ</a></li>
+            <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors font-semibold">Trang chủ</a></li>
             <li><span class="mx-1 opacity-50">/</span></li>
             <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $tag->name }}</li>
         </ol>

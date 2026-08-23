@@ -121,7 +121,7 @@
             <div class="flex flex-col gap-5 border-b border-brand/10 dark:border-slate-700 pb-5">
 
                 {{-- Search & Filter --}}
-                <form action="{{ route('home.blog') }}" method="GET" class="relative z-30 w-full">
+                <form action="{{ route('home') }}" method="GET" class="relative z-30 w-full">
                     <div class="flex flex-col sm:flex-row items-center w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-[2rem] sm:rounded-full shadow-[0_8px_30px_rgba(249,115,22,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-brand/10 dark:border-slate-700/80 p-1.5 gap-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(249,115,22,0.15)] hover:border-brand/30 focus-within:ring-4 focus-within:ring-brand/10 focus-within:border-brand">
 
                         <div class="relative flex items-center w-full flex-grow group/search">

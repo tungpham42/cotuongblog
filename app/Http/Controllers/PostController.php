@@ -287,7 +287,7 @@ class PostController extends Controller
 
         // SEO: Build Breadcrumb Schema
         $breadcrumbElements = [
-            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home.blog'))
+            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home'))
         ];
 
         if ($post->category) {
