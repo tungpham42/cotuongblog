@@ -1,23 +1,16 @@
 <?php
 
-// --- BẮT ĐẦU FIX SYMLINK ---
-$uri = $_SERVER['REQUEST_URI'] ?? '';
+// --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
+$uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
 
-// Kiểm tra nếu URL bắt đầu bằng /blog
-if (strpos($uri, '/blog') === 0) {
-    // 1. Cắt /blog khỏi REQUEST_URI
-    $newUri = substr($uri, 5);
-    $_SERVER['REQUEST_URI'] = ($newUri === '' || $newUri[0] !== '/') ? '/' . $newUri : $newUri;
+// Nếu đường dẫn chính xác là /blog hoặc bắt đầu bằng /blog/ (vd: /blog/cua-hang, /blog/thu-vien)
+if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
+    // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
+    $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
+    $_SERVER['PHP_SELF'] = '/blog/index.php';
 
-    // 2. Cắt /blog khỏi SCRIPT_NAME (Rất quan trọng để Laravel không tạo sai Route)
-    if (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/blog') === 0) {
-        $_SERVER['SCRIPT_NAME'] = substr($_SERVER['SCRIPT_NAME'], 5);
-    }
-
-    // 3. Cắt /blog khỏi PHP_SELF
-    if (isset($_SERVER['PHP_SELF']) && strpos($_SERVER['PHP_SELF'], '/blog') === 0) {
-        $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 5);
-    }
+    // Ta GIỮ NGUYÊN REQUEST_URI.
+    // Laravel sẽ tự động lấy chuỗi "/blog/cua-hang" trừ đi Base URL "/blog" để nhận diện đúng Route "/cua-hang"
 }
 // --- KẾT THÚC FIX SYMLINK ---
 
