@@ -1,5 +1,16 @@
 <?php
 
+// --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
+$uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+
+// Nếu đường dẫn chính xác là /blog hoặc bắt đầu bằng /blog/ (vd: /blog/cua-hang, /blog/thu-vien)
+if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
+    // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
+    $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
+    $_SERVER['PHP_SELF'] = '/blog/index.php';
+}
+// --- KẾT THÚC FIX SYMLINK ---
+
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
