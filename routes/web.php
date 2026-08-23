@@ -131,4 +131,4 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 // so it doesn't intercept other root requests
 // (like /login or /sitemap.xml)
 // ==========================================
-Route::get('/bai-viet/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/{post:slug}', [PostController::class, 'show'])->name('posts.show');
