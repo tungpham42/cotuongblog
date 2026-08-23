@@ -157,7 +157,7 @@ class CategoryController extends Controller
         // SEO: Build Breadcrumb Schema for the Collection Page
         $breadcrumbSchema = Schema::breadcrumbList()
             ->itemListElement([
-                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home.blog')),
                 Schema::listItem()->position(2)->name($category->name)->item(route('categories.show', $category->slug))
             ]);
 

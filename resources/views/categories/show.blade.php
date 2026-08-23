@@ -20,7 +20,7 @@
 <div class="space-y-8">
     <nav aria-label="Breadcrumb" class="mb-2">
         <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
-            <li><a href="{{ route('home') }}" class="hover:text-brand transition-colors font-semibold">{{ $isEnglish ? 'Home' : 'Trang chủ' }}</a></li>
+            <li><a href="{{ route('home.blog') }}" class="hover:text-brand transition-colors font-semibold">{{ $isEnglish ? 'Home' : 'Trang chủ' }}</a></li>
             <li><span class="mx-1 opacity-50">/</span></li>
             <li class="font-bold text-slate-900 dark:text-slate-200" aria-current="page">{{ $isEnglish ? 'Global Portal' : $category->name }}</li>
         </ol>
@@ -328,7 +328,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $isEnglish ? 'No Content Available Yet' : 'Chưa có bài viết nào' }}</h3>
                     <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">{{ $isEnglish ? 'We are currently translating and preparing new global resources. Please check back soon!' : 'Chuyên mục này hiện tại chưa có bài viết nào. Hãy quay lại sau nhé!' }}</p>
-                    <a href="{{ route('home') }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-brand text-white font-medium rounded-xl hover:bg-brand-hover transition-colors shadow-sm shadow-brand/30">
+                    <a href="{{ route('home.blog') }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-brand text-white font-medium rounded-xl hover:bg-brand-hover transition-colors shadow-sm shadow-brand/30">
                         ← {{ $isEnglish ? 'Return to Home' : 'Quay về trang chủ' }}
                     </a>
                 </div>

@@ -66,7 +66,7 @@ class ProductController extends Controller
         }
 
         $breadcrumbSchema = Schema::breadcrumbList()->itemListElement([
-            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+            Schema::listItem()->position(1)->name('Trang chủ')->item(route('home.blog')),
             Schema::listItem()->position(2)->name('Cửa hàng')->item(route('products.index')),
             Schema::listItem()->position(3)->name($product->name)->item(route('products.show', $product->slug)),
         ]);

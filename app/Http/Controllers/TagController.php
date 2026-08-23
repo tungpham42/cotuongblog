@@ -148,7 +148,7 @@ class TagController extends Controller
         // SEO: Build Breadcrumb Schema for the Tag Page
         $breadcrumbSchema = Schema::breadcrumbList()
             ->itemListElement([
-                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home')),
+                Schema::listItem()->position(1)->name('Trang chủ')->item(route('home.blog')),
                 Schema::listItem()->position(2)->name('Thẻ: ' . $tag->name)->item(route('tags.show', $tag->slug))
             ]);
 
