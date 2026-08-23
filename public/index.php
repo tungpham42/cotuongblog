@@ -1,23 +1,11 @@
 <?php
 
-// --- BẮT ĐẦU FIX SYMLINK (GIỮ NGUYÊN /BLOG) ---
+// --- BẮT ĐẦU FIX SYMLINK ---
 $uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
 
-// Nếu đường dẫn chính xác là /blog hoặc bắt đầu bằng /blog/ (vd: /blog/cua-hang, /blog/thu-vien)
 if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
-    // Ép biến môi trường để khai báo với Laravel rằng Base URL của app lúc này là /blog
     $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
     $_SERVER['PHP_SELF'] = '/blog/index.php';
-
-    // FIX PHẦN CHƯA WORK: Xử lý riêng khi URL chính xác là "/blog" (thiếu dấu / ở cuối)
-    if ($uri_path === '/blog') {
-        // Lấy lại các tham số phía sau (nếu có, vd: ?page=2)
-        $parsed_url = parse_url($_SERVER['REQUEST_URI']);
-        $query = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
-
-        // Thêm dấu '/' vào cuối để Laravel hiểu đây là request vào trang chủ (/)
-        $_SERVER['REQUEST_URI'] = '/blog/' . $query;
-    }
 }
 // --- KẾT THÚC FIX SYMLINK ---
 

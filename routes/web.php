@@ -33,6 +33,8 @@ Route::get('/test-redis', function () {
 });
 
 // Public Front Page
+Route::get('/blog', [PostController::class, 'home'])->name('home.blog');
+
 Route::get('/', [PostController::class, 'home'])->name('home');
 
 // Admin Routes (Chỉ Admin mới được vào)
