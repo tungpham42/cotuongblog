@@ -1,11 +1,23 @@
 <?php
 
 // --- BẮT ĐẦU FIX SYMLINK ---
-$uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$uri = $_SERVER['REQUEST_URI'] ?? '';
 
-if ($uri_path === '/blog' || strpos($uri_path, '/blog/') === 0) {
-    $_SERVER['SCRIPT_NAME'] = '/blog/index.php';
-    $_SERVER['PHP_SELF'] = '/blog/index.php';
+// Kiểm tra nếu URL bắt đầu bằng /blog
+if (strpos($uri, '/blog') === 0) {
+    // 1. Cắt /blog khỏi REQUEST_URI
+    $newUri = substr($uri, 5);
+    $_SERVER['REQUEST_URI'] = ($newUri === '' || $newUri[0] !== '/') ? '/' . $newUri : $newUri;
+
+    // 2. Cắt /blog khỏi SCRIPT_NAME (Rất quan trọng để Laravel không tạo sai Route)
+    if (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/blog') === 0) {
+        $_SERVER['SCRIPT_NAME'] = substr($_SERVER['SCRIPT_NAME'], 5);
+    }
+
+    // 3. Cắt /blog khỏi PHP_SELF
+    if (isset($_SERVER['PHP_SELF']) && strpos($_SERVER['PHP_SELF'], '/blog') === 0) {
+        $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 5);
+    }
 }
 // --- KẾT THÚC FIX SYMLINK ---
 
